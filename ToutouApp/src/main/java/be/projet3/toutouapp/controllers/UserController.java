@@ -63,7 +63,7 @@ public class UserController {
         return userRepo.save(existingUser);
     }
 
-    // DELETE: Supprimer un utilisateur par ID
+    // DELETE: Supprimer un utilisateur par IDl
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable int id) {
         if (!userRepo.existsById(id)) {
