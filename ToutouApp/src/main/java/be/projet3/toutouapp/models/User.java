@@ -45,7 +45,7 @@ public class User {
     @Column(name = "is_blocked", nullable = false) // Correspond à la colonne is_blocked
     private boolean blocked = false;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Relation avec la table Role
+    @ManyToOne() // Relation avec la table Role
     @JoinColumn(name = "roleId", referencedColumnName = "roleId", nullable = false)
     private Role role; // La classe Role doit être définie pour la table Role
 

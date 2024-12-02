@@ -30,13 +30,11 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeRequests(authorizeRequests -> {
-                    authorizeRequests.requestMatchers("/swagger-ui/**","/v3/api-docs","/swagger-resources/**", "/webjars/**","/user","/auth/login","/test-db","/user/all","/user/search","/user/{id}").permitAll();
+                    authorizeRequests.requestMatchers("/user/all");//.hasRole("admin");
+                    authorizeRequests.requestMatchers("/swagger-ui/**","/v3/api-docs","/swagger-resources/**", "/webjars/**","/user/**","/auth/login","/test-db").permitAll();
                     authorizeRequests.anyRequest().authenticated();
                 }).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
-
-    //curl -X POST "http://localhost:8080/auth/login" -d "mail=damien.deleeuw2004@gmail.com&password=damdam"
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
