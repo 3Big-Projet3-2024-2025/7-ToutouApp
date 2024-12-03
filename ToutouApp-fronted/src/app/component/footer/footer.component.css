@@ -1,0 +1,16 @@
+.site-footer {
+    background-color: #444;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .site-footer a {
+    color: #f0783b;
+    text-decoration: none;
+  }
+  
+  .site-footer a:hover {
+    text-decoration: underline;
+  }
+  
