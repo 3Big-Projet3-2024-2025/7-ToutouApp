@@ -1,0 +1,32 @@
+<app-header></app-header>
+<div class="map-page">
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+  <div class="details-container">
+    <h2>Request details</h2>
+    <form>
+      <label for="dogName">Dog Name :</label>
+      <input type="text" id="dogName" value="Bobby" readonly />
+
+      <label for="dogSize">Size :</label>
+      <select id="dogSize" disabled>
+        <option value="petit" selected>Small</option>
+        <option value="moyen">Medium</option>
+        <option value="gros">Large</option>
+      </select>
+
+      <label for="date">Date :</label>
+      <input type="date" id="date" value="2024-11-19" readonly />
+
+      <label for="time">Time slot :</label>
+      <input type="text" id="time" value="3:00 p.m to 5:00 p" readonly />
+
+      <label for="photo">Photo of the dog :</label>
+      <input type="file" id="photo" disabled />
+
+      <button type="submit" disabled>Accept request</button>
+    </form>
+  </div>
+</div>
+<app-footer></app-footer>

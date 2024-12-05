@@ -1,0 +1,110 @@
+.profile-container {
+    max-width: 800px;
+    margin: 120px auto;
+    padding: 20px;
+    border: 2px solid #ffa500;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f8f4f4;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-name {
+    font-size: 24px;
+    margin: 0;
+    color: #ff8c00;
+}
+
+.profile-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-section {
+    border-top: 1px solid #ffa500;
+    padding-top: 10px;
+}
+
+.profile-section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #ff8c00;
+}
+
+.profile-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-section label {
+    font-weight: bold;
+}
+
+.profile-section input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #eaeaea;
+    color: #666;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.save-changes-button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+}
+
+.save-changes-button:hover {
+    background-color: #218838;
+}
+
+.delete-account-button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #ff3b3b;
+    color: white;
+    margin-top: 20px;
+}
+
+.delete-account-button:hover {
+    background-color: #e12a2a;
+}
+
+#reviews {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+#reviews li {
+    margin-bottom: 5px;
+    color: #333;
+}
+
+body {
+    margin-top: 60px;
+    background-color: #f5f5f5;
+}
