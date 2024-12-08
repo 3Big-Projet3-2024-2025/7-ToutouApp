@@ -33,11 +33,11 @@ public class Request {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "consumer_id")
+    @JoinColumn(name = "consumer_id", nullable = false)
     private User owner;
 
     @ManyToOne
-    @JoinColumn(name = "consumer_id_1", nullable = false)
+    @JoinColumn(name = "consumer_id_1")
     private User helper;
 
     @ManyToOne
