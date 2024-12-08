@@ -30,7 +30,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeRequests(authorizeRequests -> {
-                    authorizeRequests.requestMatchers("/swagger-ui/**","/v3/api-docs","/swagger-resources/**", "/webjars/**","/user","/auth/login","/test-db","/user/all","/user/search","/user/{id}").permitAll();
+                    authorizeRequests.requestMatchers("/swagger-ui/**","/v3/api-docs","/swagger-resources/**", "/webjars/**","/user","/auth/login","/test-db","/user/all","/user/search","/user/{id}","request/{id}","request").permitAll();
                     authorizeRequests.anyRequest().authenticated();
                 }).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
