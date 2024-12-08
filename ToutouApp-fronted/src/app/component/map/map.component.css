@@ -1,0 +1,91 @@
+/* Structure globale */
+.map-page {
+    display: flex;
+    font-family: Arial, sans-serif;
+    height: calc(100vh - 60px);
+    margin-top: 60px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Carte */
+.map-container {
+    flex: 2;
+    height: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px; 
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); 
+    padding: 15px;
+    background-color: #fff; 
+    margin-top: 20px; 
+}
+
+#map {
+    height: calc(100% - 30px);
+    width: 100%;
+}
+
+/* Détails */
+.details-container {
+    flex: 1;
+    padding: 20px;
+    background-color: #f8f4f4;
+    color: #333;
+    border-left: 2px solid #ffa500;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.details-container h2 {
+    color: #ff8c00;
+    margin-bottom: 20px;
+}
+
+.details-container label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+}
+
+.details-container input,
+.details-container select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.details-container button {
+    background-color: #ff8c00;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.details-container button:hover {
+    background-color: #ff7b00;
+}
+
+/* Footer */
+.site-footer {
+    background-color: #444;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+}
+
+.site-footer a {
+    color: #f0783b;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
