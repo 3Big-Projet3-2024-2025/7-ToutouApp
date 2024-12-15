@@ -1,12 +1,10 @@
 <div class="header-container">
-    <div class="logo" (click)="navigateToHome()">
-      <img src="assets/logo.jpg" alt="HappyPaws Logo" />
-      <span class="logo-text">HappyPaws</span>
-    </div>
-    <nav class="navigation">
-      <a routerLink="/Profile">Profile</a>
-      <a routerLink="/Profile">Sign-out</a>
-    </nav>
+  <div class="logo" (click)="navigateToHome()">
+    <img src="assets/logo.jpg" alt="HappyPaws Logo" />
+    <span class="logo-text">HappyPaws</span>
   </div>
-  
-  
+  <nav class="navigation">
+    <a routerLink="/Profile">Profile</a>
+    <a (click)="logout()">Sign-out</a>
+  </nav>
+</div>

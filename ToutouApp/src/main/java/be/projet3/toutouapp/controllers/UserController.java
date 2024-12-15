@@ -93,6 +93,7 @@ public class UserController {
     @GetMapping("/emails")
     public ResponseEntity<List<String>> getAllEmails() {
         List<String> emails = userService.getAllEmails();
+        System.out.println("Requête GET /emails reçue");
         return ResponseEntity.ok(emails);
     }
 }

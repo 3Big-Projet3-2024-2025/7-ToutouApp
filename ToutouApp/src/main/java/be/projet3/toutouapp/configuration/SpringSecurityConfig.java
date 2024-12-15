@@ -14,9 +14,11 @@ public class SpringSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
-        return http.csrf(csrf -> csrf.disable())
+        return http
+                .cors(cors -> cors.configure(http)) // Active la configuration CORS
+                .csrf(csrf -> csrf.disable())       // Désactive CSRF pour les API REST
                 .authorizeRequests(authorizeRequests -> {
-                    authorizeRequests.requestMatchers("/user/emails").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers("/user/emails").hasRole("USER");
                     authorizeRequests.requestMatchers("/api/users/create").permitAll();
                     authorizeRequests.requestMatchers("/swagger-ui/**","/v3/api-docs","/user","/auth/login").permitAll();
                     authorizeRequests.requestMatchers("/user/all");//.hasRole("admin");
