@@ -2,8 +2,12 @@ package be.projet3.toutouapp.controllers;
 
 import be.projet3.toutouapp.models.User;
 import be.projet3.toutouapp.repositories.jpa.UserRepository;
+import be.projet3.toutouapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +18,14 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepo;
-
+/*
     @Autowired
     private PasswordEncoder passwordEncoder;
+*/
+    @Autowired
+    private UserService userService;
 
+/*
     // CREATE: Ajouter un utilisateur
     @PostMapping
     public User addUser(@RequestBody User user) {
@@ -70,5 +78,21 @@ public class UserController {
             throw new RuntimeException("Utilisateur introuvable avec l'ID : " + id);
         }
         userRepo.deleteById(id);
+    }
+
+ */
+//attention pas le meme request mapping avant  @RequestMapping("/api/users")
+    @PostMapping("/create")
+    public ResponseEntity<User> createUserFromToken(JwtAuthenticationToken token) {
+        System.out.println("Authorities : " + token.getAuthorities());
+        Jwt jwt = token.getToken();
+        User createdUser = userService.saveUserFromToken(jwt);
+        return ResponseEntity.ok(createdUser);
+    }
+
+    @GetMapping("/emails")
+    public ResponseEntity<List<String>> getAllEmails() {
+        List<String> emails = userService.getAllEmails();
+        return ResponseEntity.ok(emails);
     }
 }
