@@ -14,6 +14,7 @@ services:
     ports:
       - "8081:8080"
     environment:
+      KC_THEME_CACHE_ENABLED: "false"
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgresql/keycloak?currentSchema=keycloak
       KC_DB_USERNAME: keycloak
@@ -29,6 +30,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - ./data/keycloak:/opt/keycloak/data
+      - ./src/main/java/be/projet3/toutouapp/keycloak_theme/themes/my_custom_theme:/opt/keycloak/themes/my_custom_theme
 
     depends_on:
       - postgresql
