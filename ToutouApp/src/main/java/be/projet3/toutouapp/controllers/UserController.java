@@ -5,7 +5,6 @@ import be.projet3.toutouapp.repositories.jpa.UserRepository;
 import be.projet3.toutouapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -81,7 +80,6 @@ public class UserController {
     }
 
  */
-//attention pas le meme request mapping avant  @RequestMapping("/api/users")
     @PostMapping("/create")
     public ResponseEntity<User> createUserFromToken(JwtAuthenticationToken token) {
         System.out.println("Authorities : " + token.getAuthorities());
