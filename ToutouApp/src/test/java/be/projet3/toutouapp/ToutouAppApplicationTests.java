@@ -122,7 +122,7 @@ public class ToutouAppApplicationTests {
                 .then()
                 .statusCode(500); // Expecting HTTP 500 Internal Server Error for duplicate creation
     }
-    
+
     @Test
     @Order(4)
     void testUnauthorizedAccess() {
