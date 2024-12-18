@@ -89,3 +89,11 @@
 .site-footer a:hover {
     text-decoration: underline;
 }
+
+/* Barre de recherche GeoSearch */
+#geo-search {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 999;
+}
