@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
+import { PostFormRequestComponent } from './component/post-form-request/post-form-request.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet,PostFormRequestComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
