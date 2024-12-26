@@ -47,4 +47,9 @@ public class RequestController {
         requestService.deleteRequest(id);
         return ResponseEntity.noContent().build(); // HTTP 204 No Content
     }
+
+    @GetMapping("/user/{userId}")
+    public List<Request> getRequestsByUserId(@PathVariable int userId) {
+        return requestService.getRequestsByUserId(userId);
+    }
 }

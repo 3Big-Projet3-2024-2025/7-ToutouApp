@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
+import { UserIdService } from '../../services/user-id.service';
 
 @Component({
   selector: 'app-post-form-request',
@@ -12,7 +13,7 @@ import { RequestService } from '../../services/request.service';
 })
 export class PostFormRequestComponent implements OnInit{
 
-  constructor(public requestService: RequestService){}
+  constructor(public requestService: RequestService, private userIdService: UserIdService){}
 
   request = {
     requestId: null,
@@ -39,26 +40,29 @@ export class PostFormRequestComponent implements OnInit{
 
 
   onSubmit(): void {
-    // Transformation des données avant l’envoi
-    const transformedRequest = {
-      ...this.request,
-      owner: { id: this.request.owner },
-      dogCategory: { dogCategoryId: this.request.dogCategory}
-    };
-
-    console.log('Request to send:', transformedRequest);
-
-    // Envoi des données via le service
-    this.requestService.addRequest(transformedRequest).subscribe({
-      next: (response) => {
-        console.log('Request sent successfully!', response);
-        this.resetForm(); // Réinitialise le formulaire après un succès
-      },
-      error: (error) => {
-        console.error('Error sending request:', error);
-      }
+    this.userIdService.getUserId().then((userId) => {
+      const transformedRequest = {
+        ...this.request,
+        owner: { id: userId },
+        dogCategory: { dogCategoryId: this.request.dogCategory }
+      };
+  
+      console.log('Request to send:', transformedRequest);
+  
+      this.requestService.addRequest(transformedRequest).subscribe({
+        next: (response) => {
+          console.log('Request sent successfully!', response);
+          this.resetForm(); // Réinitialise le formulaire après un succès
+        },
+        error: (error) => {
+          console.error('Error sending request:', error);
+        }
+      });
+    }).catch((error) => {
+      console.error('Error fetching user ID:', error);
     });
   }
+  
 
   resetForm(): void {
     this.request = {
