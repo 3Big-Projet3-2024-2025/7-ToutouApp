@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Request</title>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Create a Request</h1>
+        <form (ngSubmit)="onSubmit()" #requestForm="ngForm">
+            <!-- Dog Name -->
+            <label for="dogName">Dog Name:</label>
+            <input 
+                type="text" 
+                id="dogName" 
+                name="dogName" 
+                maxlength="50" 
+                required 
+                [(ngModel)]="request.dogName"
+                aria-required="true">
+            
+            <!-- Comment -->
+            <label for="comment">Comment:</label>
+            <textarea 
+                id="comment" 
+                name="comment" 
+                maxlength="500" 
+                [(ngModel)]="request.comment"
+                required
+                aria-required="true">
+            </textarea>
+            
+            <!-- Photo URL -->
+            <label for="photo">Photo URL:</label>
+            <input 
+                type="text" 
+                id="photo" 
+                name="photo" 
+                maxlength="300" 
+                [(ngModel)]="request.photo">
+            
+            <!-- Request Date -->
+            <label for="requestDate">Request Date:</label>
+            <input 
+                type="date" 
+                id="requestDate" 
+                name="requestDate" 
+                required 
+                [(ngModel)]="request.requestDate"
+                aria-required="true">
+            
+            <!-- Start Time -->
+            <label for="startTime">Start Time:</label>
+            <input 
+                type="time" 
+                id="startTime" 
+                name="startTime" 
+                step="1" 
+                required 
+                [(ngModel)]="request.startTime"
+                aria-required="true">
+            
+            <!-- End Time -->
+            <label for="endTime">End Time:</label>
+            <input 
+                type="time" 
+                id="endTime" 
+                name="endTime" 
+                step="1" 
+                required 
+                [(ngModel)]="request.endTime"
+                aria-required="true">
+            
+            <!-- Dog Category -->
+            <label for="dogCategory">Dog Category:</label>
+            <select 
+                id="dogCategory" 
+                name="dogCategory" 
+                required 
+                [(ngModel)]="request.dogCategory"
+                aria-required="true">
+                <option value="" disabled>Select a category</option>
+                <option *ngFor="let category of categories" [value]="category.id">
+                    {{ category.name }}
+                </option>
+            </select>
+            
+            <!-- Submit Button -->
+            <button type="submit">Submit Request</button>
+        </form>
+    </div>
+</body>
