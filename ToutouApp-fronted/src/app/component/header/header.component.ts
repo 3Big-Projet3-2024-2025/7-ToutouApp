@@ -24,4 +24,8 @@ export class HeaderComponent {
     console.log('Déconnexion en cours...');
     this.authService.logout();
   }
+
+  seeRequests(){
+    this.router.navigate(['/hub-requests'])
+  }
 }

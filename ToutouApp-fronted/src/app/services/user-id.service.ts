@@ -78,7 +78,7 @@ export class UserIdService {
     // Récupérer l'email depuis Keycloak
   const email = await this.getUserEmail();
   if (!email) {
-    throw new Error('Email non trouvé dans Keycloak');
+    throw new Error('Email not found in Keycloak');
   }
 
   // Trouver l'utilisateur dans la base de données simulée
@@ -87,7 +87,7 @@ export class UserIdService {
   if (user) {
     return user.id.toString(); // Retourner l'ID de l'utilisateur
   } else {
-    throw new Error(`Utilisateur avec l'email ${email} non trouvé`);
+    throw new Error(`User with email ${email} not found`);
   }
 }
     

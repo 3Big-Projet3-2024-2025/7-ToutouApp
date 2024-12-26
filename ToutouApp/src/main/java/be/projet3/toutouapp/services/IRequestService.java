@@ -10,4 +10,5 @@ public Request  addRequest(Request request);
 public Request updateRequest(Request request);
 public  void deleteRequest(int id);
 public List<Request> getRequestsByUserId(int userId);
+public Request getRequestById(int id);
 }

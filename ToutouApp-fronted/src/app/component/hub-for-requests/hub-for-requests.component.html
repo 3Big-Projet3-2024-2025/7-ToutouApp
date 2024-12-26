@@ -1,0 +1,35 @@
+<div>
+    <app-header></app-header>
+</div>
+
+<div class="requests">
+  <div class="request-card" *ngFor="let request of requests">
+    <div class="request-header">
+      <h3>Date: {{ request.requestDate | date: 'dd/MM/yyyy'  }}</h3>
+      <p>Heure: {{ request.startTime  }} - {{ request.endTime }}</p>
+    </div>
+    
+    <div class="request-body">
+      <p><strong>Dog name:</strong> {{ request.dogName }}</p>
+      <p><strong>Comment:</strong> {{ request.comment }}</p>
+
+      <div *ngIf="request.helper" class="helper-info">
+        <p><strong>Helper:</strong> {{ request.helper.firstName }} {{ request.helper.lastName }}</p>
+        <p><strong>Helper contact:</strong> {{ request.helper.mail }}</p>
+        <p><strong>Helper location:</strong> {{ request.helper.city }}, {{ request.helper.country }}</p>
+      </div>
+      
+    </div>
+
+    <div class="request-footer">
+      <button class="btn btn-edit" (click)="editRequest(request.requestId)">Modify</button>
+      <button class="btn btn-delete" (click)="deleteRequest(request.requestId, request.helper)">Delete</button>
+    </div>
+  </div>
+
+  
+  <div class="create-button-container">
+    <button class="btn btn-create" (click)="createRequest()">Create a new request</button>
+  </div>
+  
+</div>
