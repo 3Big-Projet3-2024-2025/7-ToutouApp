@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findByOwner_Id(int ownerId);
+    Request findByRequestId(int requestId);
 
 }

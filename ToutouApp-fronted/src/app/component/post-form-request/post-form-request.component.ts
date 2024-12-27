@@ -3,17 +3,27 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
 import { UserIdService } from '../../services/user-id.service';
+import { HeaderComponent } from '../header/header.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-form-request',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,HeaderComponent],
   templateUrl: './post-form-request.component.html',
   styleUrl: './post-form-request.component.css'
 })
 export class PostFormRequestComponent implements OnInit{
 
-  constructor(public requestService: RequestService, private userIdService: UserIdService){}
+  constructor(
+    public requestService: RequestService,
+    private userIdService: UserIdService,
+    private router: Router
+    ){}
+
+    minDate: string = '';
+
+
 
   request = {
     requestId: null,
@@ -35,6 +45,7 @@ export class PostFormRequestComponent implements OnInit{
   ];
 
   ngOnInit(): void {
+    this.setMinDate();
     
   }
 
@@ -52,7 +63,9 @@ export class PostFormRequestComponent implements OnInit{
       this.requestService.addRequest(transformedRequest).subscribe({
         next: (response) => {
           console.log('Request sent successfully!', response);
+          window.alert('Request created successfully')
           this.resetForm(); // Réinitialise le formulaire après un succès
+          this.router.navigate(['/hub-requests']);
         },
         error: (error) => {
           console.error('Error sending request:', error);
@@ -76,6 +89,19 @@ export class PostFormRequestComponent implements OnInit{
       owner: null,
       dogCategory: null
     };
+  }
+
+
+  backToHub(){
+    this.router.navigate(['/hub-requests']);
+  }
+
+  setMinDate(): void {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    this.minDate = `${year}-${month}-${day}`;
   }
 
 }

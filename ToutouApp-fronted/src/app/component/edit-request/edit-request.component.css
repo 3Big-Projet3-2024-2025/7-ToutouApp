@@ -46,27 +46,16 @@ button:hover {
     background-color: #0056b3;
 }
 
-.error-message {
-    color: red;
-    font-size: 12px;
-}
 
-
-.back-button {
-    position: fixed; 
-    top: 80px;       
-    left: 40px;     
-    padding: 10px 20px; 
-    font-size: 16px;  
-    background-color: #007BFF;
-    color: white;
+.cancel-button {
+    background-color: #bb220b;
+    color: #fff;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    z-index: 1000; 
+    transition: background-color 0.3s;
 }
 
-.back-button:hover {
-    background-color: #0056b3; /* Couleur au survol */
+.cancel-button:hover {
+    background-color: #680c00;
 }
 
