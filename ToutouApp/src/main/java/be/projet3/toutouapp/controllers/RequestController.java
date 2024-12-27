@@ -52,4 +52,8 @@ public class RequestController {
     public List<Request> getRequestsByUserId(@PathVariable int userId) {
         return requestService.getRequestsByUserId(userId);
     }
+    @GetMapping("/{id}")
+    public Request getRequestById(@PathVariable int id) {
+        return requestService.getRequestById(id);
+    }
 }
