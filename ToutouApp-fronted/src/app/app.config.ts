@@ -14,8 +14,8 @@ export const appConfig = (keycloak: KeycloakService) => async () => {
       flow: 'standard',
       pkceMethod: 'S256',
     },
-    enableBearerInterceptor: true, // Autorise automatiquement l'ajout du token aux requêtes HTTP
+    enableBearerInterceptor: true, // Automatically allows adding the token to HTTP requests
     bearerExcludedUrls: ['/assets'], 
-    loadUserProfileAtStartUp: true, // Charge le profil utilisateur
+    loadUserProfileAtStartUp: true, // Load the user profile
   });
 };

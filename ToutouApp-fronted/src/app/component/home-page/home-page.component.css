@@ -1,5 +1,4 @@
 /* Section Welcome */
-/* Ajout d'une animation fade-in à la section Welcome */
 .welcome-section {
   position: relative;
   height: 80vh;
@@ -8,8 +7,8 @@
   align-items: center;
   text-align: center;
   color: white;
-  opacity: 0; /* D'abord invisible */
-  animation: fadeIn 1.5s forwards; /* Animation de fondu */
+  opacity: 0; /* First invisible */
+  animation: fadeIn 1.5s forwards; /* Fade animation */
 }
 
 @keyframes fadeIn {
@@ -26,16 +25,16 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  opacity: 0.7;  /* Ajoute un effet de transparence à l'image pour mieux voir le texte */
-  background-attachment: fixed; /* Effet parallax */
+  opacity: 0.7;  /* Adds a transparency effect to the image to better see the text */
+  background-attachment: fixed;
 }
 
 .welcome-section .welcome-text {
   position: relative;
   z-index: 1;
   padding: 20px;
-  background-color: rgba(0, 0, 0, 0.5);  /* Fond semi-transparent pour améliorer la lisibilité */
-  border-radius: 10px;      /* Bordures arrondies */
+  background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent background to improve readability */
+  border-radius: 10px; /* rounded borders */
 }
 
 .welcome-section h1 {
@@ -47,7 +46,7 @@
 /* Section Dog Lovers */
 .dog-lovers-section {
   display: flex;
-  flex-direction: row-reverse; /* Image à droite et texte à gauche */
+  flex-direction: row-reverse; /* Image on the right and text on the left */
   align-items: center;
   padding: 3rem;
   background-color: #f9f9f9;
@@ -83,7 +82,7 @@
 /* Section No Worries */
 .no-worries-section {
   display: flex;
-  flex-direction: row-reverse; /* Image à gauche et texte à droite */
+  flex-direction: row-reverse; /* Image on the left and text on the right */
   align-items: center;
   padding: 3rem;
   background-color: #ffffff;
@@ -148,7 +147,7 @@
   flex-wrap: wrap;
 }
 
-/* Animation de glissement pour chaque étape */
+/* Slide animation for each step */
 .step {
   background-color: #ffffff;
   padding: 2rem;
@@ -157,9 +156,9 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   width: 30%;
   opacity: 0;
-  transform: translateX(-100px); /* Position initiale hors de l'écran */
+  transform: translateX(-100px); /* Initial position off screen */
   animation: slideIn 1s forwards;
-  animation-delay: 0.2s; /* Décalage pour chaque étape */
+  animation-delay: 0.2s; /* Offset for each step */
 }
 
 @keyframes slideIn {
@@ -170,22 +169,22 @@
 }
 
 
-/* Effet de survol sur les cartes des étapes */
+/* Step map rollover effect */
 .step:hover {
-  transform: translateY(-10px); /* Soulever l'élément légèrement */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transition douce */
+  transform: translateY(-10px); /* Lift the element slightly */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* smooth transition */
 }
 
 
 .step h3 {
   font-size: 2rem;
-  color: #f0783b; /* Warm orange color */
+  color: #f0783b;
 }
 
 .step p {
   font-size: 1.1rem;
-  color: #555; /* Darker text for readability */
+  color: #555;
   margin-top: 1rem;
 }
 
@@ -206,8 +205,8 @@
 @media (max-width: 768px) {
   .dog-lovers-section,
   .no-worries-section {
-    flex-direction: column; /* Mettre l'image et le texte en colonne */
-    text-align: center; /* Centrer le texte et les images sur mobile */
+    flex-direction: column; /* Put image and text in column */
+    text-align: center; /* Center text and images on mobile */
   }
 
   .dog-lovers-section .image-container,
@@ -225,15 +224,15 @@
 
 
 
-/* Initialement, les éléments sont invisibles */
+/* Initially, the elements are invisible */
 .animate-on-scroll {
   opacity: 0;
-  transform: translateY(30px); /* Position légèrement en dessous */
+  transform: translateY(30px); /* Slightly below position */
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-/* Lorsque l'élément devient visible */
+/* When the item becomes visible */
 .animate-on-scroll.visible {
   opacity: 1;
-  transform: translateY(0); /* Position normale */
+  transform: translateY(0); /* normal position */
 }
