@@ -33,5 +33,7 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
   }
 
-  
+  seeRequests(){
+    this.router.navigate(['/hub-requests'])
+  }
 }

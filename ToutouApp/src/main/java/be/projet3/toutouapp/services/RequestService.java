@@ -43,4 +43,14 @@ public class RequestService implements IRequestService{
         }
 
     }
+
+    @Override
+    public List<Request> getRequestsByUserId(int userId) {
+        return requestRepository.findByOwner_Id(userId);
+    }
+
+    @Override
+    public Request getRequestById(int id) {
+        return requestRepository.findByRequestId(id);
+    }
 }

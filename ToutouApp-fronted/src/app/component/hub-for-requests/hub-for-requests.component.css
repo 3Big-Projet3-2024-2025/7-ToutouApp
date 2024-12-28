@@ -1,0 +1,142 @@
+/* Global styling for the requests container */
+.requests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f9f9f9; 
+    margin-top: 120px;
+    
+  }
+  
+  /* Individual request card */
+  .request-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  /* Header styles */
+  .request-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .request-header h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .request-header p {
+    margin: 5px 0 0;
+    font-size: 0.9em;
+  }
+  
+  /* Body styles */
+  .request-body {
+    padding: 15px;
+    color: #333;
+    font-size: 0.95em;
+    line-height: 1.5;
+  }
+  
+  .request-body p {
+    margin: 10px 0;
+  }
+  
+  /* Footer styles */
+  .request-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #f1f1f1;
+  }
+  
+  /* Button styles */
+  .btn {
+    padding: 8px 12px;
+    font-size: 0.9em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .btn-edit {
+    background-color: #ffc107; 
+    color: #212529; 
+  }
+  
+  .btn-edit:hover {
+    background-color: #e0a800; 
+  }
+  
+  .btn-edit:active {
+    background-color: #d39e00;
+  }
+  
+  
+  .btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .btn-delete:hover {
+    background-color: #c82333;
+  }
+
+ /* Conteneur du bouton create */
+.create-button-container {
+  position:absolute;  /* Positionne le bouton de manière absolue */
+  top: 80px;  /* Espacement de 20px du bord supérieur */
+  left: 20px;  /* Espacement de 20px du bord gauche */
+  z-index: 100;  /* Assure que le bouton soit au-dessus des autres éléments */
+}
+
+/* Bouton Create */
+.btn-create {
+  background-color: #4CAF50; /* Couleur de fond */
+  color: white; /* Couleur du texte */
+  padding: 8px 12px; /* Taille réduite */
+  border: none; /* Pas de bordure */
+  border-radius: 5px; /* Coins arrondis */
+  font-size: 14px; /* Taille de la police réduite */
+  font-weight: bold; /* Texte en gras */
+  cursor: pointer; /* Curseur en forme de main */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ombre discrète */
+  transition: background-color 0.3s ease; /* Effet de transition sur la couleur */
+}
+
+.btn-create:hover {
+  background-color: #45a049; /* Légèrement plus foncé au survol */
+}
+
+.btn-create:active {
+  background-color: #3e8e41; /* Plus foncé au clic */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Ombre réduite */
+}
+
+
+  
+
+  .helper-info {
+    background-color: #f0f8ff;
+    color: #007bff; 
+    padding: 10px; 
+    border-radius: 5px; 
+    margin-top: 10px;
+    font-size: 0.95em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+  
+  
+  

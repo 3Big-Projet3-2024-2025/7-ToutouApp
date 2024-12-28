@@ -1,0 +1,117 @@
+<app-header></app-header>
+
+<div class="form-container">
+    <h1><strong>Create a Request</strong></h1>
+    <form (ngSubmit)="onSubmit()" #requestForm="ngForm">
+        <!-- Dog Name -->
+        <label for="dogName">Dog Name:</label>
+        <input 
+            type="text" 
+            id="dogName" 
+            name="dogName" 
+            maxlength="50" 
+            required 
+            [(ngModel)]="request.dogName"
+            #dogName="ngModel"
+            aria-required="true">
+        <div *ngIf="dogName.invalid && dogName.touched" class="error-message">
+            Dog Name is required.
+        </div>
+
+        <!-- Comment -->
+        <label for="comment">Comment:</label>
+        <textarea 
+            id="comment" 
+            name="comment" 
+            maxlength="500" 
+            [(ngModel)]="request.comment"
+            required
+            #comment="ngModel"
+            aria-required="true">
+        </textarea>
+        <div *ngIf="comment.invalid && comment.touched" class="error-message">
+            Comment is required.
+        </div>
+
+        <!-- Photo URL -->
+        <label for="photo">Photo URL:</label>
+        <input 
+            type="text" 
+            id="photo" 
+            name="photo" 
+            maxlength="300" 
+            [(ngModel)]="request.photo"
+            #photo="ngModel">
+        
+
+        <!-- Request Date -->
+        <label for="requestDate">Request Date:</label>
+        <input 
+            type="date" 
+            id="requestDate" 
+            name="requestDate" 
+            required 
+            [(ngModel)]="request.requestDate"
+            [min]="minDate"
+            #requestDate="ngModel"
+            aria-required="true">
+        <div *ngIf="requestDate.invalid && requestDate.touched" class="error-message">
+            Request Date is required.
+        </div>
+
+        <!-- Start Time -->
+        <label for="startTime">Start Time:</label>
+        <input 
+            type="time" 
+            id="startTime" 
+            name="startTime" 
+            step="1" 
+            required 
+            [(ngModel)]="request.startTime"
+            #startTime="ngModel"
+            aria-required="true">
+        <div *ngIf="startTime.invalid && startTime.touched" class="error-message">
+            Start Time is required.
+        </div>
+
+        <!-- End Time -->
+        <label for="endTime">End Time:</label>
+        <input 
+            type="time" 
+            id="endTime" 
+            name="endTime" 
+            step="1" 
+            required 
+            [(ngModel)]="request.endTime"
+            #endTime="ngModel"
+            aria-required="true">
+        <div *ngIf="endTime.invalid && endTime.touched" class="error-message">
+            End Time is required.
+        </div>
+
+        <!-- Dog Category -->
+        <label for="dogCategory">Dog Category:</label>
+        <select 
+            id="dogCategory" 
+            name="dogCategory" 
+            required 
+            [(ngModel)]="request.dogCategory"
+            #dogCategory="ngModel"
+            aria-required="true">
+            <option value="" disabled>Select a category</option>
+            <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+            </option>
+        </select>
+        <div *ngIf="dogCategory.invalid && dogCategory.touched" class="error-message">
+            Dog Category is required.
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" [disabled]="requestForm.invalid">Submit Request</button>
+    </form>
+
+    <div>
+        <button type="button" class="back-button" (click)="backToHub()">Back to the hub</button>
+    </div>
+</div>
