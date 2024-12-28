@@ -46,7 +46,7 @@ export class UserIdService {
         role: { roleId: 2, name: 'USER' },
       },
       {
-        id: 3,
+        id: 27,
         mail: 'samu@gmail.com',
         password: 'samu',
         lastName: 'Samu',
@@ -55,9 +55,9 @@ export class UserIdService {
         city: 'Charleroi',
         street: 'Rue de la tour 59',
         postalCode: '6000',
-        active: true,
+        active: true, 
         blocked: false,
-        role: { id: 2, name: 'USER' },
+        role: { id: 1, name: 'USER' },
       },
       {
         id: 2,
