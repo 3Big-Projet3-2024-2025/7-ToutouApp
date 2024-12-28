@@ -36,4 +36,12 @@ export class HeaderComponent implements OnInit {
   seeRequests(){
     this.router.navigate(['/hub-requests'])
   }
+
+  seeMap(){
+    this.router.navigate(['/map'])              
+  }
+
+  seeProfile(){
+    this.router.navigate(['/personal-profile'])
+  }
 }

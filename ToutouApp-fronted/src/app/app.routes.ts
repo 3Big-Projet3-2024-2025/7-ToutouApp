@@ -11,7 +11,7 @@ export const routes: Routes = [
     {path:'', component: HomePageComponent},
     { path:'map', component: MapComponent, canActivate: [AuthGuard] },
     { path:'personal-profile', component: PersonalProfileComponent, canActivate: [AuthGuard] },
-    {path:'post-request',component: PostFormRequestComponent},
-    {path:'hub-requests',component: HubForRequestsComponent},
-    {path:'edit-request/:id',component: EditRequestComponent}
+    {path:'post-request',component: PostFormRequestComponent,canActivate: [AuthGuard]},
+    {path:'hub-requests',component: HubForRequestsComponent,canActivate: [AuthGuard]},
+    {path:'edit-request/:id',component: EditRequestComponent,canActivate: [AuthGuard]}
 ];
