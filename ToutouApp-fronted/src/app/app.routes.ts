@@ -5,11 +5,12 @@ import { PersonalProfileComponent } from './component/personal-profile/personal-
 import { PostFormRequestComponent } from './component/post-form-request/post-form-request.component';
 import { HubForRequestsComponent } from './component/hub-for-requests/hub-for-requests.component';
 import { EditRequestComponent } from './component/edit-request/edit-request.component';
+import { AuthGuard } from '../app/guard/auth.guard';
 
 export const routes: Routes = [
-    {path:'',component:HomePageComponent},
-    { path:'map', component: MapComponent },
-    { path:'personal-profile', component: PersonalProfileComponent },
+    {path:'', component: HomePageComponent},
+    { path:'map', component: MapComponent, canActivate: [AuthGuard] },
+    { path:'personal-profile', component: PersonalProfileComponent, canActivate: [AuthGuard] },
     {path:'post-request',component: PostFormRequestComponent},
     {path:'hub-requests',component: HubForRequestsComponent},
     {path:'edit-request/:id',component: EditRequestComponent}

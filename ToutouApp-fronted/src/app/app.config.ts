@@ -8,14 +8,14 @@ export const appConfig = (keycloak: KeycloakService) => async () => {
       clientId: 'frontend',
     },
     initOptions: {
-      onLoad: 'login-required', // Redirection automatique vers la connexion si non connecté
+      onLoad: 'check-sso', 
       checkLoginIframe: false,
       silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
-      flow: 'standard', // Utilisation du flux standard (Authorization Code Flow)
-      pkceMethod: 'S256', // Utilisation de PKCE (Proof Key for Code Exchange)
+      flow: 'standard',
+      pkceMethod: 'S256',
     },
-    enableBearerInterceptor: true, // Autorise automatiquement l'ajout du token aux requêtes HTTP
-    bearerExcludedUrls: ['/assets'], // Exclut certaines URL du besoin de token
-    loadUserProfileAtStartUp: true, // Charge le profil utilisateur
+    enableBearerInterceptor: true, // Automatically allows adding the token to HTTP requests
+    bearerExcludedUrls: ['/assets'], 
+    loadUserProfileAtStartUp: true, // Load the user profile
   });
 };

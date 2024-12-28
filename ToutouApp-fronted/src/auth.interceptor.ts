@@ -7,26 +7,26 @@ import { switchMap, of } from 'rxjs';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const keycloakService = inject(KeycloakService);
 
-  // Vérifiez si l'utilisateur est connecté
-  const isAuthenticated = keycloakService.isLoggedIn(); // Retourne un boolean directement
+  // Check if the user is logged in
+  const isAuthenticated = keycloakService.isLoggedIn();
 
   if (isAuthenticated) {
-    // Si l'utilisateur est connecté, obtenez le token
+    // If the user is logged in, get the token
     const tokenPromise = keycloakService.getToken();
 
     return from(tokenPromise).pipe(
       switchMap((token: string) => {
-        // Clonez la requête pour ajouter le token dans les en-têtes
+        // Clone the request to add the token in the headers
         const clonedRequest = req.clone({
           setHeaders: {
             Authorization: `Bearer ${token}`,
           },
         });
-        return next(clonedRequest); // Passez la requête clonée
+        return next(clonedRequest); // Pass the cloned query
       })
     );
   }
 
-  // Si l'utilisateur n'est pas authentifié, laissez passer la requête d'origine
+  // If the user is not authenticated, pass the original request
   return next(req);
 };

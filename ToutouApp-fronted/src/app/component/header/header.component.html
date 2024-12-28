@@ -1,11 +1,16 @@
+
 <div class="header-container">
   <div class="logo" (click)="navigateToHome()">
     <img src="assets/logo.jpg" alt="HappyPaws Logo" />
     <span class="logo-text">HappyPaws</span>
   </div>
   <nav class="navigation">
-    <a routerLink="/Profile">Profile</a>
-    <a (click)="logout()">Sign-out</a>
-    <a (click)="seeRequests()">My requests</a>
+    <button *ngIf="isLoggedIn">View Request (Map)</button>   <!-- add appropriate redirect -->
+    <button *ngIf="isLoggedIn">Create Request</button>   <!-- add appropriate redirect -->
+    <button *ngIf="isLoggedIn">Profile</button>    <!-- add appropriate redirect -->
+    <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
+    <button *ngIf="isLoggedIn" (click)="logout()">Sign-out</button>
   </nav>
+
 </div>
+

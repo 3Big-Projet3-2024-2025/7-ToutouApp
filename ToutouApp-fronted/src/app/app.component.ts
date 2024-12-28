@@ -19,7 +19,7 @@ export class AppComponent {
 
   async login(): Promise<void> {
     await this.keycloakService.login({
-      redirectUri: window.location.origin, // Redirige vers l'URL racine après connexion
+      redirectUri: window.location.origin, //Redirects to root URL after login 
     });
   }
 }

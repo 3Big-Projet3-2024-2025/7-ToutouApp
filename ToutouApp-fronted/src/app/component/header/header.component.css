@@ -25,13 +25,13 @@
   
   
   header {
-    position: fixed; /* Fixe le header en haut de la page */
-    top: 0; /* Aligne le header au sommet */
+    position: fixed;
+    top: 0;
     left: 0;
-    width: 100%; /* Assure qu'il occupe toute la largeur */
-    z-index: 1000; /* Le met au-dessus des autres éléments */
-    background-color: white; /* Ajoutez un fond pour qu'il soit toujours visible */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Facultatif : effet d'ombre */
+    width: 100%; 
+    z-index: 1000; 
+    background-color: white; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
   }
 
 
@@ -42,7 +42,7 @@
     left: 0;
     width: 100%;
     height: 60px;
-    background-color: #f0783b; /* Orange chaleureux */
+    background-color: #f0783b; 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -54,8 +54,8 @@
   .logo {
     display: flex;
     align-items: center;
-    cursor: pointer; /* Assurez-vous que le curseur change en pointeur */
-    z-index: 10; /* Ajustez le z-index si nécessaire */
+    cursor: pointer; 
+    z-index: 10; 
     
     
   }
@@ -84,4 +84,18 @@
     text-decoration: underline;
   }
   
+
+  .navigation button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 15px;
+    text-decoration: underline;
+  }
+  
+  .navigation button:hover {
+    color: black; 
+  }
   
