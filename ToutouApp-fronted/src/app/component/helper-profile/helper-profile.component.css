@@ -1,56 +1,65 @@
 .ratings-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-  }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .rating-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .rating-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .rating-header {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
-  }
-  
-  .rating-header h3 {
-    margin: 0;
-    font-size: 1.2em;
-    text-align: center;
-  }
-  
-  .rating-body,
-  .rating-footer {
-    margin-bottom: 10px;
-  }
-  
-  .rating-body p,
-  .rating-footer p {
-    margin: 5px 0;
-    font-size: 0.95em;
-    color: #555;
-  }
-  
-  .rating-footer p strong {
-    color: #333;
-  }
-  
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  margin-top: 60px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.rating-card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.rating-header h3 {
+  font-size: 18px;
+  margin: 0;
+  color: #333;
+}
+
+.stars {
+  color: #ffcd3c;
+  font-size: 18px;
+  margin-left: 8px;
+}
+
+.filled {
+  color: #ffcd3c;
+}
+
+.empty {
+  color: #ccc;
+}
+
+.rating-body p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.rating-footer {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #888;
+}
+
+.rating-footer strong {
+  color: #333;
+}
+
+.ng-template {
+  text-align: center;
+  color: #888;
+  font-size: 16px;
+  padding: 20px 0;
+}

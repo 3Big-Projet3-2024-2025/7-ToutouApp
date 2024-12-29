@@ -3,11 +3,12 @@ import { RatingService } from '../../services/rating.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-helper-profile',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, HeaderComponent],
   templateUrl: './helper-profile.component.html',
   styleUrl: './helper-profile.component.css'
 })
@@ -47,6 +48,19 @@ export class HelperProfileComponent implements OnInit{
         console.error('Error loading helper ratings', error);
       }
     );
+  }
+
+  get totalRatings(): number {
+    return this.helperRatings.length;
+  }
+
+
+  get averageRating(): number {
+    if (this.helperRatings.length === 0) {
+      return 0;
+    }
+    const total = this.helperRatings.reduce((sum, rating) => sum + rating.ratingValue, 0);
+    return total / this.helperRatings.length;
   }
 
 
