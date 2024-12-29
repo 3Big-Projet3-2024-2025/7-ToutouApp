@@ -19,7 +19,7 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(withInterceptors([authInterceptor])),
-    KeycloakService, // Fournit le service Keycloak
+    KeycloakService, // Provides the Keycloak service
     provideRouter(routes),
     {
       provide: APP_INITIALIZER,

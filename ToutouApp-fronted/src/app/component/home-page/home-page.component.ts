@@ -11,45 +11,45 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./home-page.component.css'],
 })
 export class HomePageComponent implements AfterViewInit, OnInit {
-  userFullName: string = ''; // Variable pour stocker le nom complet
+  userFullName: string = ''; // Variable to store the full name
 
   constructor(private authService: AuthService) {}
 
   async ngOnInit(): Promise<void> {
     try {
-      // Crée l'utilisateur dans la base de données s'il n'existe pas
+      // Create the user in the database if it does not exist
       await this.authService.createUser();
 
-      // Charge le nom complet après la connexion
+      // Load the full name after login
       this.userFullName = await this.authService.getUserFullName();
 
-      console.log('Nom complet de l’utilisateur chargé :', this.userFullName);
+      console.log('User full name loaded:', this.userFullName);
     } catch (error) {
-      console.error('Erreur lors de la création ou du chargement de l’utilisateur :', error);
+      console.error('Error during user creation or loading:', error);
     }
   }
 
   ngAfterViewInit(): void {
-    // Sélectionne tous les éléments à animer
+    // Select all elements to animate
     const elements = document.querySelectorAll('.animate-on-scroll');
 
-    // Configure l'observateur
+    // Configure the observer
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Ajoute une classe visible si l'élément est visible
+            // Add a visible class if the element is visible
             entry.target.classList.add('visible');
-            observer.unobserve(entry.target); // Arrête d'observer après l'animation
+            observer.unobserve(entry.target); // Stop observing after the animation
           }
         });
       },
       {
-        threshold: 0.4, // Déclenche l'animation lorsque 40% de l'élément est visible
+        threshold: 0.4, // Trigger the animation when 40% of the element is visible
       }
     );
 
-    // Observe chaque élément
+    // Observe each element
     elements.forEach((el) => observer.observe(el));
   }
 }

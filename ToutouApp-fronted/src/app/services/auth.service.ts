@@ -12,22 +12,22 @@ export class AuthService {
 
   constructor(private keycloakService: KeycloakService, private http: HttpClient) {}
 
-  // Récupérer la liste des emails existants
+  // Retrieve the list of existing emails
   getAllEmails(): Promise<string[]> {
     return this.http.get<string[]>(`${this.apiUrl}/emails`).toPromise().then((res) => res || []);
   }
 
-  // Créer un utilisateur
+  // Create a user
   async createUser(): Promise<void> {
     try {
       const profile = await this.keycloakService.loadUserProfile();
 
-      // Valeurs par défaut si des champs sont absents
+      // Default values if fields are missing
       const email: string = profile.email || 'unknown@email.com';
       const firstName: string = profile.firstName || 'Unknown';
       const lastName: string = profile.lastName || 'Unknown';
 
-      // Décoder l'Access Token pour obtenir les autres informations
+      // Decode the Access Token to obtain additional information
       const token = await this.getAccessToken();
       const decodedToken: any = jwtDecode(token);
 
@@ -36,26 +36,26 @@ export class AuthService {
       const street: string = decodedToken?.street || 'N/A';
       const postalCode: string = decodedToken?.postal_code || 'N/A';
 
-      // Vérifier si l'email existe dans la base de données
+      // Check if the email exists in the database
       const emails = await this.getAllEmails();
 
       if (!emails.includes(email)) {
         const user = { email, firstName, lastName, country, city, street, postalCode };
 
-        // Appel à l'API pour créer l'utilisateur
+        // API call to create the user
         this.http.post(`${this.apiUrl}/create`, user).subscribe({
-          next: (res) => console.log('Utilisateur créé avec succès', res),
-          error: (err) => console.error("Erreur lors de la création de l'utilisateur", err),
+          next: (res) => console.log('User successfully created', res),
+          error: (err) => console.error('Error creating the user', err),
         });
       } else {
-        console.log('Utilisateur déjà existant avec cet email : ', email);
+        console.log('User already exists with this email:', email);
       }
     } catch (error) {
-      console.error('Erreur lors de la création de l\'utilisateur :', error);
+      console.error('Error creating the user:', error);
     }
   }
 
-  // Récupère le prénom (given_name) et le nom de famille (family_name) de l'utilisateur
+  // Retrieve the user's first name (given_name) and last name (family_name)
   async getUserFullName(): Promise<string> {
     const profile = await this.keycloakService.loadUserProfile();
     const firstName = profile.firstName || '';
@@ -80,7 +80,7 @@ export class AuthService {
     return profile.firstName || '';
   }
 
-  // Méthode pour récupérer l'Access Token
+  // Method to retrieve the Access Token
   async getAccessToken(): Promise<string> {
     const token = await this.keycloakService.getToken();
     console.log('Access Token:', token);  
@@ -88,7 +88,7 @@ export class AuthService {
   }
   
 
-  // Décoder le Token JWT
+  // Decode the JWT Token
   async getDecodedAccessToken(): Promise<any> {
     const token = await this.getAccessToken();
     return jwtDecode(token);
