@@ -1,0 +1,31 @@
+<div class="ratings-container">
+    <h2>
+        Ratings for {{ helperRatings[0]?.request.helper.firstName }} {{ helperRatings[0]?.request.helper.lastName }}
+    </h2>
+  
+    <div *ngIf="helperRatings && helperRatings.length > 0; else noRatings">
+      <div *ngFor="let rating of helperRatings" class="rating-card">
+        <div class="rating-header">
+          <h3>Rating: {{ rating.ratingValue }}/5</h3>
+        </div>
+        <div class="rating-body">
+          <p><strong>Comment:</strong> {{ rating.comment }}</p>
+          <p><strong>Dog Name:</strong> {{ rating.request.dogName }}</p>
+          <p><strong>Request Date:</strong> {{ rating.request.requestDate }}</p>
+          <p>
+            <strong>Request Time:</strong> {{ rating.request.startTime }} - {{ rating.request.endTime }}
+          </p>
+          <p><strong>Request Comment:</strong> {{ rating.request.comment }}</p>
+        </div>
+        <div class="rating-footer">
+          <p><strong>Owner:</strong> {{ rating.request.owner.firstName }} {{ rating.request.owner.lastName }}</p>
+          <p><strong>Owner Contact:</strong> {{ rating.request.owner.mail }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #noRatings>
+      <p>No ratings available for this helper.</p>
+    </ng-template>
+  </div>
+  

@@ -51,50 +51,67 @@
                 name="photo" 
                 maxlength="300" 
                 [(ngModel)]="request.photo">
-            
-            <!-- Request Date -->
-            <label for="requestDate">Request Date:</label>
-            <input 
-                type="date" 
-                id="requestDate" 
-                name="requestDate" 
-                required 
-                [(ngModel)]="request.requestDate"
-                #requestDate="ngModel"
-                aria-required="true">
-                <div *ngIf="requestDate.invalid && requestDate.touched" class="error-message">
-                    Request Date is required.
+
+
+
+
+                <div *ngIf="request.photo" class="image-preview">
+                    <p>Image Preview:</p>
+                    <img [src]="request.photo" alt="Image Preview" class="preview-img" *ngIf="isValidUrl(request.photo); else invalidUrl">
+                    <ng-template #invalidUrl>
+                        <p class="error-message">Invalid image URL</p>
+                    </ng-template>
                 </div>
             
-            <!-- Start Time -->
-            <label for="startTime">Start Time:</label>
-            <input 
-                type="time" 
-                id="startTime" 
-                name="startTime" 
-                step="1" 
-                required 
-                [(ngModel)]="request.startTime"
-                #startTime="ngModel"
-                aria-required="true">
-                <div *ngIf="startTime.invalid && startTime.touched" class="error-message">
-                    Start Time is required.
-                </div>
-            
-            <!-- End Time -->
-            <label for="endTime">End Time:</label>
-            <input 
-                type="time" 
-                id="endTime" 
-                name="endTime" 
-                step="1" 
-                required 
-                [(ngModel)]="request.endTime"
-                #endTime="ngModel"
-                aria-required="true">
-                <div *ngIf="endTime.invalid && endTime.touched" class="error-message">
-                    End Time is required.
-                </div>
+             <!-- Request Date -->
+<label for="requestDate">Request Date:</label>
+<input 
+    type="date" 
+    id="requestDate" 
+    name="requestDate" 
+    required 
+    [(ngModel)]="request.requestDate"
+    [min]="minDate"
+    (change)="onDateChange()"
+    #requestDate="ngModel"
+    aria-required="true">
+<div *ngIf="requestDate.invalid && requestDate.touched" class="error-message">
+    Request Date is required.
+</div>
+
+<!-- Start Time -->
+<label for="startTime">Start Time:</label>
+<input 
+    type="time" 
+    id="startTime" 
+    name="startTime" 
+    required 
+    [(ngModel)]="request.startTime"
+    [min]="minTime"
+    (change)="onDateChange()"
+    #startTime="ngModel"
+    aria-required="true">
+<div *ngIf="startTime.invalid && startTime.touched" class="error-message">
+    Start Time is required.
+</div>
+
+<!-- End Time -->
+<label for="endTime">End Time:</label>
+<input 
+    type="time" 
+    id="endTime" 
+    name="endTime" 
+    required 
+    [(ngModel)]="request.endTime"
+    [min]="request.startTime"
+    #endTime="ngModel"
+    aria-required="true">
+<div *ngIf="endTime.invalid && endTime.touched" class="error-message">
+    End Time is required and must be after the Start Time.
+</div>
+<div *ngIf="!isEndTimeValid()" class="error-message">
+    End Time must be later than Start Time.
+</div>
             
             <!-- Dog Category -->
             <label for="dogCategory">Dog Category:</label>

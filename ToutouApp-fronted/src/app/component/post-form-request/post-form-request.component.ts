@@ -22,6 +22,7 @@ export class PostFormRequestComponent implements OnInit{
     ){}
 
     minDate: string = '';
+    minTime: string = '';
 
 
 
@@ -46,11 +47,22 @@ export class PostFormRequestComponent implements OnInit{
 
   ngOnInit(): void {
     this.setMinDate();
+    this.setMinTime();
     
   }
 
 
   onSubmit(): void {
+
+    if (!this.isEndTimeValid()) {
+      console.error('Invalid time range: End time must be later than start time.');
+     
+      return;
+    }
+
+
+
+
     this.userIdService.getUserId().then((userId) => {
       const transformedRequest = {
         ...this.request,
@@ -63,8 +75,7 @@ export class PostFormRequestComponent implements OnInit{
       this.requestService.addRequest(transformedRequest).subscribe({
         next: (response) => {
           console.log('Request sent successfully!', response);
-          window.alert('Request created successfully')
-          this.resetForm(); // Réinitialise le formulaire après un succès
+          this.resetForm();
           this.router.navigate(['/hub-requests']);
         },
         error: (error) => {
@@ -103,5 +114,44 @@ export class PostFormRequestComponent implements OnInit{
     const day = String(today.getDate()).padStart(2, '0');
     this.minDate = `${year}-${month}-${day}`;
   }
+
+  setMinTime(): void {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    this.minTime = `${hours}:${minutes}`;
+  }
+
+  onDateChange(): void {
+    const selectedDate = new Date(this.request.requestDate);
+    const today = new Date(this.minDate);
+
+    
+    if (selectedDate.toDateString() === today.toDateString()) {
+      this.setMinTime();
+    } else {
+     
+      this.minTime = '00:00';
+    }
+  }
+
+  isEndTimeValid(): boolean {
+    const startTime = this.request.startTime;
+    const endTime = this.request.endTime;
+  
+    return !endTime || !startTime || endTime > startTime;
+  }
+  
+
+
+  isValidUrl(url: string): boolean {
+    try {
+      const parsedUrl = new URL(url);
+      return ['http:', 'https:'].includes(parsedUrl.protocol) && /\.(jpg|jpeg|png|gif|webp)$/i.test(parsedUrl.pathname);
+    } catch (e) {
+      return false;
+    }
+  }
+  
 
 }
