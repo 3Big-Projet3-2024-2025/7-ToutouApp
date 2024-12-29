@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Route, Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-hub-for-requests',
   standalone: true,
-  imports: [FormsModule,CommonModule,HeaderComponent, DatePipe],
+  imports: [FormsModule,CommonModule,HeaderComponent, DatePipe, NgxPaginationModule],
   templateUrl: './hub-for-requests.component.html',
   styleUrl: './hub-for-requests.component.css'
 })
@@ -20,6 +21,7 @@ export class HubForRequestsComponent implements OnInit{
 
   requests: any[] = [];
   selectedRequest: any = null;
+  page: number = 1;
 
 
   ngOnInit(): void {
@@ -75,7 +77,10 @@ export class HubForRequestsComponent implements OnInit{
     } else {
 
       console.log('Request deletion cancelled');
-      window.alert('You cannot delete this request because someone has already agreed to help you.')
+      if(requestHelper){
+        window.alert('You cannot delete this request because someone has already agreed to help you.');
+      }
+      
     }
 
   }
@@ -94,6 +99,14 @@ export class HubForRequestsComponent implements OnInit{
 
       return dateA.getTime() - dateB.getTime();
     });
+  }
+
+
+  seeHelperProfile(helperId: any){
+
+    this.router.navigate(['/helper-profile', helperId]);
+
+
   }
 
 

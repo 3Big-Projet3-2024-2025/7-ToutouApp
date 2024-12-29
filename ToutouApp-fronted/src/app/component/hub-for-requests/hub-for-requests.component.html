@@ -3,7 +3,7 @@
 </div>
 
 <div class="requests">
-  <div class="request-card" *ngFor="let request of requests">
+  <div class="request-card" *ngFor="let request of requests | paginate: { itemsPerPage: 4, currentPage: page }">
     <div class="request-header">
       <h3>Date: {{ request.requestDate | date: 'dd/MM/yyyy'  }}</h3>
       <p>Heure: {{ request.startTime  }} - {{ request.endTime }}</p>
@@ -13,10 +13,13 @@
       <p><strong>Dog name:</strong> {{ request.dogName }}</p>
       <p><strong>Comment:</strong> {{ request.comment }}</p>
 
-      <div *ngIf="request.helper" class="helper-info">
+      <div *ngIf="request.helper" class="helper-info" (click)="seeHelperProfile(request.helper.id)">
         <p><strong>Helper:</strong> {{ request.helper.firstName }} {{ request.helper.lastName }}</p>
         <p><strong>Helper contact:</strong> {{ request.helper.mail }}</p>
         <p><strong>Helper location:</strong> {{ request.helper.city }}, {{ request.helper.country }}</p>
+        <p style="text-align: right; color: #007bff;">
+          <strong>Click here to see profile</strong> →
+        </p>
       </div>
       
     </div>
@@ -28,8 +31,14 @@
   </div>
 
   
+
+  
   <div class="create-button-container">
     <button class="btn btn-create" (click)="createRequest()">Create a new request</button>
   </div>
   
+</div>
+
+<div class="fixed-pagination-container">
+  <pagination-controls (pageChange)="page = $event"></pagination-controls>
 </div>

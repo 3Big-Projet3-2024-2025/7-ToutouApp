@@ -59,3 +59,17 @@ button:hover {
     background-color: #680c00;
 }
 
+
+.preview-img {
+    max-width: 100%;
+    max-height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 0.9em;
+  }
+

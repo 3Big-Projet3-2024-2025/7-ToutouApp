@@ -18,6 +18,8 @@ export class EditRequestComponent implements OnInit{
 
   request: any = {};
   dogCategories: any [] = [];
+  minDate: string = '';
+  minTime: string = '';
 
 
   categories = [
@@ -28,11 +30,16 @@ export class EditRequestComponent implements OnInit{
 
 
   ngOnInit(): void {
+
+    this.setMinDate();
+    this.setMinTime();
+
     const requestId = this.router.snapshot.paramMap.get('id');
 
     if(requestId){
       this.loadRequest(requestId);
     }
+
   }
 
 
@@ -44,11 +51,17 @@ export class EditRequestComponent implements OnInit{
 
 
   onSubmit() {
-    // Ici, tu enverras les données mises à jour au backend
+
+    if (!this.isEndTimeValid()) {
+      console.error('Invalid time range: End time must be later than start time.');
+     
+      return;
+    }
+    
+
     this.requestService.modifyRequest(this.request.requestId, this.request).subscribe(
       (response) => {
         console.log('Requête mise à jour avec succès', response);
-        window.alert('Your modifications have been saved successfully.');
         this.route.navigate(['/hub-requests']);
       },
       (error) => {
@@ -59,6 +72,52 @@ export class EditRequestComponent implements OnInit{
 
   cancelModif(){
     this.route.navigate(['/hub-requests']);
+  }
+
+
+  isValidUrl(url: string): boolean {
+    try {
+      const parsedUrl = new URL(url);
+      return ['http:', 'https:'].includes(parsedUrl.protocol) && /\.(jpg|jpeg|png|gif|webp)$/i.test(parsedUrl.pathname);
+    } catch (e) {
+      return false;
+    }
+  }
+
+
+  setMinDate(): void {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    this.minDate = `${year}-${month}-${day}`;
+  }
+
+  setMinTime(): void {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    this.minTime = `${hours}:${minutes}`;
+  }
+
+  onDateChange(): void {
+    const selectedDate = new Date(this.request.requestDate);
+    const today = new Date(this.minDate);
+
+    
+    if (selectedDate.toDateString() === today.toDateString()) {
+      this.setMinTime();
+    } else {
+     
+      this.minTime = '00:00';
+    }
+  }
+
+  isEndTimeValid(): boolean {
+    const startTime = this.request.startTime;
+    const endTime = this.request.endTime;
+  
+    return !endTime || !startTime || endTime > startTime;
   }
 
   

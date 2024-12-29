@@ -94,49 +94,77 @@
     background-color: #c82333;
   }
 
- /* Conteneur du bouton create */
+ 
 .create-button-container {
-  position:absolute;  /* Positionne le bouton de manière absolue */
-  top: 80px;  /* Espacement de 20px du bord supérieur */
-  left: 20px;  /* Espacement de 20px du bord gauche */
-  z-index: 100;  /* Assure que le bouton soit au-dessus des autres éléments */
+  position:absolute; 
+  top: 80px;  
+  left: 20px;  
+  z-index: 100; 
 }
 
 /* Bouton Create */
 .btn-create {
-  background-color: #4CAF50; /* Couleur de fond */
-  color: white; /* Couleur du texte */
-  padding: 8px 12px; /* Taille réduite */
-  border: none; /* Pas de bordure */
-  border-radius: 5px; /* Coins arrondis */
-  font-size: 14px; /* Taille de la police réduite */
-  font-weight: bold; /* Texte en gras */
-  cursor: pointer; /* Curseur en forme de main */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ombre discrète */
-  transition: background-color 0.3s ease; /* Effet de transition sur la couleur */
+  background-color: #4CAF50; 
+  color: white; 
+  padding: 8px 12px; 
+  border: none; 
+  border-radius: 5px; 
+  font-size: 14px; 
+  font-weight: bold;
+  cursor: pointer; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease; 
 }
 
 .btn-create:hover {
-  background-color: #45a049; /* Légèrement plus foncé au survol */
+  background-color: #45a049; 
 }
 
 .btn-create:active {
-  background-color: #3e8e41; /* Plus foncé au clic */
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Ombre réduite */
+  background-color: #3e8e41; 
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 
+.helper-info {
+  background-color: #f0f8ff;
+  color: #007bff; 
+  padding: 10px; 
+  border-radius: 5px; 
+  margin-top: 10px;
+  font-size: 0.95em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+  
   
 
-  .helper-info {
-    background-color: #f0f8ff;
-    color: #007bff; 
-    padding: 10px; 
-    border-radius: 5px; 
-    margin-top: 10px;
-    font-size: 0.95em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  }
-  
-  
-  
+.helper-info:hover {
+  background-color: #e6f2ff; 
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); 
+  transform: scale(1.03); 
+}
+
+.helper-info:active {
+  background-color: #cce7ff; 
+  transform: scale(0.97); 
+}
+
+.fixed-pagination-container {
+  position: fixed;         
+  bottom: 20px;             
+  left: 50%;               
+  transform: translateX(-50%); 
+  z-index: 1000;            
+  background-color: #ffffff; 
+  padding: 10px 20px;       
+  border-radius: 8px;       
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+pagination-controls {
+  display: inline-block;
+}
+
+
