@@ -7,6 +7,7 @@ import { HubForRequestsComponent } from './component/hub-for-requests/hub-for-re
 import { EditRequestComponent } from './component/edit-request/edit-request.component';
 import { HelperProfileComponent } from './component/helper-profile/helper-profile.component';
 import { AuthGuard } from '../app/guard/auth.guard';
+import { CommentHelperComponent } from './component/comment-helper/comment-helper.component';
 
 export const routes: Routes = [
     {path:'', component: HomePageComponent},
@@ -15,6 +16,7 @@ export const routes: Routes = [
     {path:'post-request',component: PostFormRequestComponent,canActivate: [AuthGuard]},
     {path:'hub-requests',component: HubForRequestsComponent,canActivate: [AuthGuard]},
     {path:'edit-request/:id',component: EditRequestComponent,canActivate: [AuthGuard]},
-    {path:'helper-profile/:helperId',component: HelperProfileComponent}
+    {path:'helper-profile/:helperId',component: HelperProfileComponent, canActivate: [AuthGuard]},
+    {path:'comment-helper/:helperId/:requestId',component: CommentHelperComponent, canActivate: [AuthGuard]}
 
 ];

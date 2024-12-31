@@ -1,0 +1,106 @@
+.rating-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    margin-top: 80px;
+  }
+  
+  
+  .rating-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  
+  .stars {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .stars label {
+    cursor: pointer;
+  }
+  
+  .stars input[type="radio"] {
+    display: none;
+  }
+  
+  .stars .star {
+    font-size: 30px;
+    color: #ccc;
+    transition: color 0.3s;
+  }
+  
+  .stars input[type="radio"]:checked ~ .star,
+  .stars label:hover ~ .star {
+    color: #f5a623;
+  }
+  
+  
+  .comment-section {
+    margin-bottom: 20px;
+  }
+  
+  .comment-section textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: none;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+  }
+  
+ 
+  .submit-section {
+    text-align: center;
+  }
+  
+  .submit-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-btn:hover {
+    background-color: #45a049;
+  }
+
+  .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  .back-button {
+    position: fixed; 
+    top: 80px;       
+    left: 40px;     
+    padding: 10px 20px; 
+    font-size: 16px;  
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000; 
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Couleur au survol */
+}
+  
+  

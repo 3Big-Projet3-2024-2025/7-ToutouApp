@@ -11,7 +11,7 @@
   </div>
 
   <div *ngIf="helperRatings && helperRatings.length > 0; else noRatings">
-    <div *ngFor="let rating of helperRatings" class="rating-card">
+    <div *ngFor="let rating of helperRatings | paginate: { itemsPerPage: 4, currentPage: page }" class="rating-card">
       <div class="rating-header">
         <h3>
           Rating: 

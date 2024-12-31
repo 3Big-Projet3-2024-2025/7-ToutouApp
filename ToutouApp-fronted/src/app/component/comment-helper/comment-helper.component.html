@@ -1,0 +1,117 @@
+<app-header></app-header>
+
+<div class="rating-container">
+    <h2>Évaluer cet utilisateur</h2>
+    
+    <form (ngSubmit)="onSubmit()" #ratingForm="ngForm">
+      
+        <div class="stars">
+            <label for="star1">
+              <input
+                type="radio"
+                id="star1"
+                name="ratingValue"
+                value="1"
+                [(ngModel)]="rating.ratingValue"
+                #ratingValueCtrl="ngModel"
+                required
+              >
+              <span class="star">&#9733;</span>
+            </label>
+            
+            <label for="star2">
+              <input
+                type="radio"
+                id="star2"
+                name="ratingValue"
+                value="2"
+                [(ngModel)]="rating.ratingValue"
+                #ratingValueCtrl="ngModel"
+                required
+              >
+              <span class="star">&#9733;</span>
+            </label>
+            
+            <label for="star3">
+              <input
+                type="radio"
+                id="star3"
+                name="ratingValue"
+                value="3"
+                [(ngModel)]="rating.ratingValue"
+                #ratingValueCtrl="ngModel"
+                required
+              >
+              <span class="star">&#9733;</span>
+            </label>
+            
+            <label for="star4">
+              <input
+                type="radio"
+                id="star4"
+                name="ratingValue"
+                value="4"
+                [(ngModel)]="rating.ratingValue"
+                #ratingValueCtrl="ngModel"
+                required
+              >
+              <span class="star">&#9733;</span>
+            </label>
+            
+            <label for="star5">
+              <input
+                type="radio"
+                id="star5"
+                name="ratingValue"
+                value="5"
+                [(ngModel)]="rating.ratingValue"
+                #ratingValueCtrl="ngModel"
+                required
+              >
+              <span class="star">&#9733;</span>
+            </label>
+          </div>
+          
+  
+      
+      <div *ngIf="ratingValueCtrl.invalid && ratingValueCtrl.touched" class="error">
+        Vous devez choisir une note.
+      </div>
+  
+      
+      <div class="comment-section">
+        <textarea
+          id="comment"
+          name="comment"
+          rows="5"
+          placeholder="Ajoutez un commentaire..."
+          [(ngModel)]="rating.comment"
+          #commentCtrl="ngModel"
+          required
+        ></textarea>
+      </div>
+  
+      
+      <div *ngIf="commentCtrl.invalid && commentCtrl.touched" class="error">
+        Le commentaire est obligatoire.
+        
+      </div>
+  
+      
+      <div class="submit-section">
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="ratingForm.invalid"
+        >
+          Soumettre
+        </button>
+      </div>
+    </form>
+
+    <div>
+        <button type="button" class="back-button" (click)="backToHub()">Back to the hub</button>
+    </div>
+    
+  </div>
+  

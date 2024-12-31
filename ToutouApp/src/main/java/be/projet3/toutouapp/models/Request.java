@@ -43,4 +43,7 @@ public class Request {
     @ManyToOne
     @JoinColumn(name = "dog_category_id", nullable = false)
     private DogCategory dogCategory;
+
+    @Column(nullable = false)
+    private Boolean state;
 }
