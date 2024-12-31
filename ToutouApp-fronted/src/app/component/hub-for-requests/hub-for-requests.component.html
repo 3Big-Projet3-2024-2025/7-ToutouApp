@@ -27,6 +27,15 @@
     <div class="request-footer">
       <button class="btn btn-edit" (click)="editRequest(request.requestId)">Modify</button>
       <button class="btn btn-delete" (click)="deleteRequest(request.requestId, request.helper)">Delete</button>
+
+
+      <button 
+        *ngIf="isRequestDatePassed(request.requestDate, request.endTime) && request.helper" 
+        class="btn btn-evaluate" 
+        (click)="evaluateHelper(request.helper.id, request.requestId)">
+        Evaluate Helper
+      </button>
+      
     </div>
   </div>
 
