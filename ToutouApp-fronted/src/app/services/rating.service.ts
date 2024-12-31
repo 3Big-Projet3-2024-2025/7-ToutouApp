@@ -11,10 +11,12 @@ export class RatingService {
 
   private baseUrl = 'http://localhost:8080/rating';
 
-
     getUserRating(userId: number): Observable<any>{
       return this.http.get(`${this.baseUrl}/user/${userId}`);
     }
+
+
+    
 
 
     deleteRating(id: number): Observable<any> {
@@ -25,18 +27,4 @@ export class RatingService {
     addRating(rating: any): Observable<any> {
       return this.http.post(`${this.baseUrl}`, rating); 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

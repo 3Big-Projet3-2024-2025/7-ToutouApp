@@ -1,6 +1,9 @@
 package be.projet3.toutouapp.controllers;
 
+import be.projet3.toutouapp.models.Role;
 import be.projet3.toutouapp.models.User;
+import be.projet3.toutouapp.repositories.jpa.RatingRepository;
+import be.projet3.toutouapp.repositories.jpa.RoleRepository;
 import be.projet3.toutouapp.repositories.jpa.UserRepository;
 import be.projet3.toutouapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RatingRepository ratingRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
     // Récupérer tous les utilisateurs
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -38,10 +50,31 @@ public class UserController {
     // Mettre à jour un utilisateur existant
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
-        user.setId(id);
-        User updatedUser = userService.updateUser(user);
+        // Vérifier si l'utilisateur existe
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + id));
+
+        // Mettre à jour les informations de l'utilisateur
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setCountry(user.getCountry());
+        existingUser.setCity(user.getCity());
+        existingUser.setStreet(user.getStreet());
+        existingUser.setPostalCode(user.getPostalCode());
+        existingUser.setMail(user.getMail());
+
+        // Mettre à jour le rôle si nécessaire (cela dépend si vous souhaitez permettre l'édition du rôle ou non)
+        if (user.getRole() != null) {
+            Role role = roleRepository.findById(user.getRole().getRoleId())
+                    .orElseThrow(() -> new RuntimeException("Rôle non trouvé avec l'ID : " + user.getRole().getRoleId()));
+            existingUser.setRole(role);
+        }
+
+        // Sauvegarder les modifications
+        User updatedUser = userRepository.save(existingUser);
         return ResponseEntity.ok(updatedUser);
     }
+
 
     // Supprimer un utilisateur par son ID
     @DeleteMapping("/{id}")
@@ -65,4 +98,15 @@ public class UserController {
         System.out.println("Requête GET /emails reçue");
         return ResponseEntity.ok(emails);
     }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
+        try {
+            User user = userService.getUserByEmail(email);
+            return ResponseEntity.ok(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
 }

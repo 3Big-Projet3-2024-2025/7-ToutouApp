@@ -107,6 +107,18 @@ public class UserService implements UserDetailsService, IUserService {
         if (!userRepository.existsById(user.getId())) {
             throw new RuntimeException("Utilisateur introuvable avec l'ID : " + user.getId());
         }
+
+        if (user.getRole() == null) {
+            throw new RuntimeException("Le rôle de l'utilisateur ne peut être nul");
+        }
+
+        // Si l'utilisateur a un rôle "USER" ou "ADMIN", on le met à jour avec ce rôle
+        Role role = roleRepository.findByName(user.getRole().getName())
+                .orElseThrow(() -> new RuntimeException("Rôle non trouvé : " + user.getRole().getName()));
+
+        // Mise à jour du rôle de l'utilisateur
+        user.setRole(role);
+
         return userRepository.save(user);
     }
 
@@ -117,4 +129,14 @@ public class UserService implements UserDetailsService, IUserService {
         }
         userRepository.deleteById(id);
     }
+
+    public User getUserByEmail(String email) {
+        User user = userRepository.findByMail(email);
+        if (user == null) {
+            throw new RuntimeException("Utilisateur introuvable avec l'email : " + email);
+        }
+        return user;
+    }
+
+
 }

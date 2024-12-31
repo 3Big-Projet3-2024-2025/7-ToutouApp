@@ -1,48 +1,68 @@
 <app-header></app-header>
 <div class="profile-container">
   <div class="profile-header">
-    <h1 class="profile-name">User Profile</h1>
+    <h1 class="profile-name">{{ user.firstName }} {{ user.lastName }}</h1>
   </div>
   <div class="profile-body">
     <div class="profile-section">
       <h2>Personal Information</h2>
-      <form>
+      <form (ngSubmit)="saveChanges()" #userForm="ngForm">
         <label for="first-name">First Name :</label>
-        <input type="text" id="first-name" name="first-name" value="John">
+        <input type="text" id="first-name" name="firstName" [(ngModel)]="user.firstName" required #firstName="ngModel">
+        <div *ngIf="firstName.invalid && firstName.touched" class="error-message">First Name is required.</div>
 
         <label for="last-name">Last Name :</label>
-        <input type="text" id="last-name" name="last-name" value="Doe">
+        <input type="text" id="last-name" name="lastName" [(ngModel)]="user.lastName" required #lastName="ngModel">
+        <div *ngIf="lastName.invalid && lastName.touched" class="error-message">Last Name is required.</div>
 
         <label for="country">Country :</label>
-        <input type="text" id="country" name="country" value="USA">
-
+        <input type="text" id="country" name="country" [(ngModel)]="user.country" required pattern="^[A-Za-zÀ-ÿ\s]+$" #country="ngModel">
+        <div *ngIf="country.invalid && country.touched" class="error-message">Country must contain only letters and spaces.</div>
+        
         <label for="city">City :</label>
-        <input type="text" id="city" name="city" value="New York">
+        <input type="text" id="city" name="city" [(ngModel)]="user.city" required pattern="^[A-Za-zÀ-ÿ\s]+$" #city="ngModel">
+        <div *ngIf="city.invalid && city.touched" class="error-message">City must contain only letters and spaces.</div>        
 
         <label for="street">Street/Number :</label>
-        <input type="text" id="street" name="street" value="123 Main St">
+        <input type="text" id="street" name="street" [(ngModel)]="user.street" required pattern="^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d\s]*$" #street="ngModel">
+        <div *ngIf="street.invalid && street.touched" class="error-message">Street/Number must contain at least one letter and one number.</div>        
 
         <label for="postal-code">Postal Code :</label>
-        <input type="text" id="postal-code" name="postal-code" value="10001">
-
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" value="john.doe@example.com">
+        <input type="text" id="postal-code" name="postalCode" [(ngModel)]="user.postalCode" required pattern="^\d{4,6}$" #postalCode="ngModel">
+        <div *ngIf="postalCode.invalid && postalCode.touched" class="error-message">Postal code must be between 4 and 6 digits.</div>
 
         <div class="buttons-container">
-          <button type="button" class="save-changes-button">Save Changes</button>
+          <button type="submit" class="save-changes-button" [disabled]="userForm.invalid">Save Changes</button>
+          <button type="button" class="delete-account-button" (click)="deleteAccount()">Delete Account</button>
         </div>
-
-        <button type="button" class="delete-account-button">Delete Account</button>
       </form>
     </div>
-    <div class="profile-section">
-      <h2>Reviews</h2>
-      <ul id="reviews">
-        <li>Great communication and fast response</li>
-        <li>Friendly and professional service</li>
-        <li>Reliable and trustworthy</li>
-      </ul>
-    </div>
+
+    <div class="reviews-section">
+      <h3>Reviews</h3>
+      <div *ngIf="reviews.length === 0" class="no-reviews">No reviews yet.</div>
+      <div *ngFor="let review of reviews" class="review-card">
+        <div class="review-header">
+          <div class="reviewer-info">
+            <span class="reviewer-name">{{ review.reviewerName }}</span>
+            <span class="review-date">{{ review.request.requestDate | date }}</span>
+          </div>
+        </div>
+        
+        <div class="stars">
+          <span *ngFor="let star of [].constructor(review.ratingValue); let i = index" class="star">★</span>
+          <span *ngFor="let emptyStar of [].constructor(5 - review.ratingValue); let j = index" class="empty-star">☆</span>
+        </div>
+        
+        <p class="comment">{{ review.comment }}</p>
+      </div>
+    </div>    
   </div>
-</div>  
+
+  <div *ngIf="showMessage" class="confirmation-message">
+    <span class="icon">✔</span>
+    Your information has been successfully updated!
+  </div>
+  
+</div>
 <app-footer></app-footer>

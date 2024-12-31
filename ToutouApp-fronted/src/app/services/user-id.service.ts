@@ -33,28 +33,27 @@ export class UserIdService {
 
     const users = [
       {
-        id: 1,
-        mail: 'la227758@student.helha.be',
-        lastName: 'Amico',
-        firstName: 'Matteo',
-        country: 'Belgium',
-        city: 'Charleroi',
-        street: 'Rue de la Montagne 41',
-        postalCode: '6000',
+        id: 18,
+        mail: 'marie@gmail.com',
+        lastName: 'Madeleine',
+        firstName: 'Marie',
+        country: 'Australia',
+        city: 'Sydney',
+        street: 'Porto 3',
+        postalCode: '78000',
         active: true,
         blocked: false,
-        role: { roleId: 2, name: 'USER' },
+        role: { roleId: 1, name: 'USER' },
       },
       {
-        id: 27,
-        mail: 'samu@gmail.com',
-        password: 'samu',
-        lastName: 'Samu',
-        firstName: 'Paul',
-        country: 'Belgium',
-        city: 'Charleroi',
-        street: 'Rue de la tour 59',
-        postalCode: '6000',
+        id: 15,
+        mail: 'jean1@gmail.com',
+        lastName: 'jean',
+        firstName: 'jean',
+        country: 'jean',
+        city: 'jean',
+        street: 'jean 123',
+        postalCode: '5885',
         active: true, 
         blocked: false,
         role: { id: 1, name: 'USER' },
@@ -90,5 +89,20 @@ export class UserIdService {
     throw new Error(`User with email ${email} not found`);
   }
 }
-    
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${email}`);
+  }
+
+    updateUser(user: any): Observable<any> {
+      return this.http.put(`${this.apiUrl}/${user.id}`, user);
+    }
+  
+    deleteUser(id: number): Observable<void> {
+      return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
+
+    getUserReviews(email: string): Observable<string[]> {
+      return this.http.get<string[]>(`${this.apiUrl}/${email}/reviews`);
+    }
 }
