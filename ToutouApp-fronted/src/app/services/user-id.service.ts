@@ -12,12 +12,13 @@ export class UserIdService {
   constructor(
     private keycloakService: KeycloakService,
     private authService: AuthService, 
-    private http: HttpClient
+    private http: HttpClient,
+    private userService: UserIdService
   ) { }
 
   private apiUrl = 'http://localhost:8080/user';
 
-  // Méthode pour récupérer l'ID utilisateur depuis l'API
+  
   private getUserIdFromApi(email: string): Observable<string> {
     return this.http.get<string>(`${this.apiUrl}/id`, { params: { email } });
   }
@@ -25,66 +26,26 @@ export class UserIdService {
 
   private async getUserEmail(): Promise<string> {
     const profile = await this.keycloakService.loadUserProfile();
-    return profile.email || '';  // Récupérer l'email de l'utilisateur (assurez-vous qu'il est défini dans Keycloak)
+    return profile.email || ''; 
   }
 
 
   async getUserId(): Promise<string> {
 
-    const users = [
-      {
-        id: 18,
-        mail: 'marie@gmail.com',
-        lastName: 'Madeleine',
-        firstName: 'Marie',
-        country: 'Australia',
-        city: 'Sydney',
-        street: 'Porto 3',
-        postalCode: '78000',
-        active: true,
-        blocked: false,
-        role: { roleId: 1, name: 'USER' },
-      },
-      {
-        id: 15,
-        mail: 'jean1@gmail.com',
-        lastName: 'jean',
-        firstName: 'jean',
-        country: 'jean',
-        city: 'jean',
-        street: 'jean 123',
-        postalCode: '5885',
-        active: true, 
-        blocked: false,
-        role: { id: 1, name: 'USER' },
-      },
-      {
-        id: 2,
-        mail: 'user3@example.com',
-        password: 'password3',
-        lastName: 'Brown',
-        firstName: 'Charlie',
-        country: 'UK',
-        city: 'London',
-        street: 'Baker Street',
-        postalCode: 'NW1 6XE',
-        active: true,
-        blocked: false,
-        role: { id: 2, name: 'USER' },
-      },
-    ];
 
-    // Récupérer l'email depuis Keycloak
+    
   const email = await this.getUserEmail();
   if (!email) {
     throw new Error('Email not found in Keycloak');
   }
 
-  // Trouver l'utilisateur dans la base de données simulée
-  const user = users.find((user) => user.mail === email);
+  const users = await this.userService.getAllUsers().toPromise();
+
+  
+  const user = users.find((user: any) => user.mail === email);
 
   if (user) {
-    return user.id.toString(); // Retourner l'ID de l'utilisateur
+    return user.id.toString(); 
   } else {
     throw new Error(`User with email ${email} not found`);
   }
@@ -105,4 +66,9 @@ export class UserIdService {
     getUserReviews(email: string): Observable<string[]> {
       return this.http.get<string[]>(`${this.apiUrl}/${email}/reviews`);
     }
+
+    getAllUsers(): Observable<any> {
+      return this.http.get(this.apiUrl);
+    }
+    
 }
