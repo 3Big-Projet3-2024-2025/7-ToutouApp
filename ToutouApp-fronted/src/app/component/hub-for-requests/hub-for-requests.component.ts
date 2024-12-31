@@ -22,6 +22,7 @@ export class HubForRequestsComponent implements OnInit{
   requests: any[] = [];
   selectedRequest: any = null;
   page: number = 1;
+  
 
 
   ngOnInit(): void {
@@ -37,8 +38,8 @@ export class HubForRequestsComponent implements OnInit{
      const userId = parseInt(userIdString, 10); 
 
      this.requestService.getUserRequest(userId).subscribe(
-      (data) => {
-        this.requests = data;
+      (data: any) => {
+        this.requests = data.filter((request: any) => request.state === false);
         this.sortRequestsByDate();
       },
       (error) => {
@@ -109,6 +110,21 @@ export class HubForRequestsComponent implements OnInit{
 
   }
 
+
+  evaluateHelper(helperId: any, requestId: any){
+
+    this.router.navigate(['/comment-helper', helperId, requestId]);
+
+  }
+
+
+  isRequestDatePassed(requestDate: string, requestEndTime: string): boolean {
+    const currentDateTime = new Date(); 
+    const requestDateTime = new Date(`${requestDate}T${requestEndTime}`); 
+    
+    return currentDateTime > requestDateTime;
+  }
+  
 
 
 }

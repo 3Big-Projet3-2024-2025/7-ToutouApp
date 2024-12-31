@@ -35,7 +35,8 @@ export class PostFormRequestComponent implements OnInit{
     photo: '',
     comment: '',
     owner: null, 
-    dogCategory: null 
+    dogCategory: null,
+    state: false
   };
 
 
@@ -59,6 +60,8 @@ export class PostFormRequestComponent implements OnInit{
      
       return;
     }
+
+    this.request.state = false;
 
 
 
@@ -98,7 +101,8 @@ export class PostFormRequestComponent implements OnInit{
       photo: '',
       comment: '',
       owner: null,
-      dogCategory: null
+      dogCategory: null,
+      state: false
     };
   }
 

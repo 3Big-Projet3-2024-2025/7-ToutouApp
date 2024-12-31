@@ -4,11 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-helper-profile',
   standalone: true,
-  imports: [FormsModule, CommonModule, HeaderComponent],
+  imports: [FormsModule, CommonModule, HeaderComponent, NgxPaginationModule],
   templateUrl: './helper-profile.component.html',
   styleUrl: './helper-profile.component.css'
 })
@@ -17,6 +18,7 @@ export class HelperProfileComponent implements OnInit{
   constructor(private ratingService: RatingService, private router: ActivatedRoute, ){}
 
   helperRatings: any[] = [];
+  page: number = 1;
 
 
 
