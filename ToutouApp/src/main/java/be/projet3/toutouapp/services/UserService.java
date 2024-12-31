@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, IUserService {
 
     @Autowired
     UserRepository userRepository;
@@ -86,6 +86,35 @@ public class UserService implements UserDetailsService {
     }
 
 
+    @Override
+    public User addUser(User user) {
+        return userRepository.save(user);
+    }
 
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 
+    @Override
+    public User getUserById(int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + id));
+    }
+
+    @Override
+    public User updateUser(User user) {
+        if (!userRepository.existsById(user.getId())) {
+            throw new RuntimeException("Utilisateur introuvable avec l'ID : " + user.getId());
+        }
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("Utilisateur introuvable avec l'ID : " + id);
+        }
+        userRepository.deleteById(id);
+    }
 }
