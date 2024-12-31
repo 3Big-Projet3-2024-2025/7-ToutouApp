@@ -93,4 +93,10 @@ export class AuthService {
     const token = await this.getAccessToken();
     return jwtDecode(token);
   }
+
+  async getUserEmail(): Promise<string> {
+    const profile = await this.keycloakService.loadUserProfile();
+    return profile.email || '';
+  }
+  
 }

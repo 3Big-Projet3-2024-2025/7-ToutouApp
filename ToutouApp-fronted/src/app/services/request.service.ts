@@ -36,6 +36,4 @@ export class RequestService {
     return this.http.get(`${this.baseUrl}/${requestId}`);
   }
 
-
-
 }
