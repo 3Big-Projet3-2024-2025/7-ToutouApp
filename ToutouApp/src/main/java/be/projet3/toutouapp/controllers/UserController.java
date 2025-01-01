@@ -109,4 +109,21 @@ public class UserController {
         }
     }
 
+    // Bloquer ou débloquer un utilisateur
+    @PatchMapping("/{id}/block")
+    public ResponseEntity<User> blockUser(@PathVariable int id, @RequestParam boolean block) {
+        // Récupérer l'utilisateur par ID
+        User user = userService.getUserById(id);
+
+        // Mettre à jour l'état de blocage
+        user.setBlocked(block);
+
+        // Sauvegarder l'utilisateur
+        User updatedUser = userService.updateUser(user);
+
+        // Retourner la réponse
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
 }

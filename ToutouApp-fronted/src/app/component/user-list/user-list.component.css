@@ -1,0 +1,45 @@
+.loading {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .user-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .user-table th, .user-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .user-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .blocked {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .active {
+    color: green;
+    font-weight: bold;
+  }
+  
+  .no-users {
+    text-align: center;
+    font-size: 16px;
+    color: gray;
+  }
+  
+  .user-table td {
+    vertical-align: middle;
+  }
+  
+  .user-table input[type='checkbox'] {
+    transform: scale(1.2);
+  }
+  

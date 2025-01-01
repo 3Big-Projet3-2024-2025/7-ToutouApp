@@ -1,0 +1,28 @@
+<h2>Modifier l'utilisateur</h2>
+<form [formGroup]="userForm" (ngSubmit)="onSave()">
+  <label for="firstName">Prénom</label>
+  <input id="firstName" formControlName="firstName" />
+
+  <label for="lastName">Nom</label>
+  <input id="lastName" formControlName="lastName" />
+
+  <label for="mail">Email</label>
+  <input id="mail" formControlName="mail" />
+
+  <label for="country">Pays</label>
+  <input id="country" formControlName="country" />
+
+  <label for="city">Ville</label>
+  <input id="city" formControlName="city" />
+
+  <label for="street">Rue</label>
+  <input id="street" formControlName="street" />
+
+  <label for="postalCode">Code Postal</label>
+  <input id="postalCode" formControlName="postalCode" />
+
+  <div>
+    <button type="submit">Enregistrer</button>
+    <button type="button" (click)="onCancel()">Annuler</button>
+  </div>
+</form>
