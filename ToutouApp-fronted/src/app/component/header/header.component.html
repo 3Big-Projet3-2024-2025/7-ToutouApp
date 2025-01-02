@@ -7,10 +7,9 @@
   <nav class="navigation">
     <button *ngIf="isLoggedIn" (click)="seeMap()">View Request (Map)</button>   
     <button *ngIf="isLoggedIn" (click)="seeRequests()">Create Request</button>   
+    <button *ngIf="isLoggedIn" (click)="seeMyServices()">My Services</button>
     <button *ngIf="isLoggedIn" (click)="seeProfile()">Profile</button>    
     <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
     <button *ngIf="isLoggedIn" (click)="logout()">Sign-out</button>
   </nav>
-
 </div>
-
