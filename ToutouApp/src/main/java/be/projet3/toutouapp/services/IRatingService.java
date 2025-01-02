@@ -5,8 +5,18 @@ import be.projet3.toutouapp.models.Rating;
 import java.util.List;
 
 public interface IRatingService {
-    public List<Rating> getRatingByUserId(int userId);
-    public Rating addRating(Rating rating);
-    public void deleteRating(int id);
+    // Récupérer tous les avis
+    List<Rating> getAllRatings();
+
+    // Récupérer les avis par utilisateur
+    List<Rating> getRatingByUserId(int userId);
+
+    // Ajouter un avis
+    Rating addRating(Rating rating);
+
+    // Supprimer un avis par ID
+    void deleteRating(int id);
+
+    List<Rating> getNegativeRatings();
 
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface RatingRepository extends JpaRepository <Rating, Integer> {
     List<Rating> findByConsumer_Id(int consumerId);
+    List<Rating> findByRatingValueLessThan(int ratingValue);
 }
