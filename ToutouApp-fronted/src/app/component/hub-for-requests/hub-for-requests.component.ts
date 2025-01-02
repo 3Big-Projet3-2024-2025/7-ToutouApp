@@ -41,6 +41,8 @@ export class HubForRequestsComponent implements OnInit{
       (data: any) => {
         this.requests = data.filter((request: any) => request.state === false);
         this.sortRequestsByDate();
+
+        this.deleteExpiredRequestsWithoutHelper();
       },
       (error) => {
         console.error('Erreur lors de la récupération des requêtes :', error);
@@ -124,7 +126,27 @@ export class HubForRequestsComponent implements OnInit{
     
     return currentDateTime > requestDateTime;
   }
-  
 
+
+  deleteExpiredRequestsWithoutHelper() {
+    const expiredRequests = this.requests.filter(request => 
+      request.helper == null && 
+      this.isRequestDatePassed(request.requestDate, request.endTime)
+    );
+  
+    expiredRequests.forEach(request => {
+      this.requestService.deleteRequest(request.requestId).subscribe({
+        next: (response) => {
+          console.log(`Expired request ${request.requestId} deleted successfully!`, response);
+        },
+        error: (error) => {
+          console.error(`Error deleting expired request ${request.requestId}:`, error);
+        }
+      });
+    });
+    
+  }
+  
+  
 
 }

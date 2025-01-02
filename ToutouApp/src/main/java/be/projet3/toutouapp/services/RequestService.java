@@ -29,8 +29,8 @@ public class RequestService implements IRequestService{
 
     @Override
     public Request updateRequest(Request request) {
-        if (requestRepository.existsById(request.getRequestId())) {
-            return requestRepository.save(request);
+        if (!requestRepository.existsById(request.getRequestId())) {
+            throw new RuntimeException("La requête avec l'ID " + request.getRequestId() + " n'existe pas.");
         }
         return requestRepository.save(request);
     }

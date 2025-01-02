@@ -4,6 +4,9 @@ import { HeaderComponent } from "../header/header.component";
 import { FooterComponent } from "../footer/footer.component";
 import 'leaflet-control-geocoder';
 import { NominatimService } from '../../services/nominatim.service';
+import { RequestService } from '../../services/request.service';
+import { UserIdService } from '../../services/user-id.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-map',
@@ -14,18 +17,18 @@ import { NominatimService } from '../../services/nominatim.service';
 })
 export class MapComponent implements AfterViewInit, OnDestroy {
   private map: L.Map | undefined;
-  private addresses = [
-    "Rue du Nord 123 Charleroi",
-    "Grand rue Charleroi",
-    "rue d'Accolay Bruxelles"
-  ];
+  private addresses: string[] = [];
+  private idRequest: any;
+  private request: any;
+  private error?: string;
 
-  constructor(private nominatimService: NominatimService) {}
+  constructor(private nominatimService: NominatimService, private requestService: RequestService, private userIdService: UserIdService, private router: Router) {}
 
   ngAfterViewInit(): void {
     if (!this.map) {
       this.initMap();
-      this.addAllMarkers(); // Ajouter tous les marqueurs pour toutes les adresses après l'initialisation
+      this.loadAddresses();
+      // this.addAllMarkers(); // Ajouter tous les marqueurs pour toutes les adresses après l'initialisation
     }
   }
 
@@ -77,32 +80,43 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private addAllMarkers(): void {
-    this.addresses.forEach(address => {
-      this.nominatimService.getCoordinates(address).subscribe(
-        (response) => {
-          if (response && response.length > 0) {
-            const lat = parseFloat(response[0].lat);
-            const lon = parseFloat(response[0].lon);
-            const coords: L.LatLngTuple = [lat, lon];
-  
-            if (this.map) {
-              const customIcon = this.createCustomMarker();
-              L.marker(coords, { icon: customIcon })
-                .addTo(this.map)
-                .bindPopup(`<b>${address}</b><br>Latitude: ${lat}, Longitude: ${lon}`)
-                .openPopup();
+    this.requestService.getAllRequests().subscribe(
+      (requests: any[]) => {
+        requests.forEach((request) => {
+          const address = `${request.owner.street}, ${request.owner.city}, ${request.owner.country}`;
+          this.nominatimService.getCoordinates(address).subscribe(
+            (response) => {
+              if (response && response.length > 0) {
+                const lat = parseFloat(response[0].lat);
+                const lon = parseFloat(response[0].lon);
+                const coords: L.LatLngTuple = [lat, lon];
+    
+                if (this.map) {
+                  const customIcon = this.createCustomMarker();
+                  const marker = L.marker(coords, { icon: customIcon }).addTo(this.map);
+    
+                  // Associez les données de la requête au marqueur
+                  marker.bindPopup(`<b>${address}</b><br>Latitude: ${lat}, Longitude: ${lon}`);
+                  marker.on('click', () => {
+                    this.updateDetailsPanel(request); // Mise à jour des détails
+                  });
+                }
+              } else {
+                console.error('Aucun résultat trouvé pour l\'adresse :', address);
+              }
+            },
+            (error) => {
+              console.error('Erreur lors de la récupération des coordonnées pour l\'adresse :', address, error);
             }
-          } else {
-            console.error('Aucun résultat trouvé pour l\'adresse :', address);
-          }
-        },
-        (error) => {
-          console.error('Erreur lors de la récupération des coordonnées pour l\'adresse :', address, error);
-        }
-      );
-    });
+          );
+        });
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des requêtes :', error);
+      }
+    );
   }
-
+  
   private createCustomMarker(): L.Icon {
     return L.icon({
       iconUrl: 'assets/marker.png',
@@ -112,36 +126,89 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  searchAddress(address: string): void {
-    if (!address || address.trim() === '') {
-      console.error('Adresse vide ou invalide.');
-      return;
-    }
-  
-    this.nominatimService.getCoordinates(address).subscribe(
-      (response) => {
-        if (response && response.length > 0) {
-          const lat = parseFloat(response[0].lat);
-          const lon = parseFloat(response[0].lon);
-          const coords: L.LatLngTuple = [lat, lon];
-  
-          // Ajoute un marqueur sur la carte
-          if (this.map) {
-            const customIcon = this.createCustomMarker();
-            L.marker(coords, { icon: customIcon })
-              .addTo(this.map)
-              .bindPopup(`<b>${address}</b><br>Latitude: ${lat}, Longitude: ${lon}`)
-              .openPopup();
-  
-            this.map.setView(coords, 15);
-          }
-        } else {
-          console.error('Aucun résultat trouvé pour cette adresse.');
-        }
+  loadAddresses(): void {
+    this.requestService.getAllRequests().subscribe(
+      (requests) => {
+        this.addresses = requests.map((request: any) => {
+          return `${request.owner.street}, ${request.owner.city}, ${request.owner.country}`;
+        });
+        console.log(this.addresses);
+        this.addAllMarkers();
       },
       (error) => {
-        console.error('Erreur lors de la récupération des coordonnées :', error);
+        console.error('Error loading requests:', error);
       }
     );
   }
+
+  updateDetailsPanel(request: any): void {
+    this.idRequest = request.requestId;
+    const dogName = request.dogName;
+    const dogSize = request.dogCategory ? request.dogCategory.category : 'Unknown';
+    const requestDate = request.requestDate;
+    const startTime = request.startTime;
+    const endTime = request.endTime;
+    const photoUrl = request.photo ? request.photo : 'default-photo-url.jpg';
+  
+    (document.getElementById('dogName') as HTMLInputElement).value = dogName;
+    (document.getElementById('dogSize') as HTMLInputElement).value = dogSize;
+    (document.getElementById('date') as HTMLInputElement).value = requestDate;
+    (document.getElementById('time') as HTMLInputElement).value = `${startTime} to ${endTime}`;
+    
+    //const photoElement = document.getElementById('photo') as HTMLImageElement;
+    //photoElement.src = photoUrl;
+  }
+
+  async acceptRequest(): Promise<void> {
+    if (!this.idRequest) {
+      console.error('idRequest is undefined!');
+      return;
+    }
+  
+    await this.loadRequestAsync();
+    console.log('Request loaded:', this.request);
+  
+    if (!this.request) {
+      console.error('Request is still undefined after loading!');
+      return;
+    }
+  
+    try {
+      const userId = await this.userIdService.getUserId();
+      console.log('User ID:', userId);
+  
+      const updatedRequest = {
+        ...this.request,
+        helper: { id: userId },
+        accepted: true
+      };
+  
+      console.log('Updated Request:', updatedRequest);
+  
+      const response = await this.requestService.modifyRequest(this.idRequest, updatedRequest).toPromise();
+      console.log('Request successfully updated', response);
+  
+      this.router.navigate(['/my-services']);
+    } catch (error) {
+      console.error('Error during request acceptance', error);
+    }
+  }
+  
+  async loadRequestAsync(): Promise<void> {
+    if (!this.idRequest) {
+      console.error('idRequest is undefined!');
+      return;
+    }
+  
+    try {
+      const requests = await this.requestService.getAllRequests().toPromise();
+      this.request = requests.find((req: any) => req.requestId === this.idRequest);
+      if (!this.request) {
+        console.error('Request not found!');
+      }
+    } catch (error) {
+      console.error('Error loading request', error);
+    }
+  }
+  
 }

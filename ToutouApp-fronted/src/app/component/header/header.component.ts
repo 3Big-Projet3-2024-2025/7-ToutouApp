@@ -56,8 +56,12 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/personal-profile'])
   }
 
+
   seeAdminPage(): void {
     this.router.navigate(['/admin/users']);
   }
   
+  seeMyServices() {
+    this.router.navigate(['/my-services']);
+  }
 }

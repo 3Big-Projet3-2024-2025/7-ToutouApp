@@ -7,25 +7,21 @@
     <h2>Request details</h2>
     <form>
       <label for="dogName">Dog Name :</label>
-      <input type="text" id="dogName" value="Bobby" readonly />
+      <input type="text" id="dogName" readonly />
 
       <label for="dogSize">Size :</label>
-      <select id="dogSize" disabled>
-        <option value="petit" selected>Small</option>
-        <option value="moyen">Medium</option>
-        <option value="gros">Large</option>
-      </select>
+      <input type="text" id="dogSize" readonly />
 
       <label for="date">Date :</label>
-      <input type="date" id="date" value="2024-11-19" readonly />
+      <input type="date" id="date" readonly />
 
       <label for="time">Time slot :</label>
-      <input type="text" id="time" value="3:00 p.m to 5:00 p" readonly />
+      <input type="text" id="time" readonly />
 
       <label for="photo">Photo of the dog :</label>
-      <input type="file" id="photo" disabled />
+      <img id="photo" src="" alt="Dog Photo" style="max-width: 100%; border-radius: 8px;" />
 
-      <button type="submit" disabled>Accept request</button>
+      <button type="button" (click)="acceptRequest()">Accept request</button>
     </form>
   </div>
 </div>
