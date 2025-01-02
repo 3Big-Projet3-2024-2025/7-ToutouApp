@@ -36,7 +36,7 @@ export class UserService {
   }
 
   updateUser(user: User): Observable<User> {
-    return this.http.put<User>(`http://localhost:8080/user/${user.id}`, user);
+    return this.http.put<User>(`${this.apiUrl}/${user.id}`, user);
   }
   
 
@@ -45,7 +45,7 @@ export class UserService {
   }
   
   updateUserFlag(id: number, flag: boolean): Observable<User> {
-  return this.http.patch<User>(`http://localhost:8080/user/${id}/flag?flag=${flag}`, {});
+  return this.http.patch<User>(`${this.apiUrl}/${id}/flag?flag=${flag}`, {});
 }
 
   
