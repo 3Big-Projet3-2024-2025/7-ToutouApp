@@ -4,12 +4,14 @@ import { User, UserService } from '../../services/user.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Validators } from '@angular/forms';
+import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
 
 
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,HeaderComponent,FooterComponent],
   templateUrl: './user-edit.component.html',
   styleUrl: './user-edit.component.css'
 })
