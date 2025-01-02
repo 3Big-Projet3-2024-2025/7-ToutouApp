@@ -148,11 +148,18 @@ public class UserController {
         try {
             User user = userService.getUserById(id);
 
+            // Check if the user is linked to an active request
+            if (userService.isUserLinkedToActiveRequests(id) && !flag) {
+                // If the user is linked to an active request, prevent deactivation
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("error", "Cannot deactivate a user linked to an active request."));
+            }
+
             // If the user is an ADMIN and is the last active one
             if (!flag && "ADMIN".equals(user.getRole().getName())) {
                 long activeAdminCount = userService.countActiveAdmins();
                 if (activeAdminCount <= 1) {
-                    throw new RuntimeException("Cannot remove the last active administrator!");
+                    throw new RuntimeException("Cannot deactivate the last active administrator!");
                 }
             }
 
@@ -165,12 +172,11 @@ public class UserController {
             return ResponseEntity.ok(updatedUser);
         } catch (RuntimeException e) {
             System.err.println("Error while updating user flag: " + e.getMessage());
-
-            // Return a well-structured JSON response
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
 
 
 }
