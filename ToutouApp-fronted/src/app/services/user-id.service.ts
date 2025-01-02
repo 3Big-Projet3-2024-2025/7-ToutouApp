@@ -12,8 +12,7 @@ export class UserIdService {
   constructor(
     private keycloakService: KeycloakService,
     private authService: AuthService, 
-    private http: HttpClient,
-    private userService: UserIdService
+    private http: HttpClient
   ) { }
 
   private apiUrl = 'http://localhost:8080/user';
@@ -39,7 +38,7 @@ export class UserIdService {
     throw new Error('Email not found in Keycloak');
   }
 
-  const users = await this.userService.getAllUsers().toPromise();
+  const users = await this.getAllUsers().toPromise();
 
   
   const user = users.find((user: any) => user.mail === email);
