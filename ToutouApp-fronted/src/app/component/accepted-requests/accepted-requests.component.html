@@ -1,0 +1,33 @@
+<app-header></app-header>
+<div class="accepted-requests">
+    <h2>Requêtes Acceptées</h2>
+
+    <div *ngIf="error" class="error-message">
+        <p>{{ error }}</p>
+    </div>
+
+    <div *ngIf="!error && acceptedRequests.length === 0" class="no-requests-message">
+        <p>Aucune requête acceptée.</p>
+    </div>
+
+    <div *ngIf="!error && acceptedRequests.length > 0" class="requests-list">
+        <div *ngFor="let request of acceptedRequests" class="request-item">
+            <div class="request-photo">
+                <img *ngIf="request.photo" [src]="request.photo" alt="{{ request.dogName }}" class="dog-photo" />
+                <div *ngIf="!request.photo" class="no-photo">Aucune photo</div>
+            </div>
+
+            <div class="request-details">
+                <h3>{{ request.dogName }}</h3>
+                <p><strong>Size:</strong> {{ request.dogCategory?.category || 'Unknown' }}</p>
+                <p><strong>Date de la demande:</strong> {{ request.requestDate | date }}</p>
+                <p><strong>Plage horaire:</strong> {{ request.startTime }} - {{ request.endTime }}</p>
+            </div>
+
+            <div class="request-actions">
+                <button class="delete-btn" (click)="deleteRequest(request.requestId)">Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>

@@ -44,4 +44,8 @@ export class HeaderComponent implements OnInit {
   seeProfile(){
     this.router.navigate(['/personal-profile'])
   }
+
+  seeMyServices() {
+    this.router.navigate(['/my-services']);
+  }
 }

@@ -1,5 +1,4 @@
 import { HttpClient } from '@angular/common/http';
-import { ReturnStatement } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -35,5 +34,4 @@ export class RequestService {
   getRequestById(requestId: string): Observable<any>{
     return this.http.get(`${this.baseUrl}/${requestId}`);
   }
-
 }
