@@ -1,50 +1,47 @@
 <div *ngIf="isLoading" class="loading">
-    Chargement des utilisateurs...
-  </div>
-  
-  <table *ngIf="!isLoading && users.length > 0" class="user-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Email</th>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Pays</th>
-        <th>Ville</th>
-        <th>Rôle</th>
-        <th>Statut</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.mail }}</td>
-        <td>{{ user.lastName }}</td>
-        <td>{{ user.firstName }}</td>
-        <td>{{ user.country }}</td>
-        <td>{{ user.city }}</td>
-        <td>{{ user.role.name }}</td>
-        <td>
-          <span *ngIf="user.blocked" class="blocked">Bloqué</span>
-          <span *ngIf="!user.blocked" class="active">Actif</span>
-        </td>
-        <td>
-          <input
-            type="checkbox"
-            [checked]="user.blocked"
-            (change)="onToggleBlock(user, $event)"
-          />
-        </td>
-        <td>
-            <button (click)="onEditUser(user)">Modifier</button>
-        </td>
-          
-      </tr>
-    </tbody>
-  </table>
-  
-  <div *ngIf="!isLoading && users.length === 0" class="no-users">
-    Aucun utilisateur trouvé.
-  </div>
-  
+  Loading users...
+</div>
+
+<table *ngIf="!isLoading && users.length > 0" class="user-table">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>Country</th>
+      <th>City</th>
+      <th>Role</th>
+      <th>Status and Action</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.mail }}</td>
+      <td>{{ user.lastName }}</td>
+      <td>{{ user.firstName }}</td>
+      <td>{{ user.country }}</td>
+      <td>{{ user.city }}</td>
+      <td>{{ user.role.name }}</td>
+      <td>
+        <span *ngIf="user.blocked" class="blocked">Blocked</span>
+        <span *ngIf="!user.blocked" class="active">Active</span>
+        <br />
+        <input
+          type="checkbox"
+          [checked]="user.blocked"
+          (change)="onToggleBlock(user, $event)"
+        />
+        <label for="blockToggle">Change status</label>
+      </td>
+      <td>
+        <button (click)="onEditUser(user)">Edit</button>
+        <button (click)="onDeleteUser(user)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!isLoading && users.length === 0" class="no-users">
+  No users found.
+</div>

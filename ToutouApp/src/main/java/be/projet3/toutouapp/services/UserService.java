@@ -138,5 +138,19 @@ public class UserService implements UserDetailsService, IUserService {
         return user;
     }
 
+    public List<User> getActiveUsers() {
+        return userRepository.findAll()
+                .stream()
+                .filter(User::isActive) // Filtrer par userFlag = true
+                .collect(Collectors.toList());
+    }
+
+    public long countActiveAdmins() {
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> "ADMIN".equals(user.getRole().getName()) && user.isActive())
+                .count();
+    }
+
 
 }

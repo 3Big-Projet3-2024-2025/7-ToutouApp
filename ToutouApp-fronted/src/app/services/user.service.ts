@@ -44,5 +44,9 @@ export class UserService {
     return this.http.get<User>(`${this.apiUrl}/${email}`);
   }
   
+  updateUserFlag(id: number, flag: boolean): Observable<User> {
+  return this.http.patch<User>(`http://localhost:8080/user/${id}/flag?flag=${flag}`, {});
+}
+
   
 }

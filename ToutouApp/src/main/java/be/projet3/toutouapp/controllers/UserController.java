@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import be.projet3.toutouapp.services.IUserService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -33,12 +34,16 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    // Récupérer tous les utilisateurs
+    // Récupérer les utilisateurs actifs
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<User>> getActiveUsers() {
+        List<User> activeUsers = userService.getAllUsers()
+                .stream()
+                .filter(User::isActive) // Filtrer par userFlag = true
+                .toList();
+        return ResponseEntity.ok(activeUsers);
     }
+
 
     // Ajouter un nouvel utilisateur
     @PostMapping
@@ -109,20 +114,62 @@ public class UserController {
         }
     }
 
-    // Bloquer ou débloquer un utilisateur
     @PatchMapping("/{id}/block")
-    public ResponseEntity<User> blockUser(@PathVariable int id, @RequestParam boolean block) {
-        // Récupérer l'utilisateur par ID
-        User user = userService.getUserById(id);
+    public ResponseEntity<?> blockUser(@PathVariable int id, @RequestParam boolean block) {
+        try {
+            User user = userService.getUserById(id);
 
-        // Mettre à jour l'état de blocage
-        user.setBlocked(block);
+            // If the user is an ADMIN and is the last active one
+            if (block && "ADMIN".equals(user.getRole().getName())) {
+                long activeAdminCount = userService.countActiveAdmins();
+                if (activeAdminCount <= 1) {
+                    throw new RuntimeException("Cannot block the last active administrator!");
+                }
+            }
 
-        // Sauvegarder l'utilisateur
-        User updatedUser = userService.updateUser(user);
+            // Update the block status
+            user.setBlocked(block);
 
-        // Retourner la réponse
-        return ResponseEntity.ok(updatedUser);
+            // Save the changes
+            User updatedUser = userService.updateUser(user);
+
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            System.err.println("Error while blocking/unblocking user: " + e.getMessage());
+
+            // Return a well-structured JSON response
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PatchMapping("/{id}/flag")
+    public ResponseEntity<?> updateUserFlag(@PathVariable int id, @RequestParam boolean flag) {
+        try {
+            User user = userService.getUserById(id);
+
+            // If the user is an ADMIN and is the last active one
+            if (!flag && "ADMIN".equals(user.getRole().getName())) {
+                long activeAdminCount = userService.countActiveAdmins();
+                if (activeAdminCount <= 1) {
+                    throw new RuntimeException("Cannot remove the last active administrator!");
+                }
+            }
+
+            // Update the userFlag property
+            user.setActive(flag);
+
+            // Save the changes
+            User updatedUser = userService.updateUser(user);
+
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            System.err.println("Error while updating user flag: " + e.getMessage());
+
+            // Return a well-structured JSON response
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
 
 
