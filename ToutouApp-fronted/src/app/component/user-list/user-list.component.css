@@ -1,0 +1,31 @@
+.margin {
+  margin-top: 80px;
+}
+
+/* Conteneur pour le titre et la barre de recherche */
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+/* Centrage du titre */
+.user-management-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 10px; /* Espacement entre le titre et la barre */
+}
+
+/* Barre de recherche alignée à droite */
+.search-bar {
+  align-self: flex-end; /* Aligne la barre à droite */
+  max-width: 300px; /* Vous pouvez ajuster la largeur ici */
+}
+
+/* Ajoutez un petit espace autour de la recherche */
+.search-bar input {
+  margin-right: 10px;
+}
+
