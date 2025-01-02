@@ -1,7 +1,9 @@
 package be.projet3.toutouapp.services;
 
+import be.projet3.toutouapp.models.Request;
 import be.projet3.toutouapp.models.Role;
 import be.projet3.toutouapp.models.User;
+import be.projet3.toutouapp.repositories.jpa.RequestRepository;
 import be.projet3.toutouapp.repositories.jpa.RoleRepository;
 import be.projet3.toutouapp.repositories.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ public class UserService implements UserDetailsService, IUserService {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private RequestRepository requestRepository;
 
 
     @Override
@@ -137,6 +141,35 @@ public class UserService implements UserDetailsService, IUserService {
         }
         return user;
     }
+
+    public List<User> getActiveUsers() {
+        return userRepository.findAll()
+                .stream()
+                .filter(User::isActive) // Filtrer par userFlag = true
+                .collect(Collectors.toList());
+    }
+
+    public long countActiveAdmins() {
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> "ADMIN".equals(user.getRole().getName()) && user.isActive())
+                .count();
+    }
+
+    public boolean isUserLinkedToActiveRequests(int userId) {
+        List<Request> userRequests = requestRepository.findByOwner_Id(userId);
+
+        // Check if the user is linked to an active request (state == false)
+        for (Request request : userRequests) {
+            if (!request.getState()) { // If the request is active (state == false)
+                return true; // The user is linked to an active request
+            }
+        }
+
+        return false; // The user is not linked to any active requests
+    }
+
+
 
 
 }
