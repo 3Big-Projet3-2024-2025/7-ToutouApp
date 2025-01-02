@@ -9,6 +9,7 @@ import { HelperProfileComponent } from './component/helper-profile/helper-profil
 import { AuthGuard } from '../app/guard/auth.guard';
 import { CommentHelperComponent } from './component/comment-helper/comment-helper.component';
 import { AcceptedRequestsComponent } from './component/accepted-requests/accepted-requests.component';
+import { ChatComponent } from './component/chat/chat.component';
 
 export const routes: Routes = [
     {path:'', component: HomePageComponent},
@@ -19,5 +20,6 @@ export const routes: Routes = [
     {path:'edit-request/:id',component: EditRequestComponent,canActivate: [AuthGuard]},
     {path:'helper-profile/:helperId',component: HelperProfileComponent, canActivate: [AuthGuard]},
     {path:'comment-helper/:helperId/:requestId',component: CommentHelperComponent, canActivate: [AuthGuard]},
-    {path:'my-services',component: AcceptedRequestsComponent,canActivate: [AuthGuard]}
+    {path:'my-services',component: AcceptedRequestsComponent,canActivate: [AuthGuard]},
+    { path: 'chat/:requestId', component: ChatComponent, canActivate: [AuthGuard] }
 ];

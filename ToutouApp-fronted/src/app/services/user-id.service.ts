@@ -17,42 +17,36 @@ export class UserIdService {
 
   private apiUrl = 'http://localhost:8080/user';
 
-  
   private getUserIdFromApi(email: string): Observable<string> {
     return this.http.get<string>(`${this.apiUrl}/id`, { params: { email } });
   }
-
 
   private async getUserEmail(): Promise<string> {
     const profile = await this.keycloakService.loadUserProfile();
     return profile.email || ''; 
   }
 
-
   async getUserId(): Promise<string> {
+    const email = await this.getUserEmail();
+    if (!email) {
+      throw new Error('Email not found in Keycloak');
+    }
 
+    const users = await this.getAllUsers().toPromise();
 
     
-  const email = await this.getUserEmail();
-  if (!email) {
-    throw new Error('Email not found in Keycloak');
+    const user = users.find((user: any) => user.mail === email);
+
+    if (user) {
+      return user.id.toString(); 
+    } else {
+      throw new Error(`User with email ${email} not found`);
+    }
   }
 
-  const users = await this.getAllUsers().toPromise();
-
-  
-  const user = users.find((user: any) => user.mail === email);
-
-  if (user) {
-    return user.id.toString(); 
-  } else {
-    throw new Error(`User with email ${email} not found`);
-  }
-}
-
-  getUserByEmail(email: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${email}`);
-  }
+    getUserByEmail(email: string): Observable<any> {
+      return this.http.get<any>(`${this.apiUrl}/${email}`);
+    }
 
     updateUser(user: any): Observable<any> {
       return this.http.put(`${this.apiUrl}/${user.id}`, user);
@@ -69,5 +63,4 @@ export class UserIdService {
     getAllUsers(): Observable<any> {
       return this.http.get(this.apiUrl);
     }
-    
 }
