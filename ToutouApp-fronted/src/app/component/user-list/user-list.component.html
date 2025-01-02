@@ -30,12 +30,12 @@
           <th>Country</th>
           <th>City</th>
           <th>Role</th>
-          <th>Status and Action</th>
+          <th>Status</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of filteredUsers | paginate: { itemsPerPage: 5, currentPage: currentPage }">
+        <tr *ngFor="let user of filteredUsers | paginate: { itemsPerPage: 8, currentPage: currentPage }">
           <td>{{ user.mail }}</td>
           <td>{{ user.lastName }}</td>
           <td>{{ user.firstName }}</td>
@@ -58,8 +58,8 @@
           </td>
           <td>
             <button (click)="onEditUser(user)" class="btn btn-warning btn-sm">Edit</button>
-            <button (click)="onDeleteUser(user)" class="btn btn-danger btn-sm ms-2">Delete</button>
-          </td>
+            <button (click)="onDeleteUser(user)" class="btn btn-danger btn-sm custom-margin">Delete</button>
+          </td>          
         </tr>
       </tbody>
     </table>

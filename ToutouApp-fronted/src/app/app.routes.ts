@@ -10,16 +10,18 @@ import { AuthGuard } from '../app/guard/auth.guard';
 import { CommentHelperComponent } from './component/comment-helper/comment-helper.component';
 import { UserListComponent } from './component/user-list/user-list.component';
 import { UserEditComponent } from './component/user-edit/user-edit.component';
+import { AdminGuard } from './guard/admin.guard';
 
 export const routes: Routes = [
     {path:'', component: HomePageComponent},
-    { path:'map', component: MapComponent, canActivate: [AuthGuard] },
-    { path:'personal-profile', component: PersonalProfileComponent, canActivate: [AuthGuard] },
+    {path:'map', component: MapComponent, canActivate: [AuthGuard] },
+    {path:'personal-profile', component: PersonalProfileComponent, canActivate: [AuthGuard] },
     {path:'post-request',component: PostFormRequestComponent,canActivate: [AuthGuard]},
     {path:'hub-requests',component: HubForRequestsComponent,canActivate: [AuthGuard]},
     {path:'edit-request/:id',component: EditRequestComponent,canActivate: [AuthGuard]},
     {path:'helper-profile/:helperId',component: HelperProfileComponent, canActivate: [AuthGuard]},
     {path:'comment-helper/:helperId/:requestId',component: CommentHelperComponent, canActivate: [AuthGuard]},
-    {path: 'admin/users', component: UserListComponent},
-    {path: 'users/edit/:id', component: UserEditComponent}
+    {path: 'admin/users', component: UserListComponent, canActivate: [AdminGuard, AuthGuard]},
+    {path: 'users/edit/:id', component: UserEditComponent, canActivate: [AdminGuard, AuthGuard]},
+
 ];

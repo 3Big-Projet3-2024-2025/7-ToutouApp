@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent implements OnInit {
   isLoggedIn = false;
+  isAdmin = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -21,9 +22,19 @@ export class HeaderComponent implements OnInit {
       window.location.reload(); 
     });
   }
+
   async ngOnInit(): Promise<void> {
-    this.isLoggedIn = await this.authService.isLoggedIn();
+    try {
+      this.isLoggedIn = await this.authService.isLoggedIn();
+
+      if (this.isLoggedIn) {
+        this.isAdmin = await this.authService.isAdmin(); // Vérifiez si l'utilisateur est admin
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'initialisation du header:', error);
+    }
   }
+
 
   login(): void {
     this.authService.login();
@@ -44,4 +55,9 @@ export class HeaderComponent implements OnInit {
   seeProfile(){
     this.router.navigate(['/personal-profile'])
   }
+
+  seeAdminPage(): void {
+    this.router.navigate(['/admin/users']);
+  }
+  
 }
