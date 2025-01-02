@@ -2,16 +2,19 @@ import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
 import { AuthService } from '../../services/auth.service';
+import { User } from '../../user.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [FooterComponent, HeaderComponent],
+  imports: [FooterComponent, HeaderComponent,CommonModule],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],
 })
 export class HomePageComponent implements AfterViewInit, OnInit {
   userFullName: string = ''; // Variable to store the full name
+  userdb: User | null = null;
 
   constructor(private authService: AuthService) {}
 
@@ -19,6 +22,10 @@ export class HomePageComponent implements AfterViewInit, OnInit {
     try {
       // Create the user in the database if it does not exist
       await this.authService.createUser();
+
+      this.userdb = await this.authService.getUserEmailOnly();
+
+      console.log('Détails de l\'utilisateur récupéré depuis l\'API:', this.userdb);
 
       // Load the full name after login
       this.userFullName = await this.authService.getUserFullName();
@@ -52,4 +59,6 @@ export class HomePageComponent implements AfterViewInit, OnInit {
     // Observe each element
     elements.forEach((el) => observer.observe(el));
   }
+
+  
 }
