@@ -1,0 +1,86 @@
+.margin {
+  margin-top: 80px;
+}
+.user-management-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 10px; /* Espacement entre le titre et la barre */
+}
+
+form {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 2px solid #ffa500;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f8f4f4;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ff8c00;
+}
+
+form div {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+form label {
+  font-weight: bold;
+  color: #333;
+}
+
+form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #eaeaea;
+  color: #666;
+}
+
+form input.ng-invalid.ng-touched,
+form input:invalid {
+  border-color: red;
+}
+
+form small {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+form div button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+form div button[type="submit"] {
+  background-color: #28a745;
+  color: white;
+}
+
+form div button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+form div button[type="button"] {
+  background-color: #ff3b3b;
+  color: white;
+}
+
+form div button[type="button"]:hover {
+  background-color: #e12a2a;
+}

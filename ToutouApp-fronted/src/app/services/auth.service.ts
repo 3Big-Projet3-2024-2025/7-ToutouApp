@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
+import { User } from '../user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -98,5 +99,33 @@ export class AuthService {
     const profile = await this.keycloakService.loadUserProfile();
     return profile.email || '';
   }
+
+  async getUserEmailOnly(): Promise<User | null> {
+    try {
+      const profile = await this.keycloakService.loadUserProfile();
+      const email = profile.email || 'unknown@email.com';
+  
+      const user = await this.http.get<User>(`${this.apiUrl}/${email}`).toPromise();
+      console.log('Utilisateur récupéré:', user);
+      return user || null;
+    } catch (error) {
+      console.error('Erreur lors de la récupération de l\'utilisateur:', error);
+      return null;
+    }
+  }
+
+  async isAdmin(): Promise<boolean> {
+    try {
+      const user = await this.getUserEmailOnly();
+      if (user && user.role) {
+        return user.role.name === 'ADMIN';
+      }
+      return false;
+    } catch (error) {
+      console.error('Erreur lors de la vérification du rôle admin:', error);
+      return false;
+    }
+  }
+  
   
 }
