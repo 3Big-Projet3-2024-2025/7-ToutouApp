@@ -1,5 +1,6 @@
 package be.projet3.toutouapp.controllers;
 
+import be.projet3.toutouapp.dto.RatingInfoDTO;
 import be.projet3.toutouapp.models.Rating;
 import be.projet3.toutouapp.models.Request;
 import be.projet3.toutouapp.services.IRatingService;
@@ -45,11 +46,43 @@ public class RatingController {
     }
 
     @GetMapping("/negative")
-    public ResponseEntity<List<Rating>> getNegativeRatings() {
+    public ResponseEntity<List<RatingInfoDTO>> getNegativeRatings() {
         List<Rating> negativeRatings = ratingService.getNegativeRatings();
-        return ResponseEntity.ok(negativeRatings); // HTTP 200 OK
-    }
 
+        List<RatingInfoDTO> negativeRatingsDTO = negativeRatings.stream().map(rating -> {
+            RatingInfoDTO dto = new RatingInfoDTO();
+
+            // Ajouter l'ID
+            dto.setId(rating.getRatingId()); // Assurez-vous que Rating a un champ `ratingId`
+
+            // Personne évaluée
+            String evaluatedUserName = rating.getConsumer().getFirstName() + " " + rating.getConsumer().getLastName();
+            dto.setEvaluatedUserName(evaluatedUserName);
+
+            // Personne qui donne l'avis
+            String raterUserName;
+            Request request = rating.getRequest();
+            if (request.getOwner().getId() == rating.getConsumer().getId()) {
+                raterUserName = request.getHelper() != null
+                        ? request.getHelper().getFirstName() + " " + request.getHelper().getLastName()
+                        : "Helper inconnu";
+            } else {
+                raterUserName = request.getOwner().getFirstName() + " " + request.getOwner().getLastName();
+            }
+            dto.setRaterUserName(raterUserName);
+
+            // Ajouter les autres champs
+            dto.setRatingValue(rating.getRatingValue());
+            dto.setComment(rating.getComment());
+
+            // Ajouter la date de la requête
+            dto.setRequestDate(request.getRequestDate().toString());
+
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(negativeRatingsDTO); // Retourne uniquement les avis négatifs
+    }
 
 
 }

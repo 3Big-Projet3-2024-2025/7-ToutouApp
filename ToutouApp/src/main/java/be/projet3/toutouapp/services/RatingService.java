@@ -44,4 +44,5 @@ public class RatingService implements IRatingService {
         return ratingRepository.findByRatingValueLessThan(3); // Avis avec une note < 3
     }
 
+
 }

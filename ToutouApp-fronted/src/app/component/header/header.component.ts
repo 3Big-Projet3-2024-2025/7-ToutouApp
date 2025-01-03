@@ -64,4 +64,16 @@ export class HeaderComponent implements OnInit {
   seeMyServices() {
     this.router.navigate(['/my-services']);
   }
+
+  showAdminMenu = false;
+
+toggleAdminMenu(show: boolean): void {
+  this.showAdminMenu = show;
+}
+
+navigateTo(path: string): void {
+  this.router.navigate([`/${path}`]);
+  this.showAdminMenu = false; // Masquer le menu après la navigation
+}
+
 }

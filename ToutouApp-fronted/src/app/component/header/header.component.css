@@ -1,101 +1,89 @@
-.site-header {
-    background-color: #3b8d99; 
-    color: white;
-    padding: 1rem;
-  }
-  
-  .site-header nav ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: space-around;
-  }
-  
-  .site-header nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.2rem;
-    padding: 0.5rem;
-    transition: background-color 0.3s;
-  }
-  
-  .site-header nav a:hover {
-    background-color: #f0783b;
-    border-radius: 5px;
-  }
-  
-  
-  header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%; 
-    z-index: 1000; 
-    background-color: white; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-  }
+/* Styles de la barre de navigation */
+.header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #f0783b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
 
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
 
+.logo img {
+  height: 60px;
+  width: 60px;
+  margin-right: 10px;
+}
 
-  .header-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: #f0783b; 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-  
-  .logo {
-    display: flex;
-    align-items: center;
-    cursor: pointer; 
-    z-index: 10; 
-    
-    
-  }
-  
-  .logo img {
-    height: 60px;
-    width: 60px;
-    margin-right: 10px;
-  }
-  
-  .logo-text {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
-    text-transform: uppercase;
-  }
-  
-  .navigation a {
-    margin-left: 15px;
-    color: white;
-    text-decoration: none;
-    font-size: 1rem;
-  }
-  
-  .navigation a:hover {
-    text-decoration: underline;
-  }
-  
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+}
 
-  .navigation button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-left: 15px;
-    text-decoration: underline;
-  }
-  
-  .navigation button:hover {
-    color: black; 
-  }
-  
+.navigation {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.navigation button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-left: 15px;
+  text-decoration: underline;
+}
+
+.navigation button:hover {
+  color: black;
+}
+
+/* Conteneur pour le menu déroulant Admin */
+.admin-menu-container {
+  position: relative;
+}
+
+/* Menu déroulant */
+.dropdown {
+  position: absolute;
+  top: 100%; /* Place le menu sous le bouton */
+  left: 0;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+  border-radius: 5px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Lien dans le menu déroulant */
+.dropdown a {
+  color: #3b8d99;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s;
+  white-space: nowrap; /* Évite les retours à la ligne */
+}
+
+/* Effet au survol */
+.dropdown a:hover {
+  background-color: #f0783b;
+  color: white;
+  border-radius: 5px;
+}

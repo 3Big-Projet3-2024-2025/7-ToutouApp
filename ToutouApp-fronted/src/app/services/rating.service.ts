@@ -3,12 +3,16 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Rating {
-  ratingId: number;
+  id: number;               // Assurez-vous que ce champ est présent
+  evaluatedUserName: string;
+  raterUserName: string;
   ratingValue: number;
   comment: string;
-  request: any;
-  consumer: any;
+  requestDate: string;
 }
+
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +37,7 @@ export class RatingService {
     }
 
     getAllRatings(): Observable<Rating[]> {
-      return this.http.get<Rating[]>(this.baseUrl); // Appelle l'endpoint /rating
+      return this.http.get<Rating[]>(this.baseUrl);
     }
 
     getNegativeRatings(): Observable<Rating[]> {

@@ -13,7 +13,7 @@ export class AdminGuard implements CanActivate {
       const isLoggedIn = await this.authService.isLoggedIn();
 
       if (!isLoggedIn) {
-        // Si l'utilisateur n'est pas connecté, redirection vers la page d'accueil
+        // If the user is not logged in, redirect to the home page
         this.router.navigate(['/']);
         return false;
       }
@@ -21,15 +21,15 @@ export class AdminGuard implements CanActivate {
       const isAdmin = await this.authService.isAdmin();
 
       if (!isAdmin) {
-        // Si l'utilisateur n'est pas admin, redirection vers une page d'erreur ou d'accueil
+        // If the user is not an admin, redirect to an error or home page
         this.router.navigate(['/']);
         return false;
       }
 
-      // L'utilisateur est connecté et admin
+      // The user is logged in and is an admin
       return true;
     } catch (error) {
-      console.error('Erreur lors de la vérification des droits admin:', error);
+      console.error('Error while checking admin rights:', error);
       this.router.navigate(['/']);
       return false;
     }

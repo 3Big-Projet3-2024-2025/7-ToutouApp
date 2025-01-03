@@ -1,23 +1,82 @@
-<div class="container">
-  <h2>Avis Négatifs</h2>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Note</th>
-        <th>Commentaire</th>
-        <th>Utilisateur</th>
-        <th>Demande</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let rating of negativeRatings; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ rating.ratingValue }}</td>
-        <td>{{ rating.comment }}</td>
-        <td>{{ rating.consumer?.firstName }} {{ rating.consumer?.lastName }}</td>
-        <td>{{ rating.request?.dogName }}</td>
-      </tr>
-    </tbody>
-  </table>
+<app-header></app-header>
+
+<div class="margin">
+  <!-- Header with title and sort button -->
+  <div class="header-container">
+    <h2 class="user-management-title">Negative Reviews</h2>
+    <div class="search-bar">
+      <button class="btn btn-primary btn-sort" (click)="toggleSortOrder()">
+        Sort by: {{ sortOrder === 'asc' ? 'Oldest' : 'Newest' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Table of negative reviews -->
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>Rating</th>
+          <th>Comment</th>
+          <th>Reviewed Person</th>
+          <th>Reviewer</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rating of negativeRatings" class="align-middle">
+          <td>
+            <span class="badge" [ngClass]="rating.ratingValue < 3 ? 'bg-danger' : 'bg-warning'">
+              {{ rating.ratingValue }}
+            </span>
+          </td>
+          <td>
+            <div class="comment-container">
+              <span *ngIf="rating.comment.length <= 100">{{ rating.comment }}</span>
+              <span *ngIf="rating.comment.length > 100">
+                {{ rating.comment | slice: 0:100 }}...
+                <button class="btn btn-link" (click)="showFullComment(rating.comment)">
+                  Lire plus
+                </button>
+              </span>
+            </div>
+          </td>          
+          <td>{{ rating.evaluatedUserName }}</td>
+          <td>{{ rating.raterUserName }}</td>
+          <td>{{ rating.requestDate | date: 'longDate' }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="deleteRating(rating)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Message if no reviews are found -->
+  <div *ngIf="negativeRatings.length === 0" class="no-users text-center">
+    <p class="text-muted">No negative reviews found.</p>
+  </div>
 </div>
+
+<!-- Modal to display full comment -->
+<div *ngIf="selectedComment" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Full Comment</h5>
+        <button type="button" class="close" (click)="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>{{ selectedComment }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
