@@ -144,10 +144,7 @@ public class UserService implements UserDetailsService, IUserService {
         return user;
     }
 
-<<<<<<< HEAD
-    public User getCurrentUser() {
-        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-=======
+
     public List<User> getActiveUsers() {
         return userRepository.findAll()
                 .stream()
@@ -177,7 +174,8 @@ public class UserService implements UserDetailsService, IUserService {
 
 
 
->>>>>>> 84394136949e15b2bb6790a1e4e839c6ecca7b1d
+     public User getCurrentUser() {
+        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         if (authenticationToken == null || authenticationToken.getToken() == null) {
             throw new RuntimeException("Utilisateur non authentifié");
