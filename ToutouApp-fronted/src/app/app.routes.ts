@@ -9,7 +9,13 @@ import { HelperProfileComponent } from './component/helper-profile/helper-profil
 import { AuthGuard } from '../app/guard/auth.guard';
 import { CommentHelperComponent } from './component/comment-helper/comment-helper.component';
 import { AcceptedRequestsComponent } from './component/accepted-requests/accepted-requests.component';
+<<<<<<< HEAD
 import { ChatComponent } from './component/chat/chat.component';
+=======
+import { UserListComponent } from './component/user-list/user-list.component';
+import { UserEditComponent } from './component/user-edit/user-edit.component';
+
+>>>>>>> 84394136949e15b2bb6790a1e4e839c6ecca7b1d
 
 export const routes: Routes = [
     {path:'', component: HomePageComponent},
@@ -20,6 +26,15 @@ export const routes: Routes = [
     {path:'edit-request/:id',component: EditRequestComponent,canActivate: [AuthGuard]},
     {path:'helper-profile/:helperId',component: HelperProfileComponent, canActivate: [AuthGuard]},
     {path:'comment-helper/:helperId/:requestId',component: CommentHelperComponent, canActivate: [AuthGuard]},
+<<<<<<< HEAD
     {path:'my-services',component: AcceptedRequestsComponent,canActivate: [AuthGuard]},
     { path: 'chat/:requestId', component: ChatComponent, canActivate: [AuthGuard] }
+=======
+
+    {path:'my-services',component: AcceptedRequestsComponent,canActivate: [AuthGuard]}
+
+    {path: 'admin/users', component: UserListComponent},
+    {path: 'users/edit/:id', component: UserEditComponent}
+
+>>>>>>> 84394136949e15b2bb6790a1e4e839c6ecca7b1d
 ];
