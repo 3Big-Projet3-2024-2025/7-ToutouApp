@@ -1,0 +1,23 @@
+<div class="container">
+  <h2>Avis Négatifs</h2>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Note</th>
+        <th>Commentaire</th>
+        <th>Utilisateur</th>
+        <th>Demande</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let rating of negativeRatings; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ rating.ratingValue }}</td>
+        <td>{{ rating.comment }}</td>
+        <td>{{ rating.consumer?.firstName }} {{ rating.consumer?.lastName }}</td>
+        <td>{{ rating.request?.dogName }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

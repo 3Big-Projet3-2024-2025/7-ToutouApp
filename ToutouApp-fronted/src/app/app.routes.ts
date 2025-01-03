@@ -8,33 +8,31 @@ import { EditRequestComponent } from './component/edit-request/edit-request.comp
 import { HelperProfileComponent } from './component/helper-profile/helper-profile.component';
 import { AuthGuard } from '../app/guard/auth.guard';
 import { CommentHelperComponent } from './component/comment-helper/comment-helper.component';
+import { RatingsComponent } from './component/ratings/ratings.component';
 import { AcceptedRequestsComponent } from './component/accepted-requests/accepted-requests.component';
-<<<<<<< HEAD
+
 import { ChatComponent } from './component/chat/chat.component';
-=======
+
 import { UserListComponent } from './component/user-list/user-list.component';
 import { UserEditComponent } from './component/user-edit/user-edit.component';
+import { AdminGuard } from './guard/admin.guard';
 
->>>>>>> 84394136949e15b2bb6790a1e4e839c6ecca7b1d
+
+
 
 export const routes: Routes = [
     {path:'', component: HomePageComponent},
-    { path:'map', component: MapComponent, canActivate: [AuthGuard] },
-    { path:'personal-profile', component: PersonalProfileComponent, canActivate: [AuthGuard] },
+    {path:'map', component: MapComponent, canActivate: [AuthGuard] },
+    {path:'personal-profile', component: PersonalProfileComponent, canActivate: [AuthGuard] },
     {path:'post-request',component: PostFormRequestComponent,canActivate: [AuthGuard]},
     {path:'hub-requests',component: HubForRequestsComponent,canActivate: [AuthGuard]},
     {path:'edit-request/:id',component: EditRequestComponent,canActivate: [AuthGuard]},
     {path:'helper-profile/:helperId',component: HelperProfileComponent, canActivate: [AuthGuard]},
     {path:'comment-helper/:helperId/:requestId',component: CommentHelperComponent, canActivate: [AuthGuard]},
-<<<<<<< HEAD
     {path:'my-services',component: AcceptedRequestsComponent,canActivate: [AuthGuard]},
-    { path: 'chat/:requestId', component: ChatComponent, canActivate: [AuthGuard] }
-=======
-
-    {path:'my-services',component: AcceptedRequestsComponent,canActivate: [AuthGuard]}
-
-    {path: 'admin/users', component: UserListComponent},
-    {path: 'users/edit/:id', component: UserEditComponent}
-
->>>>>>> 84394136949e15b2bb6790a1e4e839c6ecca7b1d
+    { path: 'chat/:requestId', component: ChatComponent, canActivate: [AuthGuard] },
+    {path: 'ratings', component: RatingsComponent},
+    {path: 'admin/users', component: UserListComponent, canActivate: [AdminGuard, AuthGuard]},
+    {path: 'users/edit/:id', component: UserEditComponent, canActivate: [AdminGuard, AuthGuard]},
+   
 ];

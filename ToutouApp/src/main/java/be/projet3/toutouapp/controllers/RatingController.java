@@ -18,6 +18,12 @@ public class RatingController {
     @Autowired
     private IRatingService ratingService;
 
+    @GetMapping
+    public ResponseEntity<List<Rating>> getAllRatings() {
+        List<Rating> ratings = ratingService.getAllRatings();
+        return ResponseEntity.ok(ratings); // HTTP 200 OK avec la liste des avis
+    }
+
 
     @GetMapping("/user/{userId}")
         public List<Rating> getRatingBuUserId(@PathVariable int userId){
@@ -36,6 +42,12 @@ public class RatingController {
     public ResponseEntity<Rating> addRating(@RequestBody  Rating rating){
         Rating newRating = ratingService.addRating(rating);
         return ResponseEntity.status(HttpStatus.CREATED).body(newRating);
+    }
+
+    @GetMapping("/negative")
+    public ResponseEntity<List<Rating>> getNegativeRatings() {
+        List<Rating> negativeRatings = ratingService.getNegativeRatings();
+        return ResponseEntity.ok(negativeRatings); // HTTP 200 OK
     }
 
 
