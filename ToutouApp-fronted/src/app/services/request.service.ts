@@ -34,4 +34,8 @@ export class RequestService {
   getRequestById(requestId: string): Observable<any>{
     return this.http.get(`${this.baseUrl}/${requestId}`);
   }
+
+  getDogCategories(): Observable<any[]> {
+    return this.http.get<any[]>(`http://localhost:8080/api/categories`);
+  }
 }
