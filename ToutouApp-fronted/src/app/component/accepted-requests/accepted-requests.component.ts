@@ -4,6 +4,7 @@ import { UserIdService } from '../../services/user-id.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../header/header.component";
 import { FooterComponent } from "../footer/footer.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-accepted-requests',
@@ -18,7 +19,8 @@ export class AcceptedRequestsComponent {
 
   constructor(
     private requestService: RequestService,
-    private userIdService: UserIdService
+    private userIdService: UserIdService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -27,31 +29,30 @@ export class AcceptedRequestsComponent {
 
   loadAcceptedRequests(): void {
     this.userIdService.getUserId().then((userId) => {
-      console.log('User ID:', userId);  // Affichez l'ID utilisateur ici
+      console.log('User ID:', userId);
   
       this.requestService.getAllRequests().subscribe(
         (requests) => {
-          console.log('All requests:', requests);  // Affichez toutes les requêtes
+          console.log('All requests:', requests);
   
-          // Utilisez Number() pour vous assurer que les valeurs comparées sont bien des nombres
           this.acceptedRequests = requests.filter((request: any) => {
-            console.log('Request helper:', request.helper);  // Affichez l'objet helper de chaque requête
+            console.log('Request helper:', request.helper);
             return Number(request.helper?.id) === Number(userId);
           });
   
-          console.log('Accepted requests:', this.acceptedRequests);  // Vérifiez les requêtes filtrées
+          console.log('Accepted requests:', this.acceptedRequests);
   
           if (this.acceptedRequests.length === 0) {
             this.error = 'You have not accepted any requests';
           }
         },
         (err) => {
-          this.error = 'Erreur lors de la récupération des requêtes.';
+          this.error = 'Error retrieving queries.';
           console.error(err);
         }
       );
     }).catch((err) => {
-      this.error = 'Erreur lors de la récupération de l\'ID utilisateur.';
+      this.error = 'Error retrieving user ID.';
       console.error(err);
     });
   }
@@ -64,17 +65,24 @@ export class AcceptedRequestsComponent {
 
     this.requestService.deleteRequest(requestId).subscribe(
       () => {
-        // Suppression réussie, mettez à jour la liste des requêtes acceptées
         this.acceptedRequests = this.acceptedRequests.filter(
           (request) => request.requestId !== requestId
         );
         console.log('Request deleted successfully');
       },
       (err) => {
-        this.error = 'Erreur lors de la suppression de la requête.';
+        this.error = 'Error deleting query.';
         console.error(err);
       }
     );
   }
-  
+
+  goToChat(requestId: number, helperName: string, userName: string): void {
+    if (!requestId) {
+      console.error('Request ID is missing!');
+      return;
+    }
+
+    this.router.navigate(['/chat', requestId], { state: { helperName, userName } });
+  }
 }

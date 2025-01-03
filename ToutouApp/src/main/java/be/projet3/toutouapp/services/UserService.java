@@ -9,10 +9,12 @@ import be.projet3.toutouapp.repositories.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -142,6 +144,10 @@ public class UserService implements UserDetailsService, IUserService {
         return user;
     }
 
+<<<<<<< HEAD
+    public User getCurrentUser() {
+        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+=======
     public List<User> getActiveUsers() {
         return userRepository.findAll()
                 .stream()
@@ -171,5 +177,15 @@ public class UserService implements UserDetailsService, IUserService {
 
 
 
+>>>>>>> 84394136949e15b2bb6790a1e4e839c6ecca7b1d
 
+        if (authenticationToken == null || authenticationToken.getToken() == null) {
+            throw new RuntimeException("Utilisateur non authentifié");
+        }
+
+        String email = authenticationToken.getToken().getClaimAsString("email");
+        System.out.println("Utilisateur authentifié : " + email);
+
+        return userRepository.findByMail(email);
+    }
 }

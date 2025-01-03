@@ -102,3 +102,18 @@ h2 {
 .delete-btn:hover {
     background-color: #c82333;
 }
+
+.chat-btn {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-right: 10px;
+}
+
+.chat-btn:hover {
+    background-color: #0056b3;
+}

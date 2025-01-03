@@ -7,6 +7,7 @@ import { NominatimService } from '../../services/nominatim.service';
 import { RequestService } from '../../services/request.service';
 import { UserIdService } from '../../services/user-id.service';
 import { Router } from '@angular/router';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-map',
@@ -22,7 +23,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private request: any;
   private error?: string;
 
-  constructor(private nominatimService: NominatimService, private requestService: RequestService, private userIdService: UserIdService, private router: Router) {}
+  constructor(private nominatimService: NominatimService, private requestService: RequestService, private userIdService: UserIdService, private router: Router,
+              private chatService: ChatService
+  ) {}
 
   ngAfterViewInit(): void {
     if (!this.map) {
@@ -164,30 +167,31 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       console.error('idRequest is undefined!');
       return;
     }
-  
+
     await this.loadRequestAsync();
     console.log('Request loaded:', this.request);
-  
+
     if (!this.request) {
       console.error('Request is still undefined after loading!');
       return;
     }
-  
+
     try {
       const userId = await this.userIdService.getUserId();
       console.log('User ID:', userId);
-  
+
       const updatedRequest = {
         ...this.request,
         helper: { id: userId },
         accepted: true
       };
-  
-      console.log('Updated Request:', updatedRequest);
-  
+
       const response = await this.requestService.modifyRequest(this.idRequest, updatedRequest).toPromise();
       console.log('Request successfully updated', response);
-  
+
+      await this.chatService.createChat(this.idRequest).toPromise();
+      console.log('Chat created successfully');
+
       this.router.navigate(['/my-services']);
     } catch (error) {
       console.error('Error during request acceptance', error);
@@ -210,5 +214,4 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       console.error('Error loading request', error);
     }
   }
-  
 }

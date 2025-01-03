@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class RequestService implements IRequestService{
 
@@ -52,5 +54,9 @@ public class RequestService implements IRequestService{
     @Override
     public Request getRequestById(int id) {
         return requestRepository.findByRequestId(id);
+    }
+
+    public Optional<Request> findById(Integer requestId) {
+        return requestRepository.findById(requestId);
     }
 }
