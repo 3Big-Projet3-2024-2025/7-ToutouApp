@@ -10,7 +10,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FooterComponent,FormsModule,NgxPaginationModule],
+  imports: [CommonModule, HeaderComponent, FooterComponent, FormsModule, NgxPaginationModule],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
@@ -23,37 +23,38 @@ export class UserListComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) {}
   currentPage: number = 1;
 
-
   ngOnInit(): void {
     this.fetchUsers();
   }
 
+  // Fetch all users from the backend
   fetchUsers(): void {
     this.isLoading = true;
     this.userService.getAllUsers().subscribe({
       next: (data) => {
         this.users = data;
-        this.filteredUsers = data;  // Initialement, tous les utilisateurs sont affichés
+        this.filteredUsers = data;  // Initially, all users are displayed
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des utilisateurs', err);
+        console.error('Error while fetching users', err);
         this.isLoading = false;
       },
     });
   }
 
-  // Fonction de recherche
+  // Search functionality
   onSearch(): void {
     if (this.searchTerm.trim() === '') {
-      this.filteredUsers = this.users;  // Si le champ de recherche est vide, on montre tous les utilisateurs
+      this.filteredUsers = this.users;  // If search field is empty, display all users
     } else {
       this.filteredUsers = this.users.filter(user =>
-        user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) // Recherche par lastName
+        user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) // Search by lastName
       );
     }
   }
 
+  // Toggle block/unblock user
   onToggleBlock(user: User, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
 
@@ -77,10 +78,12 @@ export class UserListComponent implements OnInit {
     });
   }
 
+  // Navigate to the user edit page
   onEditUser(user: User): void {
     this.router.navigate(['/users/edit', user.mail]);
   }
 
+  // Deactivate a user
   onDeleteUser(user: User): void {
     if (confirm(`Are you sure you want to deactivate the user ${user.firstName} ${user.lastName}?`)) {
       this.userService.updateUserFlag(user.id, false).subscribe({
@@ -103,6 +106,4 @@ export class UserListComponent implements OnInit {
       });
     }
   }
-
-  
 }

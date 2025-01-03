@@ -4,17 +4,25 @@
     <span class="logo-text">HappyPaws</span>
   </div>
   <nav class="navigation">
-
-    <button *ngIf="isLoggedIn" (click)="seeMap()">View Request (Map)</button>   
-    <button *ngIf="isLoggedIn" (click)="seeRequests()">Create Request</button>   
+    <button *ngIf="isLoggedIn" (click)="seeMap()">View Request (Map)</button>
+    <button *ngIf="isLoggedIn" (click)="seeRequests()">Create Request</button>
     <button *ngIf="isLoggedIn" (click)="seeMyServices()">My Services</button>
-    <button *ngIf="isLoggedIn" (click)="seeProfile()">Profile</button>    
-
+    <button *ngIf="isLoggedIn" (click)="seeProfile()">Profile</button>
     <button *ngIf="!isLoggedIn" (click)="login()">Login</button>
-    <button *ngIf="isLoggedIn && isAdmin" (click)="seeAdminPage()">Admin</button>
+  <div class="admin-menu-container" (mouseleave)="toggleAdminMenu(false)">
+    <button
+      *ngIf="isLoggedIn && isAdmin"
+      (mouseenter)="toggleAdminMenu(true)"
+      class="admin-button"
+    >
+      Admin
+    </button>
+    <div *ngIf="showAdminMenu" class="dropdown">
+      <a (click)="navigateTo('admin/users')">Users</a>
+      <a (click)="navigateTo('/ratings')">Reviews</a>
+    </div>
+  </div>
+
     <button *ngIf="isLoggedIn" (click)="logout()">Sign-out</button>
   </nav>
-
 </div>
-
-

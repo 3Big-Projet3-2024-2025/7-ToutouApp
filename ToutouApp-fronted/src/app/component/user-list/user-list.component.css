@@ -2,7 +2,6 @@
   margin-top: 80px;
 }
 
-/* Conteneur pour le titre et la barre de recherche */
 .header-container {
   display: flex;
   flex-direction: column;
@@ -11,20 +10,32 @@
   margin-bottom: 1.5rem;
 }
 
-/* Centrage du titre */
 .user-management-title {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 10px; /* Espacement entre le titre et la barre */
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #3b8d99;
+  position: relative;
+  margin-bottom: 20px;
 }
 
-/* Barre de recherche alignée à droite */
+.user-management-title::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #f0783b;
+  border-radius: 2px;
+}
+
 .search-bar {
-  align-self: flex-end; /* Aligne la barre à droite */
-  max-width: 300px; /* Vous pouvez ajuster la largeur ici */
+  align-self: flex-end;
+  max-width: 300px;
+  margin-right: 10px;
 }
 
-/* Ajoutez un petit espace autour de la recherche */
 .search-bar input {
   margin-right: 10px;
 }

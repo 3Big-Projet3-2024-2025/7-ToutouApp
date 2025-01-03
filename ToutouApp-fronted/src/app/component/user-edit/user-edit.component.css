@@ -4,7 +4,7 @@
 .user-management-title {
   text-align: center;
   font-size: 2rem;
-  margin-bottom: 10px; /* Espacement entre le titre et la barre */
+  margin-bottom: 10px;
 }
 
 form {

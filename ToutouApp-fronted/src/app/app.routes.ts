@@ -30,8 +30,8 @@ export const routes: Routes = [
     {path:'helper-profile/:helperId',component: HelperProfileComponent, canActivate: [AuthGuard]},
     {path:'comment-helper/:helperId/:requestId',component: CommentHelperComponent, canActivate: [AuthGuard]},
     {path:'my-services',component: AcceptedRequestsComponent,canActivate: [AuthGuard]},
-    { path: 'chat/:requestId', component: ChatComponent, canActivate: [AuthGuard] },
-    {path: 'ratings', component: RatingsComponent},
+    {path: 'chat/:requestId', component: ChatComponent, canActivate: [AuthGuard] },
+    {path: 'ratings', component: RatingsComponent, canActivate: [AdminGuard, AuthGuard]},
     {path: 'admin/users', component: UserListComponent, canActivate: [AdminGuard, AuthGuard]},
     {path: 'users/edit/:id', component: UserEditComponent, canActivate: [AdminGuard, AuthGuard]},
    
