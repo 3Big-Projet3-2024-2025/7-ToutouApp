@@ -1,6 +1,7 @@
 package be.projet3.toutouapp;
 
 import be.projet3.toutouapp.controllers.UserController;
+import be.projet3.toutouapp.models.Role;
 import be.projet3.toutouapp.models.User;
 import be.projet3.toutouapp.services.UserService;
 import be.projet3.toutouapp.repositories.jpa.UserRepository;
@@ -16,12 +17,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -46,13 +47,19 @@ public class UserControllerTests {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
-        // Initialisation de l'utilisateur pour les tests
         user = new User();
         user.setId(1);
         user.setFirstName("John");
         user.setLastName("Doe");
         user.setMail("johndoe@example.com");
+        user.setBlocked(false);
+        user.setActive(true);
+
+        Role role = new Role();
+        role.setName("USER");
+        user.setRole(role);
     }
+
 
     @Test
     public void testAddUser() throws Exception {
@@ -151,7 +158,6 @@ public class UserControllerTests {
         assertNull(response.getBody());  // Aucun corps dans la réponse
     }
 
-
     @Test
     public void testUpdateUser_InternalServerError() {
         int userId = 1;  // Utilisateur existant
@@ -201,8 +207,6 @@ public class UserControllerTests {
         assertEquals(500, response.getStatusCodeValue());  // Erreur interne du serveur
     }
 
-
-
     @Test
     public void testGetUserByEmail() throws Exception {
         when(userService.getUserByEmail("johndoe@example.com")).thenReturn(user);
@@ -227,4 +231,230 @@ public class UserControllerTests {
         // Vérifie que la méthode getUserByEmail est bien appelée avec le bon email
         verify(userService, times(1)).getUserByEmail("unknown@example.com");
     }
+
+    @Test
+    public void testBlockUser() throws Exception {
+        when(userService.getUserById(1)).thenReturn(user);
+        when(userService.updateUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform(patch("/user/1/block").param("block", "true"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.blocked").value(true));
+
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testBlockUser_LastAdmin() throws Exception {
+        Role adminRole = new Role();
+        adminRole.setName("ADMIN");
+        user.setRole(adminRole);
+
+        when(userService.getUserById(1)).thenReturn(user);
+        when(userService.countActiveAdmins()).thenReturn(1L);
+
+        mockMvc.perform(patch("/user/1/block").param("block", "true"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Cannot block the last active administrator!"));
+
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).countActiveAdmins();
+        verify(userService, never()).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testUpdateUserFlag() throws Exception {
+        when(userService.getUserById(1)).thenReturn(user);
+        when(userService.updateUser(any(User.class))).thenReturn(user);
+
+        mockMvc.perform(patch("/user/1/flag").param("flag", "false"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.active").value(false));
+
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testUpdateUserFlag_LinkedToActiveRequests() throws Exception {
+        when(userService.getUserById(1)).thenReturn(user);
+        when(userService.isUserLinkedToActiveRequests(1)).thenReturn(true);
+
+        mockMvc.perform(patch("/user/1/flag").param("flag", "false"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Cannot deactivate a user linked to an active request."));
+
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).isUserLinkedToActiveRequests(1);
+        verify(userService, never()).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testUpdateUserFlag_LastAdmin() throws Exception {
+        Role adminRole = new Role();
+        adminRole.setName("ADMIN");
+        user.setRole(adminRole);
+
+        when(userService.getUserById(1)).thenReturn(user);
+        when(userService.countActiveAdmins()).thenReturn(1L);
+
+        mockMvc.perform(patch("/user/1/flag").param("flag", "false"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Cannot deactivate the last active administrator!"));
+
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).countActiveAdmins();
+        verify(userService, never()).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testUnblockUser() throws Exception {
+        // Simulate a blocked user
+        user.setBlocked(true);
+
+        when(userService.getUserById(1)).thenReturn(user);
+        when(userService.updateUser(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Returns the updated user
+
+        mockMvc.perform(patch("/user/1/block").param("block", "false"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.blocked").value(false));
+
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testActivateUser() throws Exception {
+        // Simulate a deactivated user
+        user.setActive(false);
+
+        when(userService.getUserById(1)).thenReturn(user);
+        when(userService.updateUser(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Returns the updated user
+
+        mockMvc.perform(patch("/user/1/flag").param("flag", "true"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.active").value(true));
+
+        verify(userService, times(1)).getUserById(1);
+        verify(userService, times(1)).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testBlockUser_InvalidParameter() throws Exception {
+        mockMvc.perform(patch("/user/1/block"))
+                .andExpect(status().isBadRequest());
+
+        verify(userService, never()).getUserById(anyInt());
+        verify(userService, never()).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testUpdateUserFlag_InvalidParameter() throws Exception {
+        mockMvc.perform(patch("/user/1/flag"))
+                .andExpect(status().isBadRequest());
+
+        verify(userService, never()).getUserById(anyInt());
+        verify(userService, never()).updateUser(any(User.class));
+    }
+
+    @Test
+    public void testGetActiveUsers_Success() throws Exception {
+        // Create the list of users
+        User activeUser1 = new User();
+        activeUser1.setId(1);
+        activeUser1.setFirstName("John");
+        activeUser1.setLastName("Doe");
+        activeUser1.setMail("john.doe@example.com");
+        activeUser1.setActive(true);
+
+        User activeUser2 = new User();
+        activeUser2.setId(2);
+        activeUser2.setFirstName("Jane");
+        activeUser2.setLastName("Smith");
+        activeUser2.setMail("jane.smith@example.com");
+        activeUser2.setActive(true);
+
+        User inactiveUser = new User();
+        inactiveUser.setId(3);
+        inactiveUser.setFirstName("Mike");
+        inactiveUser.setLastName("Brown");
+        inactiveUser.setMail("mike.brown@example.com");
+        inactiveUser.setActive(false);
+
+        List<User> allUsers = List.of(activeUser1, activeUser2, inactiveUser);
+
+        // Mock the service to return all users
+        when(userService.getAllUsers()).thenReturn(allUsers);
+
+        // Execute the request and validate the response
+        mockMvc.perform(get("/user"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2)) // Two active users
+                .andExpect(jsonPath("$[0].firstName").value("John"))
+                .andExpect(jsonPath("$[1].firstName").value("Jane"));
+
+        verify(userService, times(1)).getAllUsers();
+    }
+
+    @Test
+    public void testGetActiveUsers_NoActiveUsers() throws Exception {
+        // Create the list of users (no active users)
+        User inactiveUser1 = new User();
+        inactiveUser1.setId(1);
+        inactiveUser1.setFirstName("John");
+        inactiveUser1.setLastName("Doe");
+        inactiveUser1.setMail("john.doe@example.com");
+        inactiveUser1.setActive(false);
+
+        User inactiveUser2 = new User();
+        inactiveUser2.setId(2);
+        inactiveUser2.setFirstName("Jane");
+        inactiveUser2.setLastName("Smith");
+        inactiveUser2.setMail("jane.smith@example.com");
+        inactiveUser2.setActive(false);
+
+        List<User> allUsers = List.of(inactiveUser1, inactiveUser2);
+
+        // Mock the service to return all users
+        when(userService.getAllUsers()).thenReturn(allUsers);
+
+        // Execute the request and validate the response
+        mockMvc.perform(get("/user"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0)); // No active users
+
+        verify(userService, times(1)).getAllUsers();
+    }
+
+    @Test
+    public void testGetActiveUsers_EmptyList() throws Exception {
+        // No users in the list
+        when(userService.getAllUsers()).thenReturn(List.of());
+
+        // Execute the request and validate the response
+        mockMvc.perform(get("/user"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0)); // Empty list
+
+        verify(userService, times(1)).getAllUsers();
+    }
+
+    @Test
+    public void testGetActiveUsers_InternalServerError() {
+        // Simulate an exception thrown by the service
+        when(userService.getAllUsers()).thenThrow(new RuntimeException("Internal error"));
+
+        // Execute the request and validate the exception
+        Exception exception = assertThrows(Exception.class, () -> {
+            mockMvc.perform(get("/user"))
+                    .andExpect(status().isInternalServerError());
+        });
+
+        assertEquals("Internal error", exception.getCause().getMessage());
+
+        verify(userService, times(1)).getAllUsers();
+    }
+
+
 }

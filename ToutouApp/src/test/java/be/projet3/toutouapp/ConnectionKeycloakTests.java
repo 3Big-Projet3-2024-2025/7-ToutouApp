@@ -56,7 +56,7 @@ public class ConnectionKeycloakTests {
         return given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("client_id", "backend")
-                .formParam("client_secret", "RSQRkZjjWjGqMsTPJd9RCy232aYOHr7r")
+                .formParam("client_secret", "**********")
                 .formParam("username", "test@test.com")
                 .formParam("password", "test")
                 .formParam("grant_type", "password")
