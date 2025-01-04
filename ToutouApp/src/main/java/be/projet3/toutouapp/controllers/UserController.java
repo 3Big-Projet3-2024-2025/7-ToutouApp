@@ -42,16 +42,18 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+
     /**
      * Retrieves all active users.
      *
      * @return ResponseEntity containing a list of active users and HTTP status 200 (OK).
      */
+
     @GetMapping
     public ResponseEntity<List<User>> getActiveUsers() {
         List<User> activeUsers = userService.getAllUsers()
                 .stream()
-                .filter(User::isActive) // Filtrer par userFlag = true
+                .filter(User::isActive) // Filter by userFlag = true
                 .toList();
         return ResponseEntity.ok(activeUsers);
     }

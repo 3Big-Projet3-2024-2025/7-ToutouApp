@@ -20,7 +20,6 @@ public class DogCategory {
      * It is automatically generated using an identity strategy.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer dogCategoryId;
 
     /**
