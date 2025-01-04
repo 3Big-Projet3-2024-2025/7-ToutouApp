@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; // Import du AuthService
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,11 +11,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  isLoggedIn = false;
-  isAdmin = false;
+  isLoggedIn = false; // Tracks if the user is logged in
+  isAdmin = false; // Tracks if the logged-in user has admin privileges
 
   constructor(private router: Router, private authService: AuthService) {}
 
+  // Navigates to the home page when the logo is clicked and refreshes the page
   navigateToHome() {
     console.log('Logo clicked!');
     this.router.navigateByUrl('/').then(() => {
@@ -23,57 +24,65 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  // Runs on component initialization to check login status and admin privileges
   async ngOnInit(): Promise<void> {
     try {
       this.isLoggedIn = await this.authService.isLoggedIn();
 
       if (this.isLoggedIn) {
-        this.isAdmin = await this.authService.isAdmin(); // Vérifiez si l'utilisateur est admin
+        this.isAdmin = await this.authService.isAdmin(); // Checks if the user is an admin
       }
     } catch (error) {
-      console.error('Erreur lors de l\'initialisation du header:', error);
+      console.error('Error during header initialization:', error);
     }
   }
 
-
+  // Initiates the login process
   login(): void {
     this.authService.login();
   }
 
+  // Logs the user out and clears their session
   logout(): void {
     this.authService.logout();
   }
 
-  seeRequests(){
-    this.router.navigate(['/hub-requests'])
+  // Navigates to the Requests Hub page
+  seeRequests() {
+    this.router.navigate(['/hub-requests']);
   }
 
-  seeMap(){
-    this.router.navigate(['/map'])              
+  // Navigates to the map page
+  seeMap() {
+    this.router.navigate(['/map']);
   }
 
-  seeProfile(){
-    this.router.navigate(['/personal-profile'])
+  // Navigates to the user's personal profile page
+  seeProfile() {
+    this.router.navigate(['/personal-profile']);
   }
 
-
+  // Navigates to the admin page for managing users (visible only to admin users)
   seeAdminPage(): void {
     this.router.navigate(['/admin/users']);
   }
   
+  // Navigates to the "My Services" page
   seeMyServices() {
     this.router.navigate(['/my-services']);
   }
 
-  showAdminMenu = false;
+  showAdminMenu = false; // Tracks the visibility of the admin dropdown menu
 
-toggleAdminMenu(show: boolean): void {
-  this.showAdminMenu = show;
-}
 
-navigateTo(path: string): void {
-  this.router.navigate([`/${path}`]);
-  this.showAdminMenu = false; // Masquer le menu après la navigation
-}
+  // Toggles the visibility of the admin menu
+  toggleAdminMenu(show: boolean): void {
+    this.showAdminMenu = show;
+  }
 
+  // Navigates to a specified path and hides the admin menu after navigation
+  navigateTo(path: string): void {
+    this.router.navigate([`/${path}`]);
+    this.showAdminMenu = false; // Hide the menu after navigation
+  }
 }

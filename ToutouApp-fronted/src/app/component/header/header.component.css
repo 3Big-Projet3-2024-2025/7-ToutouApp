@@ -1,4 +1,4 @@
-/* Styles de la barre de navigation */
+/* Styles for the navigation bar */
 .header-container {
   position: fixed;
   top: 0;
@@ -53,15 +53,15 @@
   color: black;
 }
 
-/* Conteneur pour le menu déroulant Admin */
+/* Container for the Admin dropdown menu */
 .admin-menu-container {
   position: relative;
 }
 
-/* Menu déroulant */
+/* Dropdown menu */
 .dropdown {
   position: absolute;
-  top: 100%; /* Place le menu sous le bouton */
+  top: 100%; /* Places the menu below the button */
   left: 0;
   background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -72,16 +72,16 @@
   flex-direction: column;
 }
 
-/* Lien dans le menu déroulant */
+/* Link inside the dropdown menu */
 .dropdown a {
   color: #3b8d99;
   text-decoration: none;
   padding: 0.5rem 1rem;
   transition: background-color 0.3s;
-  white-space: nowrap; /* Évite les retours à la ligne */
+  white-space: nowrap; /* Prevents line breaks */
 }
 
-/* Effet au survol */
+/* Hover effect */
 .dropdown a:hover {
   background-color: #f0783b;
   color: white;
