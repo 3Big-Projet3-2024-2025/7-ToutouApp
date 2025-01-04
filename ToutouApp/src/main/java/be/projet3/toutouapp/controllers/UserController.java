@@ -34,12 +34,12 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    // Récupérer les utilisateurs actifs
+    // Retrieve active users
     @GetMapping
     public ResponseEntity<List<User>> getActiveUsers() {
         List<User> activeUsers = userService.getAllUsers()
                 .stream()
-                .filter(User::isActive) // Filtrer par userFlag = true
+                .filter(User::isActive) // Filter by userFlag = true
                 .toList();
         return ResponseEntity.ok(activeUsers);
     }
