@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class RatingInfoDTO {
-    private Integer id;               // Ajout de l'ID
-    private String evaluatedUserName; // Personne qui reçoit l'avis
-    private String raterUserName;     // Personne qui donne l'avis
-    private Integer ratingValue;      // Valeur de la note
-    private String comment;           // Commentaire
-    private String requestDate;       // Date de la requête
+    private Integer id;
+    private String evaluatedUserName;
+    private String raterUserName;
+    private Integer ratingValue;
+    private String comment;
+    private String requestDate;
 }
