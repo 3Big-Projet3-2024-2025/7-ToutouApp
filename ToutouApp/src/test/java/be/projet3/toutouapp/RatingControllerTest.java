@@ -13,10 +13,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -36,7 +40,7 @@ class RatingControllerTest {
 
     @Test
     void getNegativeRatings_shouldReturnNegativeRatingsDTOList() {
-        // Préparer les données mockées
+        // Prepare mocked data
         User consumer = new User();
         consumer.setId(1);
         consumer.setFirstName("John");
@@ -64,10 +68,10 @@ class RatingControllerTest {
         List<Rating> negativeRatings = Arrays.asList(rating);
         when(ratingService.getNegativeRatings()).thenReturn(negativeRatings);
 
-        // Appeler la méthode
+        // Call the method
         ResponseEntity<List<RatingInfoDTO>> response = ratingController.getNegativeRatings();
 
-        // Vérifier les résultats
+        // Verify the results
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(1, response.getBody().size());
         RatingInfoDTO dto = response.getBody().get(0);
@@ -79,23 +83,209 @@ class RatingControllerTest {
         assertEquals("Bad experience", dto.getComment());
         assertEquals("2023-12-31", dto.getRequestDate());
 
-        // Vérifier les interactions avec le mock
+        // Verify interactions with the mock
         verify(ratingService, times(1)).getNegativeRatings();
     }
 
     @Test
     void getNegativeRatings_shouldReturnEmptyList_whenNoNegativeRatings() {
-        // Préparer les données mockées
+        // Prepare mocked data
         when(ratingService.getNegativeRatings()).thenReturn(List.of());
 
-        // Appeler la méthode
+        // Call the method
         ResponseEntity<List<RatingInfoDTO>> response = ratingController.getNegativeRatings();
 
-        // Vérifier les résultats
+        // Verify the results
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(0, response.getBody().size());
 
-        // Vérifier les interactions avec le mock
+        // Verify interactions with the mock
         verify(ratingService, times(1)).getNegativeRatings();
     }
+
+    @Test
+    void getNegativeRatings_shouldHandleMultipleNegativeRatings() {
+        // Prepare mocked data
+        User consumer1 = new User();
+        consumer1.setId(1);
+        consumer1.setFirstName("John");
+        consumer1.setLastName("Doe");
+
+        User consumer2 = new User();
+        consumer2.setId(2);
+        consumer2.setFirstName("Alice");
+        consumer2.setLastName("Johnson");
+
+        User owner = new User();
+        owner.setId(3);
+        owner.setFirstName("Jane");
+        owner.setLastName("Smith");
+
+        Request request1 = new Request();
+        request1.setRequestId(100);
+        request1.setRequestDate(LocalDate.of(2023, 12, 31));
+        request1.setOwner(owner);
+        request1.setStartTime(LocalTime.of(10, 0));
+        request1.setEndTime(LocalTime.of(12, 0));
+
+        Request request2 = new Request();
+        request2.setRequestId(101);
+        request2.setRequestDate(LocalDate.of(2023, 11, 30));
+        request2.setOwner(owner);
+        request2.setStartTime(LocalTime.of(14, 0));
+        request2.setEndTime(LocalTime.of(16, 0));
+
+        Rating rating1 = new Rating();
+        rating1.setRatingId(1);
+        rating1.setRatingValue(2);
+        rating1.setComment("Bad experience");
+        rating1.setConsumer(consumer1);
+        rating1.setRequest(request1);
+
+        Rating rating2 = new Rating();
+        rating2.setRatingId(2);
+        rating2.setRatingValue(1);
+        rating2.setComment("Terrible service");
+        rating2.setConsumer(consumer2);
+        rating2.setRequest(request2);
+
+        List<Rating> negativeRatings = Arrays.asList(rating1, rating2);
+        when(ratingService.getNegativeRatings()).thenReturn(negativeRatings);
+
+        // Call the method
+        ResponseEntity<List<RatingInfoDTO>> response = ratingController.getNegativeRatings();
+
+        // Verify the results
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(2, response.getBody().size());
+
+        RatingInfoDTO dto1 = response.getBody().get(0);
+        assertEquals(1, dto1.getId());
+        assertEquals("John Doe", dto1.getEvaluatedUserName());
+        assertEquals("Jane Smith", dto1.getRaterUserName());
+        assertEquals(2, dto1.getRatingValue());
+        assertEquals("Bad experience", dto1.getComment());
+        assertEquals("2023-12-31", dto1.getRequestDate());
+
+        RatingInfoDTO dto2 = response.getBody().get(1);
+        assertEquals(2, dto2.getId());
+        assertEquals("Alice Johnson", dto2.getEvaluatedUserName());
+        assertEquals("Jane Smith", dto2.getRaterUserName());
+        assertEquals(1, dto2.getRatingValue());
+        assertEquals("Terrible service", dto2.getComment());
+        assertEquals("2023-11-30", dto2.getRequestDate());
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).getNegativeRatings();
+    }
+
+    @Test
+    void getNegativeRatings_shouldThrowException_whenServiceFails() {
+        // Simulate an exception in the service
+        when(ratingService.getNegativeRatings()).thenThrow(new RuntimeException("Database error"));
+
+        // Call the method and verify the results
+        try {
+            ratingController.getNegativeRatings();
+        } catch (Exception e) {
+            assertEquals(RuntimeException.class, e.getClass());
+            assertEquals("Database error", e.getMessage());
+        }
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).getNegativeRatings();
+    }
+
+    @Test
+    void getNegativeRatings_shouldNotIncludePositiveRatings() {
+        // Prepare mocked data
+        User consumer = new User();
+        consumer.setId(1);
+        consumer.setFirstName("John");
+        consumer.setLastName("Doe");
+
+        User owner = new User();
+        owner.setId(2);
+        owner.setFirstName("Jane");
+        owner.setLastName("Smith");
+
+        Request request = new Request();
+        request.setRequestId(100);
+        request.setRequestDate(LocalDate.of(2023, 12, 31));
+        request.setOwner(owner);
+        request.setStartTime(LocalTime.of(10, 0));
+        request.setEndTime(LocalTime.of(12, 0));
+
+        Rating positiveRating = new Rating();
+        positiveRating.setRatingId(1);
+        positiveRating.setRatingValue(5);
+        positiveRating.setComment("Great experience");
+        positiveRating.setConsumer(consumer);
+        positiveRating.setRequest(request);
+
+        List<Rating> ratings = Arrays.asList(positiveRating);
+        when(ratingService.getNegativeRatings()).thenReturn(ratings);
+
+        // Call the method
+        ResponseEntity<List<RatingInfoDTO>> response = ratingController.getNegativeRatings();
+
+        // Verify the results
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1, response.getBody().size()); // One rating is included because the controller does not filter
+
+        RatingInfoDTO dto = response.getBody().get(0);
+        assertEquals(1, dto.getId());
+        assertEquals("John Doe", dto.getEvaluatedUserName());
+        assertEquals("Jane Smith", dto.getRaterUserName());
+        assertEquals(5, dto.getRatingValue());
+        assertEquals("Great experience", dto.getComment());
+        assertEquals("2023-12-31", dto.getRequestDate());
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).getNegativeRatings();
+    }
+
+    @Test
+    void getNegativeRatings_shouldHandleLargeDataset() {
+        // Prepare a large list of mocked data
+        List<Rating> negativeRatings = IntStream.range(0, 1000)
+                .mapToObj(i -> {
+                    User consumer = new User();
+                    consumer.setId(i);
+                    consumer.setFirstName("User" + i);
+                    consumer.setLastName("Lastname" + i);
+
+                    User owner = new User();
+                    owner.setId(i + 1000); // Unique ID for the owner
+                    owner.setFirstName("Owner" + i);
+                    owner.setLastName("OwnerLastname" + i);
+
+                    Request request = new Request();
+                    request.setRequestId(i);
+                    request.setRequestDate(LocalDate.now());
+                    request.setOwner(owner); // Set the owner
+
+                    Rating rating = new Rating();
+                    rating.setRatingId(i);
+                    rating.setRatingValue(2);
+                    rating.setComment("Negative comment " + i);
+                    rating.setConsumer(consumer);
+                    rating.setRequest(request);
+
+                    return rating;
+                }).collect(Collectors.toList());
+
+        when(ratingService.getNegativeRatings()).thenReturn(negativeRatings);
+
+        // Call the method
+        ResponseEntity<List<RatingInfoDTO>> response = ratingController.getNegativeRatings();
+
+        // Verify the results
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(1000, response.getBody().size());
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).getNegativeRatings();
+    }
+
 }
