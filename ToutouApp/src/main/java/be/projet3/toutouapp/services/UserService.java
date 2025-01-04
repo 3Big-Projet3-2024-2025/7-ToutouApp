@@ -105,24 +105,24 @@ public class UserService implements UserDetailsService, IUserService {
     @Override
     public User getUserById(int id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + id));
+                .orElseThrow(() -> new RuntimeException("User not found with ID : " + id));
     }
 
     @Override
     public User updateUser(User user) {
         if (!userRepository.existsById(user.getId())) {
-            throw new RuntimeException("Utilisateur introuvable avec l'ID : " + user.getId());
+            throw new RuntimeException("User not found with ID : " + user.getId());
         }
 
         if (user.getRole() == null) {
-            throw new RuntimeException("Le rôle de l'utilisateur ne peut être nul");
+            throw new RuntimeException("User role cannot be null");
         }
 
-        // Si l'utilisateur a un rôle "USER" ou "ADMIN", on le met à jour avec ce rôle
+        // If the user has a "USER" or "ADMIN" role, we update it with this role
         Role role = roleRepository.findByName(user.getRole().getName())
-                .orElseThrow(() -> new RuntimeException("Rôle non trouvé : " + user.getRole().getName()));
+                .orElseThrow(() -> new RuntimeException("Role not found : " + user.getRole().getName()));
 
-        // Mise à jour du rôle de l'utilisateur
+        // Update user role
         user.setRole(role);
 
         return userRepository.save(user);
@@ -131,7 +131,7 @@ public class UserService implements UserDetailsService, IUserService {
     @Override
     public void deleteUser(int id) {
         if (!userRepository.existsById(id)) {
-            throw new RuntimeException("Utilisateur introuvable avec l'ID : " + id);
+            throw new RuntimeException("User not found with ID : " + id);
         }
         userRepository.deleteById(id);
     }
@@ -139,7 +139,7 @@ public class UserService implements UserDetailsService, IUserService {
     public User getUserByEmail(String email) {
         User user = userRepository.findByMail(email);
         if (user == null) {
-            throw new RuntimeException("Utilisateur introuvable avec l'email : " + email);
+            throw new RuntimeException("User not found with email : " + email);
         }
         return user;
     }
@@ -178,11 +178,11 @@ public class UserService implements UserDetailsService, IUserService {
         JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         if (authenticationToken == null || authenticationToken.getToken() == null) {
-            throw new RuntimeException("Utilisateur non authentifié");
+            throw new RuntimeException("Unauthenticated user");
         }
 
         String email = authenticationToken.getToken().getClaimAsString("email");
-        System.out.println("Utilisateur authentifié : " + email);
+        System.out.println("Authenticated user : " + email);
 
         return userRepository.findByMail(email);
     }
