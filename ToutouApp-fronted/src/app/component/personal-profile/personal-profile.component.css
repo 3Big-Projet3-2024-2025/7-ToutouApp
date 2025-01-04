@@ -196,7 +196,7 @@ input.ng-invalid.ng-touched {
 }
 
 .confirmation-message {
-    background-color: #28a745; /* Couleur verte */
+    background-color: #28a745;
     color: white;
     font-size: 1.2em;
     padding: 15px;

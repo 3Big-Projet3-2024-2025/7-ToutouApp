@@ -3,16 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Rating {
-  id: number;               // Assurez-vous que ce champ est présent
+  id: number;
   evaluatedUserName: string;
   raterUserName: string;
   ratingValue: number;
   comment: string;
   requestDate: string;
 }
-
-
-
 
 @Injectable({
   providedIn: 'root'

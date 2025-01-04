@@ -26,9 +26,11 @@
       <input type="text" id="time" readonly />
 
       <label for="photo">Photo of the dog :</label>
-      <img id="photo" src="" alt="Dog Photo" style="max-width: 100%; border-radius: 8px;" />
+      <img id="photo" src="" alt="Dog Photo" style="max-width: 25%; border-radius: 8px;" />
 
-      <button type="button" (click)="acceptRequest()">Accept request</button>
+      <div class="button-container">
+        <button type="button" (click)="acceptRequest()">Accept request</button>
+      </div>
     </form>
   </div>
 </div>

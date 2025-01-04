@@ -1,4 +1,4 @@
-/* Structure globale */
+/* Overall structure */
 .map-page {
     display: flex;
     font-family: Arial, sans-serif;
@@ -8,7 +8,7 @@
     box-sizing: border-box;
 }
 
-/* Carte */
+/* Map */
 .map-container {
     flex: 2;
     height: 100%;
@@ -25,7 +25,7 @@
     width: 100%;
 }
 
-/* Détails */
+/* Details */
 .details-container {
     flex: 1;
     padding: 20px;
@@ -90,10 +90,16 @@
     text-decoration: underline;
 }
 
-/* Barre de recherche GeoSearch */
+/* GeoSearch search bar */
 #geo-search {
     position: absolute;
     top: 10px;
     right: 10px;
     z-index: 999;
+}
+
+/* Align the button to the right */
+.button-container {
+    display: flex;
+    justify-content: flex-end;
 }
