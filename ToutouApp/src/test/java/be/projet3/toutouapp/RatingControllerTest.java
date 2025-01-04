@@ -310,6 +310,7 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getRatingByUserId(1);
     }
 
+    @Test
     void getNegativeRatings_shouldNotIncludePositiveRatings() {
         // Prepare mocked data
         User consumer = new User();
@@ -401,5 +402,114 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getNegativeRatings();
     }
 
+
+    @Test
+    void getAllRatings_shouldReturnEmptyList_whenNoRatings() {
+        // Prepare mocked data
+        when(ratingService.getAllRatings()).thenReturn(List.of());
+
+        // Call the method
+        ResponseEntity<List<Rating>> response = ratingController.getAllRatings();
+
+        // Verify the results
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(0, response.getBody().size());
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).getAllRatings();
+    }
+
+
+    @Test
+    void deleteRating_shouldReturnNotFound_whenRatingDoesNotExist() {
+        // Simulate the service returning no such rating
+        doThrow(new RuntimeException("Rating not found")).when(ratingService).deleteRating(999);
+
+        // Call the method and verify the results
+        try {
+            ResponseEntity<Void> response = ratingController.deleteRating(999);
+            assertEquals(404, response.getStatusCodeValue());
+        } catch (RuntimeException e) {
+            assertEquals("Rating not found", e.getMessage());
+        }
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).deleteRating(999);
+    }
+
+
+
+    @Test
+    void getRatingByUserId_shouldReturnEmptyList_whenNoRatingsForUser() {
+        // Prepare mocked data
+        when(ratingService.getRatingByUserId(1)).thenReturn(List.of());
+
+        // Call the method
+        List<Rating> response = ratingController.getRatingBuUserId(1);
+
+        // Verify the results
+        assertEquals(0, response.size());
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).getRatingByUserId(1);
+    }
+
+
+
+    @Test
+    void getRatingByUserId_shouldReturnAllRatingsForUser() {
+        // Prepare mocked data for multiple ratings
+        User consumer = new User();
+        consumer.setId(2);
+        consumer.setFirstName("Jake");
+        consumer.setLastName("Peralta");
+
+        Request request = new Request();
+        request.setRequestId(101);
+
+        Rating rating1 = new Rating();
+        rating1.setRatingId(1);
+        rating1.setRatingValue(5);
+        rating1.setComment("Excellent service");
+        rating1.setConsumer(consumer);
+        rating1.setRequest(request);
+
+        Rating rating2 = new Rating();
+        rating2.setRatingId(2);
+        rating2.setRatingValue(4);
+        rating2.setComment("Good service");
+        rating2.setConsumer(consumer);
+        rating2.setRequest(request);
+
+        List<Rating> ratings = Arrays.asList(rating1, rating2);
+        when(ratingService.getRatingByUserId(2)).thenReturn(ratings);
+
+        // Call the method
+        List<Rating> response = ratingController.getRatingBuUserId(2);
+
+        // Verify the results
+        assertEquals(2, response.size());
+        assertEquals("Excellent service", response.get(0).getComment());
+        assertEquals("Good service", response.get(1).getComment());
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).getRatingByUserId(2);
+    }
+
+
+    @Test
+    void getRatingByUserId_shouldReturnEmptyList_whenUserDoesNotExist() {
+        // Prepare mocked data
+        when(ratingService.getRatingByUserId(999)).thenReturn(List.of());
+
+        // Call the method
+        List<Rating> response = ratingController.getRatingBuUserId(999);
+
+        // Verify the results
+        assertEquals(0, response.size());
+
+        // Verify interactions with the mock
+        verify(ratingService, times(1)).getRatingByUserId(999);
+    }
 
 }

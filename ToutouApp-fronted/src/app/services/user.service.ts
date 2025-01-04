@@ -45,8 +45,6 @@ export class UserService {
   }
   
   updateUserFlag(id: number, flag: boolean): Observable<User> {
-  return this.http.patch<User>(`${this.apiUrl}/${id}/flag?flag=${flag}`, {});
-}
-
-  
+    return this.http.patch<User>(`${this.apiUrl}/${id}/flag?flag=${flag}`, {});
+  }
 }

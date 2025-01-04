@@ -5,11 +5,12 @@ import be.projet3.toutouapp.models.Chat;
 import be.projet3.toutouapp.models.Request;
 import be.projet3.toutouapp.services.ChatService;
 import be.projet3.toutouapp.services.RequestService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
@@ -17,6 +18,15 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * These tests validate the creation of a chat, retrieving chat by request ID,
+ * handling not found errors, and internal server errors for chat-related API endpoints.
+ *
+ * @see be.projet3.toutouapp
+ * @author Jaï Dusépulchre
+ */
+@SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ChatControllerTests {
 
     @InjectMocks
@@ -28,12 +38,20 @@ public class ChatControllerTests {
     @Mock
     private RequestService requestService;
 
+    /**
+     * Initializes mocks before each test.
+     */
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
+    /**
+     * Tests successful creation of a chat when the request exists.
+     */
     @Test
+    @Order(1)
+    @DisplayName("Test successful chat creation when request exists")
     public void testCreateChatSuccess() {
         Integer requestId = 1;
         Request mockRequest = new Request();
@@ -54,7 +72,12 @@ public class ChatControllerTests {
         assertEquals(mockRequest, response.getBody().getRequest());
     }
 
+    /**
+     * Tests the case when the request does not exist, resulting in a 404 error.
+     */
     @Test
+    @Order(2)
+    @DisplayName("Test chat creation with non-existent request (404 Not Found)")
     public void testCreateChatRequestNotFound() {
         Integer requestId = 1;
         when(requestService.findById(requestId)).thenReturn(Optional.empty());
@@ -65,7 +88,13 @@ public class ChatControllerTests {
         assertNull(response.getBody());
     }
 
+    /**
+     * Tests the scenario when an internal server error occurs during chat creation.
+     * This is simulated by throwing an exception in the request service.
+     */
     @Test
+    @Order(3)
+    @DisplayName("Test internal server error during chat creation")
     public void testCreateChatInternalServerError() {
         Integer requestId = 1;
         when(requestService.findById(requestId)).thenThrow(new RuntimeException("Database error"));
@@ -76,7 +105,12 @@ public class ChatControllerTests {
         assertNull(response.getBody());
     }
 
+    /**
+     * Tests the successful retrieval of a chat by request ID.
+     */
     @Test
+    @Order(4)
+    @DisplayName("Test successful retrieval of chat by request ID")
     public void testGetChatByRequestSuccess() {
         Integer requestId = 1;
         Chat mockChat = new Chat();
@@ -91,7 +125,12 @@ public class ChatControllerTests {
         assertEquals(mockChat, response.getBody());
     }
 
+    /**
+     * Tests the case when no chat is found for the given request ID, resulting in a 404 error.
+     */
     @Test
+    @Order(5)
+    @DisplayName("Test chat retrieval with non-existent request ID (404 Not Found)")
     public void testGetChatByRequestNotFound() {
         Integer requestId = 1;
         when(chatService.findByRequestId(requestId)).thenReturn(Optional.empty());

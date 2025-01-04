@@ -26,6 +26,7 @@ public class SpringSecurityConfig {
                             "/rating/{id}"
                     ).hasRole("ADMIN");
 
+
                     // Accessible only by USER or ADMIN
                     authorizeRequests.requestMatchers(
                             "/user/**",
@@ -43,6 +44,7 @@ public class SpringSecurityConfig {
                     ).permitAll();
 
                     // Authentication required for all other requests
+
                     authorizeRequests.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))

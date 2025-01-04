@@ -83,6 +83,6 @@ export class AcceptedRequestsComponent {
       return;
     }
 
-    this.router.navigate(['/chat', requestId], { state: { helperName, userName } });
+    this.router.navigate(['/chat', requestId]);
   }
 }
