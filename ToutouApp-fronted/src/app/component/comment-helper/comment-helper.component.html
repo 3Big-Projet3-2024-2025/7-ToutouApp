@@ -1,7 +1,7 @@
 <app-header></app-header>
 
 <div class="rating-container">
-    <h2>Évaluer cet utilisateur</h2>
+    <h2>Rate this user</h2>
     
     <form (ngSubmit)="onSubmit()" #ratingForm="ngForm">
       
@@ -75,7 +75,7 @@
   
       
       <div *ngIf="ratingValueCtrl.invalid && ratingValueCtrl.touched" class="error">
-        Vous devez choisir une note.
+        You must choose a note.
       </div>
   
       
@@ -93,7 +93,7 @@
   
       
       <div *ngIf="commentCtrl.invalid && commentCtrl.touched" class="error">
-        Le commentaire est obligatoire.
+        The comment is mandatory.
         
       </div>
   
@@ -104,7 +104,7 @@
           class="submit-btn"
           [disabled]="ratingForm.invalid"
         >
-          Soumettre
+          Submit
         </button>
       </div>
     </form>
