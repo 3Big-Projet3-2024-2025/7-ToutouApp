@@ -35,7 +35,7 @@ public class RequestController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Request> updateRequest(@PathVariable int id, @RequestBody Request request) {
-        
+
         request.setRequestId(id);
         Request updatedRequest = requestService.updateRequest(request);
         return ResponseEntity.ok(updatedRequest); // HTTP 200 OK
@@ -56,4 +56,5 @@ public class RequestController {
     public Request getRequestById(@PathVariable int id) {
         return requestService.getRequestById(id);
     }
+    
 }
