@@ -48,44 +48,68 @@ public class UserController {
     // Ajouter un nouvel utilisateur
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody User user) {
-        User newUser = userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        try {
+            User newUser = userService.addUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     // Mettre à jour un utilisateur existant
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
-        // Vérifier si l'utilisateur existe
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + id));
+        try {
+            // Vérifier si l'utilisateur existe
+            User existingUser = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + id));
 
-        // Mettre à jour les informations de l'utilisateur
-        existingUser.setFirstName(user.getFirstName());
-        existingUser.setLastName(user.getLastName());
-        existingUser.setCountry(user.getCountry());
-        existingUser.setCity(user.getCity());
-        existingUser.setStreet(user.getStreet());
-        existingUser.setPostalCode(user.getPostalCode());
-        existingUser.setMail(user.getMail());
+            // Mettre à jour les informations de l'utilisateur
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setCountry(user.getCountry());
+            existingUser.setCity(user.getCity());
+            existingUser.setStreet(user.getStreet());
+            existingUser.setPostalCode(user.getPostalCode());
+            existingUser.setMail(user.getMail());
 
-        // Mettre à jour le rôle si nécessaire (cela dépend si vous souhaitez permettre l'édition du rôle ou non)
-        if (user.getRole() != null) {
-            Role role = roleRepository.findById(user.getRole().getRoleId())
-                    .orElseThrow(() -> new RuntimeException("Rôle non trouvé avec l'ID : " + user.getRole().getRoleId()));
-            existingUser.setRole(role);
+            // Mettre à jour le rôle si nécessaire
+            if (user.getRole() != null) {
+                Role role = roleRepository.findById(user.getRole().getRoleId())
+                        .orElseThrow(() -> new RuntimeException("Rôle non trouvé avec l'ID : " + user.getRole().getRoleId()));
+                existingUser.setRole(role);
+            }
+
+            // Sauvegarder les modifications
+            User updatedUser = userRepository.save(existingUser);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            // Si l'utilisateur n'est pas trouvé ou autre erreur
+            if (e.getMessage().contains("Utilisateur introuvable")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            // Gérer les erreurs inattendues comme des erreurs 500
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
         }
-
-        // Sauvegarder les modifications
-        User updatedUser = userRepository.save(existingUser);
-        return ResponseEntity.ok(updatedUser);
     }
 
 
     // Supprimer un utilisateur par son ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            // Si l'utilisateur n'est pas trouvé ou autre erreur
+            if (e.getMessage().contains("Utilisateur introuvable")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            // Gérer les erreurs inattendues comme des erreurs 500
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
     }
 
     //attention pas le meme request mapping avant  @RequestMapping("/api/users")

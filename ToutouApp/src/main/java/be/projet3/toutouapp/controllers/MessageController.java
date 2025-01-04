@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,11 +59,12 @@ public class MessageController {
     @GetMapping("/chat/{chatId}")
     public ResponseEntity<List<Message>> getMessagesByChatId(@PathVariable Integer chatId) {
         List<Message> messages = messageService.getMessagesByChatId(chatId);
-        if (messages.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (messages == null || messages.isEmpty()) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(messages, HttpStatus.OK);
     }
+
 
     @PatchMapping("/read/{messageId}")
     public ResponseEntity<Message> markAsRead(@PathVariable Integer messageId) {
