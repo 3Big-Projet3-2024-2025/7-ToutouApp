@@ -21,8 +21,8 @@ public class SpringSecurityConfig {
                     authorizeRequests.requestMatchers("/user/emails").hasRole("USER");
                     authorizeRequests.requestMatchers("/api/users/create").permitAll();
 
-                    authorizeRequests.requestMatchers("/swagger-ui/**","/v3/api-docs","/user","/auth/login","/request","/request/user/{userId}","request/{id}","/rating","rating/user/{userId}","/user/{id}","/user/{id}","/messages/send/**").permitAll();
-                    authorizeRequests.requestMatchers("/user/{id}/block", "/user/{id}/flag").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers("/swagger-ui/","/v3/api-docs","/user","/auth/login","/request/","/rating/","/user/{id}","/user/{id}","/messages/send/").hasRole("USER");
+                    authorizeRequests.requestMatchers("/**").hasRole("ADMIN");
                   
                     authorizeRequests.anyRequest().authenticated();
                 }).oauth2ResourceServer(oauth2 ->
