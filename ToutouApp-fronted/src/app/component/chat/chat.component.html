@@ -1,23 +1,41 @@
-<app-header></app-header>  
-  <div class="chat-container">
-    <h2>Conversation between {{ helperName }} and {{ userName }}</h2>
-    
-    <header class="chat-header">
-      <h3>Conversation with Request #{{ requestId }}</h3>
-    </header>
+<app-header></app-header>
 
-    <div class="chat-messages">
-      <div *ngFor="let message of messages" class="message">
-        <div class="message-content">
-          <p>{{ message.content }}</p>
-        </div>
-        <div class="message-time">{{ message.messageTime | date: 'shortTime' }}</div>
-      </div>
-    </div>
-
-    <footer class="chat-footer">
-      <textarea [(ngModel)]="newMessage" placeholder="Écrivez votre message ici..." rows="1" class="message-input"></textarea>
-      <button (click)="sendMessage()" class="send-button">Send</button>
-    </footer>
+<div class="chat-container">
+  <div class="conversation-header">
+    <h2 class="conversation-title">
+      Chat between 
+      <span class="user-name">{{ helperName }} (Helper)</span> and 
+      <span class="user-name">{{ userName }} (Owner)</span>
+    </h2>
+    <h3 class="request-title">Request #{{ requestId }}</h3>
   </div>
+
+  <div class="chat-messages">
+    <div *ngFor="let message of messages" class="message"
+         [ngClass]="{
+           'my-message': message.consumer.id === request.owner.id,
+           'other-message': message.consumer.id === request.helper.id
+         }">
+      <div *ngIf="message.consumer.id === request.owner.id" class="message-sender">
+        <strong>{{ userName }} (Owner)</strong>
+      </div>
+      <div *ngIf="message.consumer.id === request.helper.id" class="message-sender">
+        <strong>{{ helperName }} (Helper)</strong>
+      </div>
+
+      <div class="message-content">
+        <p>{{ message.content }}</p>
+      </div>
+      <div class="message-time">{{ message.messageTime | date: 'shortTime' }}</div>
+      <div *ngIf="message.readed" class="status-text">Read</div>
+      <div *ngIf="!message.readed" class="status-text">Unread</div>
+    </div>
+  </div>
+
+  <footer class="chat-footer">
+    <textarea [(ngModel)]="newMessage" placeholder="Type your message..." rows="1" class="message-input"></textarea>
+    <button (click)="sendMessage()" class="send-button">Send</button>
+  </footer>
+</div>
+
 <app-footer></app-footer>

@@ -36,7 +36,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (!this.map) {
       this.initMap();
       this.loadAddresses();
-      // this.addAllMarkers(); // Ajouter tous les marqueurs pour toutes les adresses après l'initialisation
     }
     this.loadFilters();
   }
@@ -48,32 +47,32 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private initMap(): void {
-    const helhaCoords: L.LatLngTuple = [50.4082935863085, 4.481319694900066]; // Coordonnées HELHa
+    const helhaCoords: L.LatLngTuple = [50.4082935863085, 4.481319694900066]; // HELHa contact details
   
-    // Initialiser la carte
+    // Initialize the map
     this.map = L.map('map').setView(helhaCoords, 15);
   
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.map);
   
-    // Configurer le géocodeur avec un marqueur personnalisé
+    // Configure the geocoder with a custom marker
     const geocoder = new (L.Control as any).Geocoder({
-      defaultMarkGeocode: false // Désactive l'ajout automatique d'un marqueur par le géocodeur
+      defaultMarkGeocode: false // Disables the automatic addition of a marker by the geocoder
     });
   
     geocoder.on('markgeocode', (e: any) => {
       const customIcon = this.createCustomMarker();
     
-      // Obtenez les coordonnées du résultat
+      // Get the coordinates of the result
       const latlng = e.geocode.center;
     
-      // Ajoutez un marqueur personnalisé à l'emplacement trouvé
+      // Add a custom marker to the found location
       L.marker(latlng, { icon: customIcon }).addTo(this.map!)
         .bindPopup(e.geocode.name)
         .openPopup();
     
-      // Vérifiez si la carte est définie avant de centrer la vue
+      // Check if the map is defined before centering the view
       if (this.map) {
         this.map.setView(latlng, this.map.getZoom());
       }
@@ -81,7 +80,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   
     geocoder.addTo(this.map);
   
-    // Ajouter le marqueur initial personnalisé
+    // Add custom initial marker
     const customIcon = this.createCustomMarker();
     const marker = L.marker(helhaCoords, { icon: customIcon }).addTo(this.map);
   
@@ -162,15 +161,15 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     const requestDate = request.requestDate;
     const startTime = request.startTime;
     const endTime = request.endTime;
-    const photoUrl = request.photo ? request.photo : 'default-photo-url.jpg';
+    const photoUrl = request.photo ? request.photo : 'assets/default-photo-dog.jpg';
   
     (document.getElementById('dogName') as HTMLInputElement).value = dogName;
     (document.getElementById('dogSize') as HTMLInputElement).value = dogSize;
     (document.getElementById('date') as HTMLInputElement).value = requestDate;
     (document.getElementById('time') as HTMLInputElement).value = `${startTime} to ${endTime}`;
     
-    //const photoElement = document.getElementById('photo') as HTMLImageElement;
-    //photoElement.src = photoUrl;
+    const photoElement = document.getElementById('photo') as HTMLImageElement;
+    photoElement.src = photoUrl;
   }
 
   async acceptRequest(): Promise<void> {
@@ -190,6 +189,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     try {
       const userId = await this.userIdService.getUserId();
       console.log('User ID:', userId);
+
+      if (this.request.owner.id == userId) {
+        window.alert('You cannot accept your own request !');
+        console.error('You cannot accept your own request.');
+        return;
+      }
 
       const updatedRequest = {
         ...this.request,
