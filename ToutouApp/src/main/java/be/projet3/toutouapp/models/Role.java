@@ -20,7 +20,6 @@ public class Role {
      * This is automatically generated using an identity strategy.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer roleId;
 
     /**
