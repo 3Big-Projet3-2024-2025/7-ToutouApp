@@ -45,12 +45,12 @@ export class HubForRequestsComponent implements OnInit{
         this.deleteExpiredRequestsWithoutHelper();
       },
       (error) => {
-        console.error('Erreur lors de la récupération des requêtes :', error);
+        console.error('Error while retrieving requests :', error);
       }
      ); 
    })
    .catch(error => {
-     console.error("Erreur lors de la récupération de l'ID utilisateur :", error);
+     console.error("Error while retrieving User id :", error);
    });
   }
 
@@ -146,7 +146,16 @@ export class HubForRequestsComponent implements OnInit{
     });
     
   }
-  
-  
 
+
+  goToChat(requestId: number, helperName: string, userName: string): void {
+    if (!requestId) {
+      console.error('Request ID is missing!');
+      return;
+    }
+
+    this.router.navigate(['/chat', requestId], { state: { helperName, userName } });
+  }
+  
+  
 }

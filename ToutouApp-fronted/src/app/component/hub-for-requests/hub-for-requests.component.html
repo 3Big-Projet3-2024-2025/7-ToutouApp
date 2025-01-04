@@ -35,6 +35,13 @@
         (click)="evaluateHelper(request.helper.id, request.requestId)">
         Evaluate Helper
       </button>
+
+      <button 
+        *ngIf="request.helper" 
+        class="chat-btn" 
+        (click)="goToChat(request.requestId, request.helper?.firstName, request.owner?.firstName)">
+        Chat
+    </button>
       
     </div>
   </div>

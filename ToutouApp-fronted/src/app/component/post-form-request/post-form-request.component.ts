@@ -151,7 +151,11 @@ export class PostFormRequestComponent implements OnInit{
   isValidUrl(url: string): boolean {
     try {
       const parsedUrl = new URL(url);
-      return ['http:', 'https:'].includes(parsedUrl.protocol) && /\.(jpg|jpeg|png|gif|webp)$/i.test(parsedUrl.pathname);
+      return (
+    /\.(jpg|jpeg|png|gif|webp)$/i.test(parsedUrl.pathname) || 
+    /^data:image\/(jpeg|png|gif|webp);base64,/i.test(parsedUrl.href)
+);
+
     } catch (e) {
       return false;
     }
