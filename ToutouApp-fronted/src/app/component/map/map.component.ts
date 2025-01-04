@@ -94,10 +94,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.requestService.getAllRequests().subscribe(
         (requests: any[]) => {
           const filteredRequests = requests.filter((request) =>
-            this.filterRequests(request)
+            this.filterRequests(request) && !request.accepted
           );
     
-          console.log('Filtered requests:', filteredRequests);
+          console.log('Filtered requests (excluding accepted):', filteredRequests);
     
           filteredRequests.forEach((request) => {
             const address = `${request.owner.street}, ${request.owner.city}, ${request.owner.country}`;
@@ -240,6 +240,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   private filterRequests(request: any): boolean {
+
+    if (request.helper != null) {
+      return false;
+    }
+    
     if (this.selectedCategory.toLowerCase() === 'all') {
       return true;
     }
