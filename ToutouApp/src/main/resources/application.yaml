@@ -14,3 +14,22 @@ spring:
         jwt:
           issuer-uri: http://localhost:8081/realms/HappyPaws
           jwk-set-uri: http://localhost:8081/realms/HappyPaws/protocol/openid-connect/certs
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: happypaws.noreply@gmail.com
+    password: crgq qepa tdxf opln
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+
+  logging:
+    level:
+      root: INFO
+      org.springframework.mail: DEBUG
+      org.apache.commons.mail: DEBUG
+
