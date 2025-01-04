@@ -52,37 +52,36 @@ public class RatingController {
         List<RatingInfoDTO> negativeRatingsDTO = negativeRatings.stream().map(rating -> {
             RatingInfoDTO dto = new RatingInfoDTO();
 
-            // Ajouter l'ID
-            dto.setId(rating.getRatingId()); // Assurez-vous que Rating a un champ `ratingId`
+            // Add ID
+            dto.setId(rating.getRatingId());
 
-            // Personne évaluée
+            // Evaluated person
             String evaluatedUserName = rating.getConsumer().getFirstName() + " " + rating.getConsumer().getLastName();
             dto.setEvaluatedUserName(evaluatedUserName);
 
-            // Personne qui donne l'avis
+            // Person giving the review
             String raterUserName;
             Request request = rating.getRequest();
             if (request.getOwner().getId() == rating.getConsumer().getId()) {
                 raterUserName = request.getHelper() != null
                         ? request.getHelper().getFirstName() + " " + request.getHelper().getLastName()
-                        : "Helper inconnu";
+                        : "Unknown Helper";
             } else {
                 raterUserName = request.getOwner().getFirstName() + " " + request.getOwner().getLastName();
             }
             dto.setRaterUserName(raterUserName);
 
-            // Ajouter les autres champs
+            // Add other fields
             dto.setRatingValue(rating.getRatingValue());
             dto.setComment(rating.getComment());
 
-            // Ajouter la date de la requête
+            // Add the request date
             dto.setRequestDate(request.getRequestDate().toString());
 
             return dto;
         }).toList();
 
-        return ResponseEntity.ok(negativeRatingsDTO); // Retourne uniquement les avis négatifs
+        return ResponseEntity.ok(negativeRatingsDTO); // Returns only negative ratings
     }
-
 
 }

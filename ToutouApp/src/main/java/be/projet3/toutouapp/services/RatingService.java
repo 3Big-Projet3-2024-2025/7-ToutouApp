@@ -47,11 +47,6 @@ public class RatingService implements IRatingService {
         return newRating;
     }
 
-
-
-
-
-
     // Supprimer un avis
     @Override
     public void deleteRating(int id) {
