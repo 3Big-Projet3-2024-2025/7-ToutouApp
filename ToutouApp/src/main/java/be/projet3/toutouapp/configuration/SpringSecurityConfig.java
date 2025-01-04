@@ -15,19 +15,38 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> cors.configure(http)) // Active la configuration CORS
-                .csrf(csrf -> csrf.disable())       // Désactive CSRF pour les API REST
+                .cors(cors -> cors.configure(http)) // Enables CORS configuration
+                .csrf(csrf -> csrf.disable())       // Disables CSRF for REST APIs
                 .authorizeRequests(authorizeRequests -> {
-                    authorizeRequests.requestMatchers("/user/emails").hasRole("USER");
-                    authorizeRequests.requestMatchers("/api/users/create").permitAll();
+                    // Accessible only by ADMIN
+                    authorizeRequests.requestMatchers(
+                            "/user/{id}/block",
+                            "/user/{id}/flag",
+                            "/rating/negative",
+                            "/rating/{id}"
+                    ).hasRole("ADMIN");
 
-                    authorizeRequests.requestMatchers("/swagger-ui/**","/v3/api-docs","/user","/auth/login","/request","/request/user/{userId}","request/{id}","/rating","rating/user/{userId}","/user/{id}","/user/{id}","/messages/send/**").permitAll();
-                    authorizeRequests.requestMatchers("/user/{id}/block", "/user/{id}/flag").hasRole("ADMIN");
-                  
+                    // Accessible only by USER or ADMIN
+                    authorizeRequests.requestMatchers(
+                            "/user/**",
+                            "/request/**",
+                            "/rating/**",
+                            "/messages/**",
+                            "/api/**",
+                            "/chats/**"
+                    ).hasAnyRole("USER", "ADMIN");
+
+                    // Accessible by everyone
+                    authorizeRequests.requestMatchers(
+                            "/swagger-ui/**",
+                            "/v3/api-docs"
+                    ).permitAll();
+
+                    // Authentication required for all other requests
                     authorizeRequests.anyRequest().authenticated();
-                }).oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                ).build();
+                })
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .build();
     }
 
     private JwtAuthenticationConverter jwtAuthenticationConverter() {
