@@ -19,6 +19,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+/**
+ * Controller responsible for managing chat-related operations.
+ * Provides endpoints to create and retrieve chats based on associated requests.
+ *
+ * @see be.projet3.toutouapp.controllers
+ * @author Jaï Dusépulchre
+ */
 @RestController
 @RequestMapping("/chats")
 public class ChatController {
@@ -29,6 +36,15 @@ public class ChatController {
     @Autowired
     private RequestService requestService;
 
+    /**
+     * Creates a new chat for a specific request.
+     *
+     * @param requestId the ID of the request for which the chat is to be created
+     * @return ResponseEntity containing the created Chat object and HTTP status:
+     * - 201 (Created) if the chat is successfully created
+     * - 404 (Not Found) if the request does not exist
+     * - 500 (Internal Server Error) if an unexpected error occurs
+     */
     @PostMapping("/create")
     public ResponseEntity<Chat> createChat(@RequestParam Integer requestId) {
         try {
@@ -50,6 +66,14 @@ public class ChatController {
         }
     }
 
+    /**
+     * Retrieves a chat associated with a specific request ID.
+     *
+     * @param requestId the ID of the request for which the chat is to be retrieved
+     * @return ResponseEntity containing the Chat object and HTTP status:
+     * - 200 (OK) if the chat is found
+     * - 404 (Not Found) if no chat is associated with the given request ID
+     */
     @GetMapping("/chats/request/{requestId}")
     public ResponseEntity<Chat> getChatByRequest(@PathVariable Integer requestId) {
         Optional<Chat> chat = chatService.findByRequestId(requestId);

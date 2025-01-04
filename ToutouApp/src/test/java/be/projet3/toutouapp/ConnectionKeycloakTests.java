@@ -2,6 +2,7 @@ package be.projet3.toutouapp;
 
 import be.projet3.toutouapp.models.User;
 import be.projet3.toutouapp.repositories.jpa.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,16 @@ import org.springframework.http.MediaType;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
+/**
+ * Integration tests for validating Keycloak authentication and API functionalities.
+ * These tests verify JWT token retrieval, user creation, email retrieval, duplicate handling, and authorization.
+ *
+ * @see be.projet3.toutouapp
+ * @author Damien De Leeuw
+ */
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ToutouAppApplicationTests {
+public class ConnectionKeycloakTests {
 
     @Autowired
     private UserRepository userRepository;
@@ -41,12 +49,14 @@ public class ToutouAppApplicationTests {
     /**
      * Retrieves a valid JWT token from Keycloak.
      * This token is used to authenticate requests to the API.
+     *
+     * @return the JWT token as a {@code String}.
      */
     private String obtainAccessToken() {
         return given()
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("client_id", "backend")
-                .formParam("client_secret", "RSQRkZjjWjGqMsTPJd9RCy232aYOHr7r")
+                .formParam("client_secret", "**********")
                 .formParam("username", "test@test.com")
                 .formParam("password", "test")
                 .formParam("grant_type", "password")
@@ -57,13 +67,15 @@ public class ToutouAppApplicationTests {
                 .path("access_token"); // Extract and return the access token
     }
 
+    /**
+     * Tests user creation using a valid JWT token.
+     */
     @Test
     @Order(1)
+    @DisplayName("Create a user using a valid JWT token")
     void testCreateUserFromToken() {
-        // Obtain a valid JWT token
         jwt = obtainAccessToken();
 
-        // Call the API to create a user
         given()
                 .auth().oauth2(jwt)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -73,19 +85,20 @@ public class ToutouAppApplicationTests {
                 .statusCode(200);
     }
 
+    /**
+     * Validates that the total number of emails retrieved via API matches the user count in the database.
+     */
     @Test
     @Order(2)
+    @DisplayName("Retrieve all emails and validate count matches users in database")
     void testGetAllEmails() {
-
         if (jwt == null || jwt.isEmpty()) {
             throw new IllegalStateException("JWT is not initialized. Ensure testCreateUserFromToken is executed first.");
         }
 
-        // Count the total number of users in the database
         long totalUsersInDB = userRepository.count();
         System.out.println("Total users in DB: " + totalUsersInDB);
 
-        // Call the API to get the total number of emails
         int totalEmailsFromAPI = given()
                 .auth().oauth2(jwt)
                 .when()
@@ -98,47 +111,54 @@ public class ToutouAppApplicationTests {
 
         System.out.println("Total emails from API: " + totalEmailsFromAPI);
 
-        // Ensure the number of users in DB matches the number of emails from API
         assert totalUsersInDB == totalEmailsFromAPI
                 : "Mismatch: Total users in DB (" + totalUsersInDB + ") is not equal to total emails from API (" + totalEmailsFromAPI + ").";
 
         System.out.println("Test passed: Total users in DB matches total emails from API.");
     }
 
+    /**
+     * Tests that attempting to create a duplicate user results in an error.
+     */
     @Test
     @Order(3)
+    @DisplayName("Attempt to create a duplicate user and expect failure")
     void testDuplicateUserCreation() {
-        // Ensure the JWT token is initialized
         if (jwt == null || jwt.isEmpty()) {
             throw new IllegalStateException("JWT is not initialized. Ensure testCreateUserFromToken is executed first.");
         }
 
-        // Attempt to create the same user again
         given()
                 .auth().oauth2(jwt)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .post("http://localhost:8080/user/create")
                 .then()
-                .statusCode(500); // Expecting HTTP 500 Internal Server Error for duplicate creation
+                .statusCode(500);
     }
 
+    /**
+     * Verifies that unauthorized API access is denied when no authentication token is provided.
+     */
     @Test
     @Order(4)
+    @DisplayName("Verify unauthorized access is denied without authentication")
     void testUnauthorizedAccess() {
-        // Call the API without authentication
         given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .get("http://localhost:8080/user/emails")
                 .then()
-                .statusCode(401); // Ensure unauthorized access is denied
+                .statusCode(401);
     }
 
+    /**
+     * Cleans up by deleting the test user from the database.
+     */
     @Test
     @Order(5)
+    @DisplayName("Clean up: Delete the test user from the database")
     void cleanupTestUser() {
-        // Cleanup: Remove the test user from the database at the end
         User user = userRepository.findByMail("test@test.com");
         if (user != null) {
             userRepository.deleteById(user.getId());

@@ -18,6 +18,14 @@ import be.projet3.toutouapp.services.IUserService;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST controller for managing users.
+ * Provides endpoints for CRUD operations, user activation/deactivation,
+ * and role management.
+ *
+ * @see be.projet3.toutouapp.controllers
+ * @author Jaï Dusépulchre
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -34,18 +42,30 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
-    // Récupérer les utilisateurs actifs
+
+    /**
+     * Retrieves all active users.
+     *
+     * @return ResponseEntity containing a list of active users and HTTP status 200 (OK).
+     */
+
     @GetMapping
     public ResponseEntity<List<User>> getActiveUsers() {
         List<User> activeUsers = userService.getAllUsers()
                 .stream()
-                .filter(User::isActive) // Filtrer par userFlag = true
+                .filter(User::isActive) // Filter by userFlag = true
                 .toList();
         return ResponseEntity.ok(activeUsers);
     }
 
-
-    // Ajouter un nouvel utilisateur
+    /**
+     * Adds a new user.
+     *
+     * @param user the User object to be created.
+     * @return ResponseEntity containing the created User and HTTP status:
+     * - 201 (Created) if successful,
+     * - 400 (Bad Request) if there is an error in the request.
+     */
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody User user) {
         try {
@@ -56,15 +76,24 @@ public class UserController {
         }
     }
 
-    // Mettre à jour un utilisateur existant
+    /**
+     * Updates an existing user by ID.
+     *
+     * @param id   the ID of the user to be updated.
+     * @param user the User object containing updated details.
+     * @return ResponseEntity containing the updated User and HTTP status:
+     * - 200 (OK) if successful,
+     * - 404 (Not Found) if the user does not exist,
+     * - 500 (Internal Server Error) for unexpected errors.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
         try {
-            // Vérifier si l'utilisateur existe
+            // Check if user exists
             User existingUser = userRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Utilisateur introuvable avec l'ID : " + id));
+                    .orElseThrow(() -> new RuntimeException("User not found with ID : " + id));
 
-            // Mettre à jour les informations de l'utilisateur
+            // Update user information
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
             existingUser.setCountry(user.getCountry());
@@ -73,46 +102,58 @@ public class UserController {
             existingUser.setPostalCode(user.getPostalCode());
             existingUser.setMail(user.getMail());
 
-            // Mettre à jour le rôle si nécessaire
+            // Update the role if necessary
             if (user.getRole() != null) {
                 Role role = roleRepository.findById(user.getRole().getRoleId())
-                        .orElseThrow(() -> new RuntimeException("Rôle non trouvé avec l'ID : " + user.getRole().getRoleId()));
+                        .orElseThrow(() -> new RuntimeException("Role not found with ID : " + user.getRole().getRoleId()));
                 existingUser.setRole(role);
             }
 
-            // Sauvegarder les modifications
+            // Save changes
             User updatedUser = userRepository.save(existingUser);
             return ResponseEntity.ok(updatedUser);
         } catch (RuntimeException e) {
-            // Si l'utilisateur n'est pas trouvé ou autre erreur
-            if (e.getMessage().contains("Utilisateur introuvable")) {
+            // If the user is not found or other error
+            if (e.getMessage().contains("User not found")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            // Gérer les erreurs inattendues comme des erreurs 500
+            // Handle unexpected errors like 500 errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
     }
 
-
-    // Supprimer un utilisateur par son ID
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param id the ID of the user to be deleted.
+     * @return ResponseEntity with HTTP status:
+     * - 204 (No Content) if deletion is successful,
+     * - 404 (Not Found) if the user does not exist,
+     * - 500 (Internal Server Error) for unexpected errors.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         try {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            // Si l'utilisateur n'est pas trouvé ou autre erreur
-            if (e.getMessage().contains("Utilisateur introuvable")) {
+            // If the user is not found or other error
+            if (e.getMessage().contains("User not found")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            // Gérer les erreurs inattendues comme des erreurs 500
+            // Handle unexpected errors like 500 errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
         }
     }
 
-    //attention pas le meme request mapping avant  @RequestMapping("/api/users")
+    /**
+     * Creates a user from the given authentication token.
+     *
+     * @param token the JwtAuthenticationToken containing user information.
+     * @return ResponseEntity containing the created User and HTTP status 200 (OK).
+     */
     @PostMapping("/create")
     public ResponseEntity<User> createUserFromToken(JwtAuthenticationToken token) {
         System.out.println("Authorities : " + token.getAuthorities());
@@ -121,6 +162,11 @@ public class UserController {
         return ResponseEntity.ok(createdUser);
     }
 
+    /**
+     * Retrieves all user emails.
+     *
+     * @return ResponseEntity containing a list of email strings and HTTP status 200 (OK).
+     */
     @GetMapping("/emails")
     public ResponseEntity<List<String>> getAllEmails() {
         List<String> emails = userService.getAllEmails();
@@ -128,6 +174,14 @@ public class UserController {
         return ResponseEntity.ok(emails);
     }
 
+    /**
+     * Retrieves a user by their email.
+     *
+     * @param email the email of the user to retrieve.
+     * @return ResponseEntity containing the User and HTTP status:
+     * - 200 (OK) if the user is found,
+     * - 404 (Not Found) if the user does not exist.
+     */
     @GetMapping("/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         try {
@@ -138,6 +192,15 @@ public class UserController {
         }
     }
 
+    /**
+     * Blocks or unblocks a user.
+     *
+     * @param id    the ID of the user to block/unblock.
+     * @param block the boolean flag indicating whether to block (true) or unblock (false) the user.
+     * @return ResponseEntity containing the updated User and HTTP status:
+     * - 200 (OK) if successful,
+     * - 400 (Bad Request) if blocking is not allowed or other issues occur.
+     */
     @PatchMapping("/{id}/block")
     public ResponseEntity<?> blockUser(@PathVariable int id, @RequestParam boolean block) {
         try {
@@ -167,6 +230,15 @@ public class UserController {
         }
     }
 
+    /**
+     * Activates or deactivates a user.
+     *
+     * @param id   the ID of the user to activate/deactivate.
+     * @param flag the boolean flag indicating whether to activate (true) or deactivate (false) the user.
+     * @return ResponseEntity containing the updated User and HTTP status:
+     * - 200 (OK) if successful,
+     * - 400 (Bad Request) if deactivation is not allowed or other issues occur.
+     */
     @PatchMapping("/{id}/flag")
     public ResponseEntity<?> updateUserFlag(@PathVariable int id, @RequestParam boolean flag) {
         try {

@@ -22,20 +22,30 @@ export class HomePageComponent implements AfterViewInit, OnInit {
     try {
       // Create the user in the database if it does not exist
       await this.authService.createUser();
-
+  
+      // Attempt to fetch user details from the database
       this.userdb = await this.authService.getUserEmailOnly();
-
-      console.log('Détails de l\'utilisateur récupéré depuis l\'API:', this.userdb);
-
-      // Load the full name after login
-      this.userFullName = await this.authService.getUserFullName();
-
-      console.log('User full name loaded:', this.userFullName);
+  
+      if (!this.userdb) {
+        // If user is not in the database, fallback to Keycloak profile
+        console.log('User not found in the database. Using Keycloak profile details.');
+        const fullName = await this.authService.getUserFullName();
+        const [firstName, lastName] = fullName.split(' ');
+  
+        // Create a temporary user object for display
+        this.userdb = {
+          firstName: firstName || '',
+          lastName: lastName || '',
+          email: '', // Placeholder since it's not fetched
+        } as unknown as User;
+      }
+  
+      console.log('User details:', this.userdb);
     } catch (error) {
       console.error('Error during user creation or loading:', error);
     }
   }
-
+  
   ngAfterViewInit(): void {
     // Select all elements to animate
     const elements = document.querySelectorAll('.animate-on-scroll');

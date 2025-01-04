@@ -37,7 +37,7 @@ export class AcceptedRequestsComponent {
   
           this.acceptedRequests = requests.filter((request: any) => {
             console.log('Request helper:', request.helper);
-            return Number(request.helper?.id) === Number(userId);
+            return Number(request.helper?.id) === Number(userId) && request.state === false;
           });
   
           console.log('Accepted requests:', this.acceptedRequests);

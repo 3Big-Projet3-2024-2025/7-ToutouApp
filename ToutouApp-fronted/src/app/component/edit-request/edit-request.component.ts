@@ -61,11 +61,11 @@ export class EditRequestComponent implements OnInit{
 
     this.requestService.modifyRequest(this.request.requestId, this.request).subscribe(
       (response) => {
-        console.log('Requête mise à jour avec succès', response);
+        console.log('Request successfully updated', response);
         this.route.navigate(['/hub-requests']);
       },
       (error) => {
-        console.error('Erreur lors de la mise à jour de la requête', error);
+        console.error('Error while updating the request', error);
       }
     );
   }
