@@ -70,13 +70,17 @@ public class UserService implements UserDetailsService, IUserService {
 
     /**
      * Saves a new user using information extracted from a JWT.
+     * This method processes user information extracted from a JWT token, checks
+     * whether the user already exists, and assigns an appropriate role based on
+     * the number of existing users in the database. The first user receives the
+     * ADMIN role, while subsequent users receive the USER role.
      *
      * @param jwt the JWT containing the user's information.
      * @return the saved {@link User}.
-     * @throws RuntimeException if the user already exists or the role is not found.
+     * @throws RuntimeException if the user already exists or if the required role is not found.
      */
     public User saveUserFromToken(Jwt jwt) {
-        // Extraire les informations du token
+        // Extract user information from the token
         String email = jwt.getClaimAsString("email");
         String firstName = jwt.getClaimAsString("given_name");
         String lastName = jwt.getClaimAsString("family_name");
@@ -85,16 +89,24 @@ public class UserService implements UserDetailsService, IUserService {
         String street = jwt.getClaimAsString("street");
         String postalCode = jwt.getClaimAsString("postal_code");
 
-        // Vérifier si l'utilisateur existe déjà
+        // Check if the user already exists
         if (userRepository.existsByMail(email)) {
-            throw new RuntimeException("Utilisateur déjà existant avec cet email : " + email);
+            throw new RuntimeException("User already exists with this email: " + email);
         }
 
-        // Récupérer le rôle par défaut (supposons "USER")
-        Role role = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("Rôle USER non trouvé"));
+        // Determine the role to assign
+        Role role;
+        if (userRepository.count() == 0) {
+            // Assign the ADMIN role to the first user
+            role = roleRepository.findById(2)
+                    .orElseThrow(() -> new RuntimeException("ADMIN role not found"));
+        } else {
+            // Assign the USER role to subsequent users
+            role = roleRepository.findById(1)
+                    .orElseThrow(() -> new RuntimeException("USER role not found"));
+        }
 
-        // Créer un nouvel utilisateur
+        // Create a new user
         User user = new User();
         user.setMail(email);
         user.setFirstName(firstName);
@@ -103,10 +115,10 @@ public class UserService implements UserDetailsService, IUserService {
         user.setCity(city);
         user.setStreet(street);
         user.setPostalCode(postalCode);
-        user.setPassword("N/A"); // Pas besoin de mot de passe dans ce cas, car géré par Keycloak
+        user.setPassword("N/A"); // No password needed in this case, because managed by Keycloak
         user.setRole(role);
 
-        // Sauvegarder l'utilisateur
+        // Save the user in the database
         return userRepository.save(user);
     }
 
