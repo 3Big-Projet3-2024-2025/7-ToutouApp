@@ -9,17 +9,24 @@ import { HeaderComponent } from '../header/header.component';
   standalone: true,
   imports: [CommonModule, FooterComponent, HeaderComponent],
   templateUrl: './ratings.component.html',
-  styleUrls: ['./ratings.component.css']
+  styleUrls: ['./ratings.component.css'],
 })
 export class RatingsComponent implements OnInit {
   negativeRatings: Rating[] = []; // List of negative reviews
   sortOrder: 'asc' | 'desc' = 'asc'; // Sorting order
   selectedComment: string | null = null; // Selected comment for the modal
+  notification: { type: string; message: string } | null = null; // Notification message
 
   constructor(private ratingService: RatingService) {}
 
   ngOnInit(): void {
     this.loadNegativeRatings();
+  }
+
+  // Show notification
+  showNotification(type: 'success' | 'error', message: string): void {
+    this.notification = { type, message };
+    setTimeout(() => (this.notification = null), 5000); // Auto-hide after 5 seconds
   }
 
   // Load negative reviews from the backend
@@ -28,7 +35,10 @@ export class RatingsComponent implements OnInit {
       next: (data) => {
         this.negativeRatings = data;
       },
-      error: (err) => console.error('Error loading negative reviews:', err)
+      error: (err) => {
+        console.error('Error loading negative reviews:', err);
+        this.showNotification('error', 'Failed to load negative reviews.');
+      },
     });
   }
 
@@ -42,6 +52,7 @@ export class RatingsComponent implements OnInit {
 
       return this.sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
+    this.showNotification('success', `Sorted by ${this.sortOrder === 'asc' ? 'Oldest' : 'Newest'}.`);
   }
 
   // Delete a review
@@ -49,13 +60,13 @@ export class RatingsComponent implements OnInit {
     if (confirm(`Are you sure you want to delete this review?`)) {
       this.ratingService.deleteRating(rating.id).subscribe({
         next: () => {
-          this.negativeRatings = this.negativeRatings.filter(r => r.id !== rating.id);
-          alert('Review successfully deleted!');
+          this.negativeRatings = this.negativeRatings.filter((r) => r.id !== rating.id);
+          this.showNotification('success', 'Review successfully deleted!');
         },
         error: (err) => {
           console.error('Error deleting the review:', err);
-          alert('Failed to delete the review. Please try again.');
-        }
+          this.showNotification('error', 'Failed to delete the review. Please try again.');
+        },
       });
     }
   }

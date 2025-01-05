@@ -7,17 +7,17 @@ import { Validators } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 
-
 @Component({
   selector: 'app-user-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,HeaderComponent,FooterComponent],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FooterComponent],
   templateUrl: './user-edit.component.html',
-  styleUrl: './user-edit.component.css'
+  styleUrls: ['./user-edit.component.css'],
 })
 export class UserEditComponent implements OnInit {
   userForm: FormGroup;
   userEmail!: string;
+  notification: { type: string; message: string } | null = null; // Notification message
 
   constructor(
     private route: ActivatedRoute,
@@ -35,49 +35,48 @@ export class UserEditComponent implements OnInit {
       street: ['', [Validators.required]],
       postalCode: ['', [Validators.required, Validators.minLength(4), Validators.pattern('^[0-9]*$')]],
     });
-    
-    
-    
   }
 
   ngOnInit(): void {
     const email = this.route.snapshot.paramMap.get('id');
     if (email) {
-        this.userEmail = email;
-        this.loadUser();
+      this.userEmail = email;
+      this.loadUser();
     } else {
-        console.error("Email not provided in the URL!");
+      this.showNotification('error', 'Email not provided in the URL!');
     }
   }
 
   loadUser(): void {
     this.userService.getUserByEmail(this.userEmail).subscribe({
-        next: (user) => {
-            this.userForm.patchValue(user);
-        },
-        error: (err) => {
-            console.error('Error while loading user:', err);
-            alert('User not found!');
-            this.router.navigate(['/users']);
-        },
+      next: (user) => {
+        this.userForm.patchValue(user);
+      },
+      error: (err) => {
+        console.error('Error while loading user:', err);
+        this.showNotification('error', 'User not found!');
+        this.router.navigate(['/users']);
+      },
     });
   }
 
   onSave(): void {
     const updatedUser: User = this.userForm.getRawValue(); // Includes disabled fields
     console.log('Data sent:', updatedUser); // Debugging
-
+  
     this.userService.updateUser(updatedUser).subscribe({
-        next: () => {
-            alert('User successfully updated');
-            this.router.navigate(['/admin/users']); // Redirect to the user list
-        },
-        error: (err) => {
-            console.error('Error while updating:', err);
-            alert('An error occurred while updating.');
-        },
+      next: () => {
+        this.showNotification('success', 'User successfully updated!');
+        setTimeout(() => {
+          this.router.navigate(['/admin/users']);
+        }, 2000); 
+      },
+      error: (err) => {
+        console.error('Error while updating:', err);
+        this.showNotification('error', 'An error occurred while updating.');
+      },
     });
-  }
+  }  
 
   onCancel(): void {
     this.router.navigate(['/admin/users']);
@@ -94,19 +93,21 @@ export class UserEditComponent implements OnInit {
     if (!control || !control.errors) return null;
 
     if (control.errors['required']) {
-        return 'This field is required.';
+      return 'This field is required.';
     }
     if (control.errors['minlength']) {
-        return `This field must have at least ${control.errors['minlength'].requiredLength} characters.`;
+      return `This field must have at least ${control.errors['minlength'].requiredLength} characters.`;
     }
     if (control.errors['pattern']) {
-        return 'This field must contain only numbers.';
+      return 'This field must contain only numbers.';
     }
 
     return null;
   }
-  
+
+  // Show notification
+  showNotification(type: 'success' | 'error', message: string): void {
+    this.notification = { type, message };
+    setTimeout(() => (this.notification = null), 5000); // Auto-hide after 5 seconds
+  }
 }
-
-
-

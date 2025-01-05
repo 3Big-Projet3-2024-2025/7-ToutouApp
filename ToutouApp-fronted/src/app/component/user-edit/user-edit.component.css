@@ -84,3 +84,72 @@ form div button[type="button"] {
 form div button[type="button"]:hover {
   background-color: #e12a2a;
 }
+
+.user-management-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #3b8d99;
+  position: relative;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.user-management-title-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.user-management-title::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 9.5%; 
+  height: 3px;
+  background-color: #f0783b;
+  border-radius: 2px;
+}
+
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1055;
+}
+
+.toast {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s, fadeOut 0.5s 4.5s;
+}
+
+.text-bg-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.text-bg-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

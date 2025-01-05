@@ -1,5 +1,25 @@
 <app-header></app-header>
+
 <div class="margin">
+  <!-- Notification Section -->
+  <div *ngIf="notification" class="toast-container position-fixed top-0 end-0 p-3">
+    <div
+      class="toast show"
+      [ngClass]="{
+        'text-bg-success': notification.type === 'success',
+        'text-bg-danger': notification.type === 'error'
+      }"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="toast-body">
+        {{ notification.message }}
+      </div>
+    </div>
+  </div>
+
+  <!-- User Edit Form -->
   <h2 class="user-management-title">Edit User</h2>
   <form [formGroup]="userForm" (ngSubmit)="onSave()">
     <div>
@@ -20,7 +40,7 @@
 
     <div>
       <label for="mail">Email</label>
-      <input id="mail" formControlName="mail" />
+      <input id="mail" formControlName="mail"/>
     </div>
 
     <div>
@@ -61,4 +81,5 @@
     </div>
   </form>
 </div>
+
 <app-footer></app-footer>
