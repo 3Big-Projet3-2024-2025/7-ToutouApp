@@ -21,6 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for managing {@link User} entities.
+ * Implements {@link UserDetailsService} to load user details for authentication.
+ *
+ *@see be.projet3.toutouapp.services
+ *@author Jaï Dusépulchre
+ */
 @Service
 public class UserService implements UserDetailsService, IUserService {
 
@@ -32,7 +39,13 @@ public class UserService implements UserDetailsService, IUserService {
     @Autowired
     private RequestRepository requestRepository;
 
-
+    /**
+     * Loads the user details by username (email).
+     *
+     * @param mail the email of the user to retrieve.
+     * @return a {@link UserDetails} object containing user information.
+     * @throws UsernameNotFoundException if the user is not found by the provided email.
+     */
     @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
         User user = userRepository.findByMail((mail));
@@ -43,13 +56,25 @@ public class UserService implements UserDetailsService, IUserService {
         return userDetails;
     }
 
+    /**
+     * Retrieves granted authorities based on the user's role.
+     *
+     * @param role the role of the user.
+     * @return a list of {@link GrantedAuthority} objects for the user's role.
+     */
     public List<GrantedAuthority> getGrantedAuthorities(String role) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_"+role.toUpperCase()));
         return authorities;
     }
 
-
+    /**
+     * Saves a new user using information extracted from a JWT.
+     *
+     * @param jwt the JWT containing the user's information.
+     * @return the saved {@link User}.
+     * @throws RuntimeException if the user already exists or the role is not found.
+     */
     public User saveUserFromToken(Jwt jwt) {
         // Extraire les informations du token
         String email = jwt.getClaimAsString("email");
@@ -84,6 +109,12 @@ public class UserService implements UserDetailsService, IUserService {
         // Sauvegarder l'utilisateur
         return userRepository.save(user);
     }
+
+    /**
+     * Retrieves all emails of the users.
+     *
+     * @return a list of user emails.
+     */
     public List<String> getAllEmails() {
         return userRepository.findAll()
                 .stream()
@@ -91,23 +122,47 @@ public class UserService implements UserDetailsService, IUserService {
                 .collect(Collectors.toList());
     }
 
-
+    /**
+     * Adds a new user to the repository.
+     *
+     * @param user the user to be added.
+     * @return the added {@link User}.
+     */
     @Override
     public User addUser(User user) {
         return userRepository.save(user);
     }
 
+    /**
+     * Retrieves all users from the repository.
+     *
+     * @return a list of all {@link User} entities.
+     */
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id the ID of the user.
+     * @return the {@link User} with the given ID.
+     * @throws RuntimeException if the user is not found.
+     */
     @Override
     public User getUserById(int id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID : " + id));
     }
 
+    /**
+     * Updates an existing user.
+     *
+     * @param user the user with updated information.
+     * @return the updated {@link User}.
+     * @throws RuntimeException if the user is not found or the role is not valid.
+     */
     @Override
     public User updateUser(User user) {
         if (!userRepository.existsById(user.getId())) {
@@ -128,6 +183,12 @@ public class UserService implements UserDetailsService, IUserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Deletes a user by their ID.
+     *
+     * @param id the ID of the user to delete.
+     * @throws RuntimeException if the user is not found.
+     */
     @Override
     public void deleteUser(int id) {
         if (!userRepository.existsById(id)) {
@@ -136,6 +197,13 @@ public class UserService implements UserDetailsService, IUserService {
         userRepository.deleteById(id);
     }
 
+    /**
+     * Retrieves a user by their email.
+     *
+     * @param email the email of the user.
+     * @return the {@link User} associated with the email.
+     * @throws RuntimeException if the user is not found.
+     */
     public User getUserByEmail(String email) {
         User user = userRepository.findByMail(email);
         if (user == null) {
@@ -144,7 +212,11 @@ public class UserService implements UserDetailsService, IUserService {
         return user;
     }
 
-
+    /**
+     * Retrieves all active users.
+     *
+     * @return a list of active {@link User} entities.
+     */
     public List<User> getActiveUsers() {
         return userRepository.findAll()
                 .stream()
@@ -152,6 +224,11 @@ public class UserService implements UserDetailsService, IUserService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Counts the number of active administrators.
+     *
+     * @return the count of active administrators.
+     */
     public long countActiveAdmins() {
         return userRepository.findAll()
                 .stream()
@@ -159,6 +236,12 @@ public class UserService implements UserDetailsService, IUserService {
                 .count();
     }
 
+    /**
+     * Checks if a user is linked to any active requests.
+     *
+     * @param userId the ID of the user.
+     * @return true if the user is linked to any active requests, false otherwise.
+     */
     public boolean isUserLinkedToActiveRequests(int userId) {
         List<Request> userRequests = requestRepository.findByOwner_Id(userId);
 
@@ -172,8 +255,12 @@ public class UserService implements UserDetailsService, IUserService {
         return false; // The user is not linked to any active requests
     }
 
-
-
+    /**
+     * Retrieves the current authenticated user.
+     *
+     * @return the current {@link User} based on the authentication token.
+     * @throws RuntimeException if the user is not authenticated.
+     */
      public User getCurrentUser() {
         JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
