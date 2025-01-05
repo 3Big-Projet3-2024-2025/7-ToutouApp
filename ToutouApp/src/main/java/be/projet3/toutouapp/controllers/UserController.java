@@ -206,6 +206,12 @@ public class UserController {
         try {
             User user = userService.getUserById(id);
 
+            // Check if the user is linked to an active request and prevent blocking
+            if (userService.isUserLinkedToActiveRequests(id) && block) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("error", "Cannot block a user linked to an active request."));
+            }
+
             // If the user is an ADMIN and is the last active one
             if (block && "ADMIN".equals(user.getRole().getName())) {
                 long activeAdminCount = userService.countActiveAdmins();

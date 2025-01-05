@@ -67,24 +67,27 @@ export class UserListComponent implements OnInit {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     this.userService.blockUser(user.id, isChecked).subscribe({
-      next: (updatedUser) => {
-        user.blocked = updatedUser.blocked;
-        this.showNotification('success', `User ${user.firstName} ${user.lastName} has been ${isChecked ? 'blocked' : 'unblocked'}.`);
-      },
-      error: (err) => {
-        console.error('Error while blocking/unblocking user:', err);
+        next: (updatedUser) => {
+            user.blocked = updatedUser.blocked;
+            this.showNotification('success', `User ${user.firstName} ${user.lastName} has been ${isChecked ? 'blocked' : 'unblocked'}.`);
+        },
+        error: (err) => {
+            console.error('Error while blocking/unblocking user:', err);
 
-        const errorMessage = err.error?.error || 'An error occurred.';
-        if (errorMessage === 'Cannot block the last active administrator!') {
-          this.showNotification('error', 'You cannot block the last active administrator.');
-        } else {
-          this.showNotification('error', 'An error occurred while blocking/unblocking the user.');
-        }
+            const errorMessage = err.error?.error || 'An error occurred.';
+            if (errorMessage === 'Cannot block the last active administrator!') {
+                this.showNotification('error', 'You cannot block the last active administrator.');
+            } else if (errorMessage === 'Cannot block a user linked to an active request.') {
+                this.showNotification('error', 'Cannot block this user because they are linked to an active request.');
+            } else {
+                this.showNotification('error', 'An error occurred while blocking/unblocking the user.');
+            }
 
-        (event.target as HTMLInputElement).checked = !isChecked; // Reset checkbox if there is an error
-      },
+            (event.target as HTMLInputElement).checked = !isChecked; // Reset checkbox if there is an error
+        },
     });
-  }
+}
+
 
   // Navigate to the user edit page
   onEditUser(user: User): void {
