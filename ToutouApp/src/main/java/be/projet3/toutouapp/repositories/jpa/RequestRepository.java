@@ -34,4 +34,13 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
      */
     Request findByRequestId(int requestId);
 
+    /**
+     * Retrieves a list of {@link Request} entities associated with a specific helper ID.
+     *
+     * @param helperId the ID of the helper whose requests are to be retrieved
+     * @return a list of {@link Request} entities where the specified user is a helper
+     */
+    List<Request> findByHelper_Id(int helperId);
+
 }
+
