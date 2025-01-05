@@ -76,6 +76,12 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage(): void {
+    if (this.newMessage.trim().length > 60) {
+      alert('Your message is too long. Please limit your message to 60 characters or less.');
+      this.newMessage = '';
+      return;
+    }
+
     if (this.newMessage.trim()) {
       this.messageService.sendMessage(this.chat?.chatId!, this.newMessage).subscribe(() => {
         if (this.chat) {
