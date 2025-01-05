@@ -44,8 +44,12 @@ export class HeaderComponent implements OnInit {
 
   // Logs the user out and clears their session
   logout(): void {
-    this.authService.logout();
+    const confirmation = window.confirm('Are you sure you want to leave the application?');
+    if (confirmation) {
+      this.authService.logout();
+    }
   }
+  
 
   // Navigates to the Requests Hub page
   seeRequests() {
