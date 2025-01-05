@@ -18,4 +18,8 @@ export class MessageService {
   sendMessage(chatId: number, content: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/send/${chatId}`, { content });
   }
+
+  markAsRead(messageId: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/read/${messageId}`, {});
+  }
 }
