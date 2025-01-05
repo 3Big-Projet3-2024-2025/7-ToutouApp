@@ -12,19 +12,26 @@ import { NgxPaginationModule } from 'ngx-pagination';
   standalone: true,
   imports: [CommonModule, HeaderComponent, FooterComponent, FormsModule, NgxPaginationModule],
   templateUrl: './user-list.component.html',
-  styleUrl: './user-list.component.css'
+  styleUrls: ['./user-list.component.css'],
 })
 export class UserListComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
   isLoading = true;
   searchTerm: string = '';
+  currentPage: number = 1;
+  notification: { type: string; message: string } | null = null;
 
   constructor(private userService: UserService, private router: Router) {}
-  currentPage: number = 1;
 
   ngOnInit(): void {
     this.fetchUsers();
+  }
+
+  // Display a notification
+  showNotification(type: 'success' | 'error', message: string): void {
+    this.notification = { type, message };
+    setTimeout(() => (this.notification = null), 5000); // Auto-hide after 5 seconds
   }
 
   // Fetch all users from the backend
@@ -33,11 +40,12 @@ export class UserListComponent implements OnInit {
     this.userService.getAllUsers().subscribe({
       next: (data) => {
         this.users = data;
-        this.filteredUsers = data;  // Initially, all users are displayed
+        this.filteredUsers = data; // Initially, all users are displayed
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Error while fetching users', err);
+        this.showNotification('error', 'Error while fetching users.');
         this.isLoading = false;
       },
     });
@@ -46,9 +54,9 @@ export class UserListComponent implements OnInit {
   // Search functionality
   onSearch(): void {
     if (this.searchTerm.trim() === '') {
-      this.filteredUsers = this.users;  // If search field is empty, display all users
+      this.filteredUsers = this.users; // If search field is empty, display all users
     } else {
-      this.filteredUsers = this.users.filter(user =>
+      this.filteredUsers = this.users.filter((user) =>
         user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) // Search by lastName
       );
     }
@@ -59,24 +67,27 @@ export class UserListComponent implements OnInit {
     const isChecked = (event.target as HTMLInputElement).checked;
 
     this.userService.blockUser(user.id, isChecked).subscribe({
-      next: (updatedUser) => {
-        user.blocked = updatedUser.blocked;
-        alert(`User ${user.firstName} ${user.lastName} has been ${isChecked ? 'blocked' : 'unblocked'}.`);
-      },
-      error: (err) => {
-        console.error('Error while blocking/unblocking user:', err);
+        next: (updatedUser) => {
+            user.blocked = updatedUser.blocked;
+            this.showNotification('success', `User ${user.firstName} ${user.lastName} has been ${isChecked ? 'blocked' : 'unblocked'}.`);
+        },
+        error: (err) => {
+            console.error('Error while blocking/unblocking user:', err);
 
-        const errorMessage = err.error?.error || 'An error occurred.';
-        if (errorMessage === 'Cannot block the last active administrator!') {
-          alert('You cannot block the last active administrator.');
-        } else {
-          alert('An error occurred while blocking/unblocking the user.');
-        }
+            const errorMessage = err.error?.error || 'An error occurred.';
+            if (errorMessage === 'Cannot block the last active administrator!') {
+                this.showNotification('error', 'You cannot block the last active administrator.');
+            } else if (errorMessage === 'Cannot block a user linked to an active request.') {
+                this.showNotification('error', 'Cannot block this user because they are linked to an active request.');
+            } else {
+                this.showNotification('error', 'An error occurred while blocking/unblocking the user.');
+            }
 
-        (event.target as HTMLInputElement).checked = !isChecked;  // Reset checkbox if there is an error
-      },
+            (event.target as HTMLInputElement).checked = !isChecked; // Reset checkbox if there is an error
+        },
     });
-  }
+}
+
 
   // Navigate to the user edit page
   onEditUser(user: User): void {
@@ -88,19 +99,19 @@ export class UserListComponent implements OnInit {
     if (confirm(`Are you sure you want to deactivate the user ${user.firstName} ${user.lastName}?`)) {
       this.userService.updateUserFlag(user.id, false).subscribe({
         next: () => {
-          alert(`User ${user.firstName} ${user.lastName} has been deactivated.`);
+          this.showNotification('success', `User ${user.firstName} ${user.lastName} has been deactivated.`);
           this.fetchUsers(); // Reloads the list of users
         },
         error: (err) => {
           console.error('Error while deactivating user:', err);
           const errorMessage = err.error?.error || 'An error occurred.';
-  
+
           if (errorMessage === 'Cannot deactivate a user linked to an active request.') {
-            alert('Cannot deactivate this user because they are linked to an active request.');
+            this.showNotification('error', 'Cannot deactivate this user because they are linked to an active request.');
           } else if (errorMessage === 'Cannot deactivate the last active administrator!') {
-            alert('You cannot deactivate the last active administrator.');
+            this.showNotification('error', 'You cannot deactivate the last active administrator.');
           } else {
-            alert('An error occurred while deactivating the user.');
+            this.showNotification('error', 'An error occurred while deactivating the user.');
           }
         },
       });

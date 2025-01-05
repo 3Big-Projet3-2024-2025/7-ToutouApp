@@ -43,3 +43,46 @@
 .custom-margin {
   margin-left: 10px;
 }
+
+.toast-container {
+  position: fixed;
+  top: 1rem; /* Positionnez légèrement en bas du haut de la page */
+  right: 1rem; /* Déplacez la notification sur le côté droit */
+  z-index: 1055; /* Assurez-vous qu'elle reste au-dessus des autres éléments */
+}
+
+.toast {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s, fadeOut 0.5s 4.5s; /* Smooth fade in and out */
+}
+
+.text-bg-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.text-bg-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+

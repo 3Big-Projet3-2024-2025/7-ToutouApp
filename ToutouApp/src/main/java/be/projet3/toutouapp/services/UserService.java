@@ -255,17 +255,30 @@ public class UserService implements UserDetailsService, IUserService {
      * @return true if the user is linked to any active requests, false otherwise.
      */
     public boolean isUserLinkedToActiveRequests(int userId) {
-        List<Request> userRequests = requestRepository.findByOwner_Id(userId);
+        // Retrieve all requests where the user is the owner
+        List<Request> ownerRequests = requestRepository.findByOwner_Id(userId);
 
-        // Check if the user is linked to an active request (state == false)
-        for (Request request : userRequests) {
+        // Check if the user is linked as an owner to an active request
+        for (Request request : ownerRequests) {
             if (!request.getState()) { // If the request is active (state == false)
-                return true; // The user is linked to an active request
+                return true;
             }
         }
 
-        return false; // The user is not linked to any active requests
+        // Retrieve all requests where the user is a helper
+        List<Request> helperRequests = requestRepository.findByHelper_Id(userId);
+
+        // Check if the user is linked as a helper to an active request
+        for (Request request : helperRequests) {
+            if (!request.getState()) { // If the request is active (state == false)
+                return true;
+            }
+        }
+
+        // If neither condition is met, the user is not linked to any active requests
+        return false;
     }
+
 
     /**
      * Retrieves the current authenticated user.
@@ -273,7 +286,7 @@ public class UserService implements UserDetailsService, IUserService {
      * @return the current {@link User} based on the authentication token.
      * @throws RuntimeException if the user is not authenticated.
      */
-     public User getCurrentUser() {
+    public User getCurrentUser() {
         JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 
         if (authenticationToken == null || authenticationToken.getToken() == null) {

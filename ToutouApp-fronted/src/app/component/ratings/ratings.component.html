@@ -1,6 +1,24 @@
 <app-header></app-header>
 
 <div class="margin">
+  <!-- Notification Section -->
+  <div *ngIf="notification" class="toast-container position-fixed top-0 end-0 p-3">
+    <div
+      class="toast show"
+      [ngClass]="{
+        'text-bg-success': notification.type === 'success',
+        'text-bg-danger': notification.type === 'error'
+      }"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+    >
+      <div class="toast-body">
+        {{ notification.message }}
+      </div>
+    </div>
+  </div>
+
   <!-- Header with title and sort button -->
   <div class="header-container">
     <h2 class="user-management-title">Negative Reviews</h2>
@@ -41,7 +59,7 @@
                 </button>
               </span>
             </div>
-          </td>          
+          </td>
           <td>{{ rating.evaluatedUserName }}</td>
           <td>{{ rating.raterUserName }}</td>
           <td>{{ rating.requestDate | date: 'longDate' }}</td>
