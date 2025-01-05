@@ -21,7 +21,12 @@
           <strong>Click here to see profile</strong> →
         </p>
       </div>
-      
+      <button 
+        *ngIf="request.helper" 
+        class="btn btn-chat" 
+        (click)="goToChat(request.requestId, request.helper?.firstName, request.owner?.firstName)">
+        Chat
+       </button>
     </div>
 
     <div class="request-footer">
@@ -36,12 +41,6 @@
         Evaluate Helper
       </button>
 
-      <button 
-        *ngIf="request.helper" 
-        class="chat-btn" 
-        (click)="goToChat(request.requestId, request.helper?.firstName, request.owner?.firstName)">
-        Chat
-    </button>
       
     </div>
   </div>
