@@ -29,7 +29,7 @@ import java.util.Optional;
  * These tests validate the functionality of user management endpoints in the controller.
  *
  * @see be.projet3.toutouapp
- * @author Jaï Dusépulchre
+ * @author Jaï Dusépulchre, Sirjacques Célestin
  */
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -306,6 +306,10 @@ public class UserControllerTests {
         verify(userService, times(1)).getUserByEmail("unknown@example.com");
     }
 
+    /**
+     * Test blocking a user successfully.
+     * Verifies that the user is blocked and the correct response is returned.
+     */
     @Test
     public void testBlockUser() throws Exception {
         when(userService.getUserById(1)).thenReturn(user);
@@ -319,6 +323,10 @@ public class UserControllerTests {
         verify(userService, times(1)).updateUser(any(User.class));
     }
 
+    /**
+     * Test blocking the last active administrator.
+     * Verifies that the action is rejected with an error message.
+     */
     @Test
     public void testBlockUser_LastAdmin() throws Exception {
         Role adminRole = new Role();
@@ -337,6 +345,10 @@ public class UserControllerTests {
         verify(userService, never()).updateUser(any(User.class));
     }
 
+    /**
+     * Test updating the user flag (activation/deactivation).
+     * Verifies that the user's active flag is correctly updated.
+     */
     @Test
     public void testUpdateUserFlag() throws Exception {
         when(userService.getUserById(1)).thenReturn(user);
@@ -350,6 +362,10 @@ public class UserControllerTests {
         verify(userService, times(1)).updateUser(any(User.class));
     }
 
+    /**
+     * Test updating the user flag when the user is linked to active requests.
+     * Verifies that the action is rejected with an error message.
+     */
     @Test
     public void testUpdateUserFlag_LinkedToActiveRequests() throws Exception {
         when(userService.getUserById(1)).thenReturn(user);
@@ -364,6 +380,10 @@ public class UserControllerTests {
         verify(userService, never()).updateUser(any(User.class));
     }
 
+    /**
+     * Test updating the user flag when the user is the last active administrator.
+     * Verifies that the action is rejected with an error message.
+     */
     @Test
     public void testUpdateUserFlag_LastAdmin() throws Exception {
         Role adminRole = new Role();
@@ -382,6 +402,10 @@ public class UserControllerTests {
         verify(userService, never()).updateUser(any(User.class));
     }
 
+    /**
+     * Test unblocking a user.
+     * Verifies that the user is unblocked and the correct response is returned.
+     */
     @Test
     public void testUnblockUser() throws Exception {
         // Simulate a blocked user
@@ -398,6 +422,10 @@ public class UserControllerTests {
         verify(userService, times(1)).updateUser(any(User.class));
     }
 
+    /**
+     * Test activating a user.
+     * Verifies that the user's active flag is correctly set to true.
+     */
     @Test
     public void testActivateUser() throws Exception {
         // Simulate a deactivated user
@@ -414,6 +442,10 @@ public class UserControllerTests {
         verify(userService, times(1)).updateUser(any(User.class));
     }
 
+    /**
+     * Test blocking a user with an invalid parameter.
+     * Verifies that a bad request status is returned when no parameter is provided.
+     */
     @Test
     public void testBlockUser_InvalidParameter() throws Exception {
         mockMvc.perform(patch("/user/1/block"))
@@ -423,6 +455,10 @@ public class UserControllerTests {
         verify(userService, never()).updateUser(any(User.class));
     }
 
+    /**
+     * Test updating the user flag with an invalid parameter.
+     * Verifies that a bad request status is returned when no parameter is provided.
+     */
     @Test
     public void testUpdateUserFlag_InvalidParameter() throws Exception {
         mockMvc.perform(patch("/user/1/flag"))
@@ -432,6 +468,10 @@ public class UserControllerTests {
         verify(userService, never()).updateUser(any(User.class));
     }
 
+    /**
+     * Test retrieving active users when there are some active users.
+     * Verifies that only active users are returned.
+     */
     @Test
     public void testGetActiveUsers_Success() throws Exception {
         // Create the list of users
@@ -471,6 +511,10 @@ public class UserControllerTests {
         verify(userService, times(1)).getAllUsers();
     }
 
+    /**
+     * Test retrieving active users when there are no active users.
+     * Verifies that the response contains no active users.
+     */
     @Test
     public void testGetActiveUsers_NoActiveUsers() throws Exception {
         // Create the list of users (no active users)
@@ -501,6 +545,10 @@ public class UserControllerTests {
         verify(userService, times(1)).getAllUsers();
     }
 
+    /**
+     * Test retrieving active users when the list is empty.
+     * Verifies that the response contains no users.
+     */
     @Test
     public void testGetActiveUsers_EmptyList() throws Exception {
         // No users in the list
@@ -514,6 +562,10 @@ public class UserControllerTests {
         verify(userService, times(1)).getAllUsers();
     }
 
+    /**
+     * Test retrieving active users when an internal server error occurs.
+     * Verifies that the proper error status is returned.
+     */
     @Test
     public void testGetActiveUsers_InternalServerError() {
         // Simulate an exception thrown by the service

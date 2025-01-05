@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
  * Service class for sending emails.
  * Provides functionality to send simple email messages using the configured {@link JavaMailSender}.
  * Annotated with {@link Service} to indicate it's a Spring service component.
+ * @see be.projet3.toutouapp.services
  * @author Sirjacques Célestin
  */
 @Service

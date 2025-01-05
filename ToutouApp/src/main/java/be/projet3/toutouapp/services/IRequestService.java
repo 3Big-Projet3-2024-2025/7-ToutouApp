@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Interface for managing Request entities.
  * Defines the contract for business logic operations related to Requests.
+ * @see be.projet3.toutouapp.services
  * @author Amico Matteo
  */
 public interface IRequestService {

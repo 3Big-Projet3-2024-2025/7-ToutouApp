@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
  * Service class for testing the database connection.
  * Provides a method to verify the connection by attempting to retrieve a user from the database.
  * Annotated with {@link Service} to indicate it's a Spring service component.
+ * @see be.projet3.toutouapp.services
  * @author Damien DeLeeuw
  */
 @Service

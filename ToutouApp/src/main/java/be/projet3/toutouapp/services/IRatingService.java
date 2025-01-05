@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Interface for managing Rating entities.
  * Defines the contract for business logic operations related to Ratings.
+ * @see be.projet3.toutouapp.services
  * @author Amico Matteo
  */
 public interface IRatingService {

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
+ * @see be.projet3.toutouapp.repositories.jpa
  * Repository interface for managing Rating entities in the database.
  * Extends {@link JpaRepository} to provide CRUD operations and custom query methods.
  * @author Amico Matteo

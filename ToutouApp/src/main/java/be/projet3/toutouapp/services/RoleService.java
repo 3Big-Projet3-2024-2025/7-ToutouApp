@@ -12,6 +12,7 @@ import java.util.Optional;
  * Service class for managing Role entities.
  * Provides functionality to fetch Role details from the database.
  * Annotated with {@link Service} to indicate it's a Spring service component.
+ * @see be.projet3.toutouapp.services
  * @author Jaï Dusépulchre
  */
 @Service

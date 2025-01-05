@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
+ * @see be.projet3.toutouapp.repositories.jpa
  * Repository interface for managing Request entities in the database.
  * Extends {@link JpaRepository} to provide CRUD operations and custom query methods.
  * This interface is annotated with {@link Repository} to indicate it's a Spring repository.

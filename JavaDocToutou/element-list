@@ -1,0 +1,8 @@
+be.projet3.toutouapp
+be.projet3.toutouapp.configuration
+be.projet3.toutouapp.controllers
+be.projet3.toutouapp.dto
+be.projet3.toutouapp.models
+be.projet3.toutouapp.repositories.jpa
+be.projet3.toutouapp.security
+be.projet3.toutouapp.services

@@ -26,6 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test class for RatingController.
+ * Author: Amico Matteo, Sirjacques Célestin
+ */
 class RatingControllerTest {
 
     @Mock
@@ -39,6 +43,11 @@ class RatingControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
+
+    /**
+     * Test retrieving negative ratings and returning a list of RatingInfoDTO.
+     * Verifies that the response contains the correct details for negative ratings.
+     */
     @Test
     void getNegativeRatings_shouldReturnNegativeRatingsDTOList() {
         // Prepare mocked data
@@ -88,6 +97,10 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getNegativeRatings();
     }
 
+    /**
+     * Test retrieving negative ratings when no negative ratings are available.
+     * Verifies that the response contains an empty list.
+     */
     @Test
     void getNegativeRatings_shouldReturnEmptyList_whenNoNegativeRatings() {
         // Prepare mocked data
@@ -104,6 +117,11 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getNegativeRatings();
     }
 
+
+    /**
+     * Test retrieving multiple negative ratings and returning the correct details.
+     * Verifies that multiple negative ratings are correctly handled and returned.
+     */
     @Test
     void getNegativeRatings_shouldHandleMultipleNegativeRatings() {
         // Prepare mocked data
@@ -180,6 +198,11 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getNegativeRatings();
     }
 
+
+    /**
+     * Test retrieving negative ratings when the service fails.
+     * Verifies that the exception is correctly thrown and handled.
+     */
     @Test
     void getNegativeRatings_shouldThrowException_whenServiceFails() {
         // Simulate an exception in the service
@@ -197,6 +220,11 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getNegativeRatings();
     }
 
+
+    /**
+     * Test retrieving all ratings.
+     * Verifies that the correct list of ratings is returned with the correct details.
+     */
     @Test
 
     void getAllRatings_shouldReturnListOfRatings() {
@@ -233,6 +261,11 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getAllRatings();
     }
 
+
+    /**
+     * Test adding a new rating.
+     * Verifies that a new rating is created successfully and returned.
+     */
     @Test
     void addRating_shouldCreateNewRating() {
         User consumer = new User();
@@ -266,6 +299,11 @@ class RatingControllerTest {
         verify(ratingService, times(1)).addRating(any(Rating.class));
     }
 
+
+    /**
+     * Test deleting a rating.
+     * Verifies that the delete method of the service is correctly called.
+     */
     @Test
     void deleteRating_shouldCallServiceDeleteMethod() {
         doNothing().when(ratingService).deleteRating(1);
@@ -276,6 +314,11 @@ class RatingControllerTest {
         verify(ratingService, times(1)).deleteRating(1);
     }
 
+
+    /**
+     * Test retrieving ratings by user ID.
+     * Verifies that the list of ratings for a user is returned correctly.
+     */
     @Test
     void getRatingByUserId_shouldReturnListOfRatingsForUser() {
         User consumer = new User();
@@ -309,6 +352,11 @@ class RatingControllerTest {
 
         verify(ratingService, times(1)).getRatingByUserId(1);
     }
+
+    /**
+     * Test retrieving negative ratings when no positive ratings exist.
+     * Verifies that positive ratings should not be included.
+     */
 
     @Test
     void getNegativeRatings_shouldNotIncludePositiveRatings() {
@@ -359,6 +407,11 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getNegativeRatings();
     }
 
+
+    /**
+     * Test for handling large datasets of negative ratings.
+     * Verifies that the method can handle a large number of negative ratings (1000 in this case) and returns them correctly.
+     */
     @Test
     void getNegativeRatings_shouldHandleLargeDataset() {
         // Prepare a large list of mocked data
@@ -403,6 +456,10 @@ class RatingControllerTest {
     }
 
 
+    /**
+     * Test for getting all ratings when there are no ratings available.
+     * Verifies that the response returns an empty list when no ratings exist.
+     */
     @Test
     void getAllRatings_shouldReturnEmptyList_whenNoRatings() {
         // Prepare mocked data
@@ -419,7 +476,10 @@ class RatingControllerTest {
         verify(ratingService, times(1)).getAllRatings();
     }
 
-
+    /**
+     * Test for deleting a rating when the rating does not exist.
+     * Verifies that the method correctly returns a 404 status when trying to delete a non-existing rating.
+     */
     @Test
     void deleteRating_shouldReturnNotFound_whenRatingDoesNotExist() {
         // Simulate the service returning no such rating
@@ -439,6 +499,10 @@ class RatingControllerTest {
 
 
 
+    /**
+     * Test for getting ratings by user ID when the user has no ratings.
+     * Verifies that the response correctly returns an empty list when no ratings exist for the user.
+     */
     @Test
     void getRatingByUserId_shouldReturnEmptyList_whenNoRatingsForUser() {
         // Prepare mocked data
@@ -456,6 +520,10 @@ class RatingControllerTest {
 
 
 
+    /**
+     * Test for getting all ratings for a user when the user has multiple ratings.
+     * Verifies that all ratings for the user are returned correctly.
+     */
     @Test
     void getRatingByUserId_shouldReturnAllRatingsForUser() {
         // Prepare mocked data for multiple ratings
@@ -497,6 +565,10 @@ class RatingControllerTest {
     }
 
 
+    /**
+     * Test for getting ratings by user ID when the user does not exist.
+     * Verifies that the response returns an empty list when no ratings exist for the given user ID.
+     */
     @Test
     void getRatingByUserId_shouldReturnEmptyList_whenUserDoesNotExist() {
         // Prepare mocked data

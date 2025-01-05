@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  * Converter for extracting roles from a JWT token and converting them into a collection of {@link GrantedAuthority}.
  * This class is used to convert Keycloak roles into Spring Security authorities.
  * Implements the {@link Converter} interface from Spring Security to perform the conversion.
+ * @see  be.projet3.toutouapp.security
  * @author Damien DeLeeuw
  */
 public class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
