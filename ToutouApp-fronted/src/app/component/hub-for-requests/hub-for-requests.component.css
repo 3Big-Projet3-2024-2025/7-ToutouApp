@@ -155,6 +155,33 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* Chat Button Styling */
+.btn-chat {
+  background-color: #7a2668; 
+  color: white; 
+  padding: 8px 16px; 
+  font-size: 14px; 
+  font-weight: bold; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-chat:hover {
+  background-color: #7a2668; 
+  transform: translateY(-2px); 
+}
+
+.btn-chat:active {
+  background-color: #7a2668;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
 
 .helper-info {
   background-color: #f0f8ff;
