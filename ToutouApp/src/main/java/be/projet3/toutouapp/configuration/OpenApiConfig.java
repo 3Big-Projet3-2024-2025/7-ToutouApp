@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * This class defines the custom configuration for OpenAPI 3.0, including API metadata, security settings,
  * and the security scheme for Bearer token authentication using JWT.
  * The configuration will be used to generate and document the API endpoints automatically.
+ * @see  be.projet3.toutouapp.configuration
  * @author Damien DeLeeuw
  */
 @Configuration

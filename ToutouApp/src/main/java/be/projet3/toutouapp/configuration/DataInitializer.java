@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
  * Component that initializes roles and dog categories in the database at application startup.
  * Implements {@link CommandLineRunner} to execute the initialization logic after the application context is loaded.
  * This ensures that roles and dog categories are pre-loaded into the database if they don't already exist.
+ * @see  be.projet3.toutouapp.configuration
  * @author Damien DeLeeuw
  */
 @Component

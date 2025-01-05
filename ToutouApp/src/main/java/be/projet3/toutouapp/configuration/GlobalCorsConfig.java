@@ -10,6 +10,7 @@ import org.springframework.web.filter.CorsFilter;
  * Configuration class for global Cross-Origin Resource Sharing (CORS) settings.
  * This class defines a {@link CorsFilter} bean to allow cross-origin requests from any domain, with support for all HTTP methods and headers.
  * It ensures that the CORS settings are applied globally across all endpoints in the application.
+ * @see  be.projet3.toutouapp.configuration
  * @author Damien DeLeeuw
  */
 @Configuration

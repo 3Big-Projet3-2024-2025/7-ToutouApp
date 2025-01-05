@@ -24,7 +24,7 @@ import java.util.Map;
  * and role management.
  *
  * @see be.projet3.toutouapp.controllers
- * @author Jaï Dusépulchre
+ * @author Jaï Dusépulchre, Damien DeLeeuw, Sirjacques Célestin
  */
 @RestController
 @RequestMapping("/user")

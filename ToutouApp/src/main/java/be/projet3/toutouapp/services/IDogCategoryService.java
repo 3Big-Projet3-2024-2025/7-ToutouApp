@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Interface for managing DogCategory entities.
  * Defines the contract for business logic operations related to Dog Categories.
+ * @see be.projet3.toutouapp.services
  * @author Jaï Dusépulchre
  */
 public interface IDogCategoryService {

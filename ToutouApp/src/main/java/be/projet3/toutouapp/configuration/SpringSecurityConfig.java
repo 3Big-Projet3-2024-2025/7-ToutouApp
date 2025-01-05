@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * Spring Security configuration class for setting up security filters and rules in the application.
  * This class configures CORS, CSRF, and request authorization rules based on user roles (USER, ADMIN) for different endpoints.
  * It also integrates with Keycloak for JWT-based authentication, utilizing {@link KeycloakRoleConverter} for role mapping.
+ * @see  be.projet3.toutouapp.configuration
  * @author Damien DeLeeuw
  */
 @Configuration

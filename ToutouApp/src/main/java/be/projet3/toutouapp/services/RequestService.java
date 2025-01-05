@@ -12,6 +12,7 @@ import java.util.Optional;
  * Service class for managing Request entities.
  * Implements the {@link IRequestService} interface to provide business logic for Request operations.
  * Annotated with {@link Service} to indicate it's a Spring service component.
+ * @see be.projet3.toutouapp.services
  * @author Amico Matteo
  */
 @Service

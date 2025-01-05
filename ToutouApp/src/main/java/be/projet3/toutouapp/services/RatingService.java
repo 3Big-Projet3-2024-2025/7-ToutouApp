@@ -11,6 +11,7 @@ import java.util.List;
  * Service class for managing Rating entities.
  * Implements the {@link IRatingService} interface to provide business logic for Rating operations.
  * Annotated with {@link Service} to indicate it's a Spring service component.
+ * @see be.projet3.toutouapp.services
  * @author Amico Matteo
  */
 

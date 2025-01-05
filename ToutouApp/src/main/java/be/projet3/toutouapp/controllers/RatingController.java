@@ -17,7 +17,7 @@ import java.util.List;
  * Controller for managing ratings in the application.
  * This class provides the endpoints for interacting with ratings, including retrieving, creating, and deleting ratings,
  * as well as retrieving negative ratings with detailed information.
- *
+ * @see  be.projet3.toutouapp.controllers
  * @author Amico Matteo
  */
 @RestController
